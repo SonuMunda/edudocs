@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { setUser } from "./userSlice";
 
 // Thunks
 export const signup = createAsyncThunk(
@@ -43,7 +44,7 @@ export const signup = createAsyncThunk(
 
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ data, toast }, { rejectWithValue }) => {
+  async ({ data, toast, navigate }, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/user/auth/signin`,
@@ -65,13 +66,18 @@ export const login = createAsyncThunk(
       }
 
       const responseData = await response.json();
+
+      const { token } = responseData;
+      localStorage.setItem("token", token);
+      dispatch(setUser(responseData.user));
+
       toast.success(responseData.message, {
         position: "top-center",
       });
 
-      const { token } = responseData;
-      localStorage.setItem("token", token);
-      fetchUserDetails();
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";
@@ -95,11 +101,12 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null;
+      state.isLoggedIn = false;
       localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state, action) => {
+    builder.addCase(login.fulfilled, (state) => {
       state.isLoggedIn = true;
     });
   },

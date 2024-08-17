@@ -1,20 +1,21 @@
 import { useSelector } from "react-redux";
 import FetchUserId from "../utils/FetchUserId";
 import { FaFileAlt } from "react-icons/fa";
+import Loader from "../components/Loader";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
   const id = FetchUserId();
 
   if (!user) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
 
   return (
     <main className="profile bg-indigo-100 min-h-screen center p-4 ">
-      <div className="container max-w-4xl mx-auto my-12 bg-white p-6 rounded-lg shadow-lg center flex-col">
-        <div className="avatar m-auto py-10 px-12 bg-indigo-700 rounded-full">
-          <h1 className="avatar-text text-6xl font-bold text-white">
+      <div className="container max-w-4xl mx-auto mt-14 mb-4 bg-white p-6 rounded-lg shadow-lg center flex-col">
+        <div className="avatar m-auto border-2 h-40 w-40 rounded-full center">
+          <h1 className="avatar-text text-6xl font-bold text-indigo-500">
             {user?.firstName.charAt(0)}
           </h1>
         </div>

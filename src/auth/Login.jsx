@@ -1,16 +1,17 @@
 import { Field, Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import sideimage from "../assets/images/side_image.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../store/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    dispatch(login({ data: values, toast }));
+    dispatch(login({ data: values, toast, navigate }));
   };
 
   const validationSchema = Yup.object({
