@@ -6,7 +6,7 @@ const FetchUserId = () => {
     try {
       return decodedToken.userId;
     } catch (error) {
-      console.log(error.message || "Failed to fetch Id");
+      console.log(error.message);
     }
   } else {
     console.warn("No token found");

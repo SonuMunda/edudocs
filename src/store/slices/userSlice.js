@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { json } from "react-router-dom";
 
 export const fetchUserDetails = createAsyncThunk(
   "auth/fetchUserDetails",
@@ -6,7 +7,7 @@ export const fetchUserDetails = createAsyncThunk(
     try {
       if (id) {
         const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/api/user/auth/user/${id}`,
+          `${import.meta.env.VITE_SERVER_URL}/api/users/auth/user/${id}`,
           {
             method: "GET",
             headers: {
@@ -32,6 +33,41 @@ export const fetchUserDetails = createAsyncThunk(
       const errorMessage =
         error.message || "An unexpected error occurred during fetchUserDetails";
       return rejectWithValue({ message: errorMessage });
+    }
+  }
+);
+
+//update profile
+export const updateUserProfile = createAsyncThunk(
+  "updateUserProfile",
+  async ({ id, data, toast }, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/users/auth/user/update/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        toast.error(responseData.message);
+        return rejectWithValue(responseData.message);
+      }
+
+      toast.success(responseData.message);
+      dispatch(setUser(responseData.user));
+      return responseData;
+    } catch (error) {
+      console.log(error);
+      toast.error("An error occurred while updating the profile.");
+      return rejectWithValue("An error occurred while updating the profile.");
     }
   }
 );

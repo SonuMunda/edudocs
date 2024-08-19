@@ -7,7 +7,7 @@ export const signup = createAsyncThunk(
   async ({ data, toast }, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/user/auth/signup`,
+        `${import.meta.env.VITE_SERVER_URL}/api/users/auth/signup`,
         {
           method: "POST",
           headers: {
@@ -47,7 +47,7 @@ export const login = createAsyncThunk(
   async ({ data, toast, navigate }, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/user/auth/signin`,
+        `${import.meta.env.VITE_SERVER_URL}/api/users/auth/signin`,
         {
           method: "POST",
           headers: {

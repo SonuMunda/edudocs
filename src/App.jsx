@@ -4,10 +4,9 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import Login from "./auth/Login";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 const App = () => {
-  
-
   return (
     <>
       <Router>
@@ -17,6 +16,7 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </Router>
     </>

@@ -32,7 +32,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center p-2 fixed w-full bg-white px-10 border-b">
+    <header className="flex justify-between items-center p-2 fixed w-full bg-white px-10 border-b z-10">
       <div className="logo">
         <NavLink to="/" className="center">
           <img src={logo} alt="logo" className="h-10" />
@@ -44,7 +44,7 @@ const Header = () => {
         <input
           type="text"
           placeholder="Search for documents"
-          className="p-3 border border-gray-300 rounded-full w-80 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+          className="p-2 border border-gray-300 rounded-full w-80 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
         />
         <HiMagnifyingGlass
           size={24}
@@ -82,12 +82,12 @@ const Header = () => {
               onClick={toggleMenu}
             >
               {!isLoading ? (
-                <div className="mx-1 py-1 px-3 text-white text-xl font-bold bg-indigo-500 rounded center">
+                <div className="mx-1 py-2 px-3 text-white font-semibold bg-indigo-500 rounded center">
                   <span>{user?.firstName.charAt(0)}</span>
-                  <span> {user?.lastName.charAt(0)}</span>
+                  <span>{user?.lastName.charAt(0)}</span>
                 </div>
               ) : (
-                <Skeleton height={40} width={40} className="mx-3 mx-1"/>
+                <Skeleton height={40} width={40} className="mx-3 mx-1" />
               )}
               <FaAngleDown size={20} className="text-gray-600" />
             </div>
@@ -121,7 +121,7 @@ const Header = () => {
                   </li>
                   <li className="text-gray-600 hover:bg-gray-100 transition-colors">
                     <NavLink
-                      to="/upload"
+                      to="/settings"
                       className="block py-2 flex items-center "
                       onClick={() => {
                         setIsMenuOpen(false);

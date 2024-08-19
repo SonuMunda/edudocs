@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const Signup = () => {
   const dispatch = useDispatch();
 
@@ -16,7 +15,7 @@ const Signup = () => {
   };
 
   const usernameRegex = /^[a-z][a-z0-9._]*[a-z0-9]$/i;
-
+  const nameRegex = /^[a-zA-Z]+$/;
   const validationSchema = Yup.object({
     username: Yup.string()
       .required("Username is required")
@@ -26,14 +25,15 @@ const Signup = () => {
       .lowercase("Username must be lowercase")
       .trim(),
     firstName: Yup.string()
-      .required("First name is required")
-      .min(3, "First name to short")
+      .required("First name is required").matches(nameRegex, "First name must be alphabets only").
+      min(3, "First name to short")
       .max(20, "First name to long")
       .trim(),
-    lastName: Yup.string().optional().trim(),
-    email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required")
+    lastName: Yup.string()
+      .required("Last name is required")
+      .matches(nameRegex, "Last name must be alphabets only")
+      .min(3, "First name to short")
+      .max(20, "First name to long")
       .trim(),
     password: Yup.string()
       .required("Password is required")
@@ -43,11 +43,10 @@ const Signup = () => {
   });
 
   return (
-    <main className="min-h-screen center bg-indigo-200 overflow-hidden">
+    <main className="min-h-screen p-10 center bg-indigo-200">
       <ToastContainer />
-      <section
-        className="flex w-11/12 max-w-4xl shadow-lg bg-white mt-12 mx-auto"
-        style={{ height: "85%" }}
+      <div
+        className="flex w-11/12 max-w-4xl shadow-lg bg-white mt-14 mx-auto"
       >
         <div
           className="hidden lg:block lg:w-1/2 bg-cover"
@@ -71,7 +70,7 @@ const Signup = () => {
             }}
           >
             <Form className="signup-form" autoComplete="off">
-              <div className="form-group flex flex-col relative pb-5 my-2">
+              <div className="form-group flex flex-col relative pb-6 my-2">
                 <Field
                   type="text"
                   name="username"
@@ -161,7 +160,7 @@ const Signup = () => {
             </Form>
           </Formik>
         </div>
-      </section>
+      </div>
     </main>
   );
 };

@@ -4,10 +4,10 @@ import { FaFileAlt } from "react-icons/fa";
 import Loader from "../components/Loader";
 
 const Profile = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user, isLoading } = useSelector((state) => state.user);
   const id = FetchUserId();
 
-  if (!user) {
+  if (isLoading) {
     return <Loader />;
   }
 
@@ -23,8 +23,8 @@ const Profile = () => {
           <h1 className="text-3xl font-bold text-center mt-4">
             {user?.firstName} {user?.lastName}
           </h1>
-          <p className="text-center text-gray-500 my-1">@{user.username}</p>
-          <p className="text-center text-gray-500 my-1">{user.university}</p>
+          <p className="text-center text-gray-500 my-1">@{user?.username}</p>
+          <p className="text-center text-gray-500 my-1">{user?.university}</p>
 
           <div className="flex justify-center gap-10 mt-6 font-semibold text-gray-600">
             <div className="followers center flex-col">
@@ -37,7 +37,7 @@ const Profile = () => {
             </div>
           </div>
 
-          {id !== user._id ? (
+          {id !== user?._id ? (
             <button className="btn btn-primary bg-indigo-600 text-white py-2 px-4 rounded-lg">
               Follow
             </button>
