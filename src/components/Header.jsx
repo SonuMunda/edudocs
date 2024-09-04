@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/images/logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { HiMagnifyingGlass } from "react-icons/hi2";
-import { CiLogout, CiSaveUp2, CiUser } from "react-icons/ci";
+import { CiHome, CiLogout, CiSaveUp2, CiUser } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa6";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
@@ -32,27 +32,29 @@ const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center p-2 fixed w-full bg-white px-10 border-b z-10">
+    <header className="flex justify-between items-center shadow p-2 fixed w-full bg-white px-10 z-10">
       <div className="logo">
         <NavLink to="/" className="center">
           <img src={logo} alt="logo" className="h-10" />
-          <h1 className="text-2xl">edudocs</h1>
+          <h1 className="text-2xl uppercase font-bold">edudocs</h1>
         </NavLink>
       </div>
 
-      <div className="search-bar relative flex items-center">
-        <input
-          type="text"
-          placeholder="Search for documents"
-          className="p-2 border border-gray-300 rounded-full w-80 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
-        />
-        <HiMagnifyingGlass
-          size={24}
-          className="text-indigo-600 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-        />
+      <div className="md: hidden">
+        <div className="search-bar relative flex items-center">
+          <input
+            type="text"
+            placeholder="Search for documents"
+            className="p-2 border border-gray-300 rounded-full w-80 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out xl: w-full"
+          />
+          <HiMagnifyingGlass
+            size={24}
+            className="text-indigo-600 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          />
+        </div>
       </div>
 
-      <nav className="navbar">
+      <nav className="navbar mx-4">
         <ul className="flex items-center gap-6">
           <li>
             <NavLink to="/" className="text-gray-600 font-semibold">
@@ -61,7 +63,7 @@ const Header = () => {
           </li>
           <li>
             <NavLink to="/documents" className="text-gray-600 font-semibold">
-              Documents
+              Books
             </NavLink>
           </li>
         </ul>
@@ -93,9 +95,21 @@ const Header = () => {
             </div>
 
             {isMenuOpen && (
-              <div className="user-menu absolute top-12 right-0  bg-white rounded-lg shadow-lg border w-40 z-50">
-                <ul className="menu-list">
-                  <li className="text-gray-600 hover:bg-gray-100 transition-colors">
+              <div className="user-menu absolute top-12 right-0 bg-white rounded-lg shadow-lg border w-60 z-50">
+                <ul className="menu-list p-4">
+                  <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
+                    <NavLink
+                      to="/"
+                      className="block py-2 flex items-center "
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      <CiHome size={20} className="m-2" />
+                      Home
+                    </NavLink>
+                  </li>
+                  <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                     <NavLink
                       to="/profile"
                       className="block py-2 flex items-center "
@@ -107,19 +121,19 @@ const Header = () => {
                       Profile
                     </NavLink>
                   </li>
-                  <li className="text-gray-600 hover:bg-gray-100 transition-colors">
+                  <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                     <NavLink
-                      to="/upload"
+                      to="/uploads"
                       className="block py-2 flex items-center "
                       onClick={() => {
                         setIsMenuOpen(false);
                       }}
                     >
                       <CiSaveUp2 size={20} className="m-2" />
-                      Upload
+                      Uploads
                     </NavLink>
                   </li>
-                  <li className="text-gray-600 hover:bg-gray-100 transition-colors">
+                  <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                     <NavLink
                       to="/settings"
                       className="block py-2 flex items-center "
@@ -131,7 +145,7 @@ const Header = () => {
                       Settings
                     </NavLink>
                   </li>
-                  <li className="text-gray-600 hover:bg-red-100 transition-colors border-t border-gray-200">
+                  <li className="text-gray-600 rounded-lg px-2 hover:bg-red-600 hover:text-white transition-colors border-t border-gray-200">
                     <button
                       className="block py-2 flex items-center"
                       onClick={() => {

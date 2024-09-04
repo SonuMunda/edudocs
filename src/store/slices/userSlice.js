@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { json } from "react-router-dom";
 
 export const fetchUserDetails = createAsyncThunk(
   "auth/fetchUserDetails",
@@ -7,7 +6,7 @@ export const fetchUserDetails = createAsyncThunk(
     try {
       if (id) {
         const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/api/users/auth/user/${id}`,
+          `${import.meta.env.VITE_SERVER_URL}/api/auth/user/${id}`,
           {
             method: "GET",
             headers: {
@@ -43,7 +42,7 @@ export const updateUserProfile = createAsyncThunk(
   async ({ id, data, toast }, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/users/auth/user/update/${id}`,
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/user/update/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -68,6 +67,37 @@ export const updateUserProfile = createAsyncThunk(
       console.log(error);
       toast.error("An error occurred while updating the profile.");
       return rejectWithValue("An error occurred while updating the profile.");
+    }
+  }
+);
+
+export const userDocumentUpload = createAsyncThunk(
+  "userDocumentUpload",
+  async ({ id, formData, toast }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/user/upload/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue(errorData.message || "Upload failed");
+      }
+
+      const responseData = await response.json();
+      toast(responseData.message);
+      
+      return responseData;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue("An error occurred while uploading the document");
     }
   }
 );

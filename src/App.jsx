@@ -5,6 +5,9 @@ import Home from "./pages/Home";
 import Login from "./auth/Login";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import Uploads from "./pages/Uploads";
+import Footer from "./components/Footer";
+import DocumentView from "./pages/DocumentView";
 
 const App = () => {
   return (
@@ -16,8 +19,11 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/uploads" element={<Uploads />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/document/view" element={<DocumentView />} />
         </Routes>
+        <Footer/>
       </Router>
     </>
   );

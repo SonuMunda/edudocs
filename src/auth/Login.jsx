@@ -24,11 +24,8 @@ const Login = () => {
 
   return (
     <main className="h-screen center bg-indigo-200">
-      <ToastContainer/>
-      <section
-        className="flex w-10/12 max-w-4xl shadow-lg bg-white  overflow-hidden mt-10 mx-auto lg:w-3/4 sm:w-5/6"
-        style={{ height: "80%" }}
-      >
+      <ToastContainer />
+      <section className="flex w-10/12 max-w-4xl shadow-lg bg-white  overflow-hidden mt-10 mx-auto lg:w-3/4 sm:w-5/6">
         <div
           className="hidden lg:block lg:w-1/2 bg-cover"
           style={{ background: `url(${sideimage}) center center/cover` }}

@@ -23,7 +23,7 @@ const Home = () => {
       </section>
       <hr />
       <section id="notes" className="p-10">
-        <div className="sm:container border mx-auto">
+        <div className="container  mx-auto">
           <h3 className="text-3xl font-bold mb-4 text-indigo-600">Notes</h3>
           <p className="text-gray-700 mb-4">
             Browse and share notes with your classmates.
@@ -47,7 +47,7 @@ const Home = () => {
           <h3 className="text-3xl font-bold mb-4 text-indigo-600">
             Assignments
           </h3>
-          <p className="text-gray-700 mb-4">
+          <p className="text-gray-700 mb-b4">
             Upload and download assignments with ease.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -86,20 +86,20 @@ const Home = () => {
               <label className="block text-gray-600 mb-2">Name</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded  focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full p-2 border border-indigo-200 rounded  focus:outline-none focus:ring-1 focus:ring-indigo-500"
               />
             </div>
             <div>
               <label className="block text-gray-600 mb-2">Email</label>
               <input
                 type="email"
-                className="w-full p-2 border rounded  focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full p-2 border border-indigo-200 rounded  focus:outline-none focus:ring-1 focus:ring-indigo-500"
               />
             </div>
             <div>
               <label className="block text-gray-600 mb-2">Message</label>
               <textarea
-                className="w-full p-2 border rounded  focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full p-2 border border-indigo-200 rounded  focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 rows="4"
               ></textarea>
             </div>

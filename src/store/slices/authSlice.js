@@ -7,7 +7,7 @@ export const signup = createAsyncThunk(
   async ({ data, toast }, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/users/auth/signup`,
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/signup`,
         {
           method: "POST",
           headers: {
@@ -47,7 +47,7 @@ export const login = createAsyncThunk(
   async ({ data, toast, navigate }, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/users/auth/signin`,
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/signin`,
         {
           method: "POST",
           headers: {
@@ -77,7 +77,7 @@ export const login = createAsyncThunk(
 
       setTimeout(() => {
         navigate("/");
-      }, 1500);
+      }, 2000);
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";

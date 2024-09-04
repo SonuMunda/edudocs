@@ -86,54 +86,9 @@ const Profile = () => {
             </div>
             <div className="documents-lists m-4">
               <ul className="document-list">
-                <li className="list-item my-4 border-b py-2 flex">
-                  <div className="document-icon">
-                    <FaFileAlt size={24} />
-                  </div>
-                  <div className="document-details">
-                    <h1>Document Title</h1>
-                    <p>100 pages</p>
-                  </div>
-                </li>
-                <li className="list-item flex justify-between my-4 border-b py-2">
-                  <div className="document-icon">
-                    <FaFileAlt size={24} />
-                  </div>
-                  <div className="document-details">
-                    <h1>Document Title</h1>
-                    <p>100 pages</p>
-                  </div>
-                </li>
-                <li className="list-item flex justify-between my-4 border-b py-2">
-                  <div className="document-icon">
-                    <FaFileAlt size={24} />
-                  </div>
-                  <div className="document-details">
-                    <h1>Document Title</h1>
-                    <p>100 pages</p>
-                  </div>
-                </li>
-                <li className="list-item flex justify-between my-4 border-b py-2">
-                  <div className="document-icon">
-                    <FaFileAlt size={24} />
-                  </div>
-                  <div className="document-details">
-                    <h1>Document Title</h1>
-                    <p>100 pages</p>
-                  </div>
-                </li>
-                <li className="list-item flex justify-between my-4 border-b py-2">
-                  <div className="document-icon">
-                    <FaFileAlt size={24} />
-                  </div>
-                  <div className="document-details">
-                    <h1>Document Title</h1>
-                    <p>100 pages</p>
-                  </div>
-                </li>
-                <li className="list-item flex justify-between my-4 border-b py-2">
-                  <div className="document-icon">
-                    <FaFileAlt size={24} />
+                <li className="flex justify-between border-b p-2 bg-gray-50 rounded hover:bg-gray-100">
+                  <div className="document-thumbnail">
+                    <img src="https://res-console.cloudinary.com/drssactyo/thumbnails/v1/image/upload/v1725461681/QmFja0VuZCBXUy0zLnBkZg==/grid_landscape" alt=""  className="h-16"/>
                   </div>
                   <div className="document-details">
                     <h1>Document Title</h1>
