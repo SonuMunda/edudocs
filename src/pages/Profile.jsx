@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import FetchUserId from "../utils/FetchUserId";
-import { FaFileAlt } from "react-icons/fa";
 import Loader from "../components/Loader";
+import { FiFileText } from "react-icons/fi";
 
 const Profile = () => {
   const { user, isLoading } = useSelector((state) => state.user);
@@ -85,14 +85,29 @@ const Profile = () => {
               <h1>Uploaded Documents</h1>
             </div>
             <div className="documents-lists m-4">
-              <ul className="document-list">
-                <li className="flex justify-between border-b p-2 bg-gray-50 rounded hover:bg-gray-100">
-                  <div className="document-thumbnail">
-                    <img src="https://res-console.cloudinary.com/drssactyo/thumbnails/v1/image/upload/v1725461681/QmFja0VuZCBXUy0zLnBkZg==/grid_landscape" alt=""  className="h-16"/>
+              <ul className="document-list max-h-96 overflow-y-auto">
+                <li className="flex justify-between items-center gap-4 border-b p-4 bg-gray-50 rounded hover:bg-gray-100">
+                  <div className="flex gap-4 items-center">
+                    <div className="document-icon text-2xl text-indigo-800">
+                      <FiFileText />
+                    </div>
+                    <div className="document-details">
+                      <h1 className="document-title font-semibold text-indigo-600">
+                        Document Title
+                      </h1>
+                      <p className="document-subject text-sm text-gray-500">
+                        IOT
+                      </p>
+                    </div>
                   </div>
-                  <div className="document-details">
-                    <h1>Document Title</h1>
-                    <p>100 pages</p>
+                  <div className="flex gap-4 items-center">
+                    <div className="likes flex items-center text-gray-600">
+                      <i className="fas fa-thumbs-up mr-2"></i>
+                      <span>10 Likes</span>
+                    </div>
+                    <button className="border rounded-lg py-2 px-4 text-gray-600 hover:bg-gray-100">
+                      Share
+                    </button>
                   </div>
                 </li>
               </ul>

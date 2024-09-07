@@ -6,6 +6,27 @@ import { useDispatch } from "react-redux";
 import { userDocumentUpload } from "../store/slices/userSlice";
 import fetchUserId from "../utils/FetchUserId";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { DatalistInput } from "react-datalist-input";
+import "react-datalist-input/dist/styles.css";
+import universitiesList from "../api/universitiesList";
+import coursesList from "../api/coursesList";
+import sessionsList from "../api/sessionsList";
+import styled from "styled-components";
+
+const StyledDataListInput = styled(DatalistInput)`
+  &.datalist input {
+    padding: 0.6rem;
+  }
+
+  &.datalist input:focus {
+    outline: 2px solid #6366f1;
+  }
+
+  &.datalist {
+    border-radius: 0.25rem;
+  }
+`;
 
 const FileUpload = () => {
   const dispatch = useDispatch();
@@ -24,45 +45,76 @@ const FileUpload = () => {
       setFile(selectedFile);
       setFieldValue("file", selectedFile);
     } else {
+      toast.error(
+        "Invalid file type! Please upload a valid file (pdf, doc, docx)."
+      );
       setFile(null);
       setFieldValue("file", null);
     }
   };
 
-  const handleUpload = (values) => {
+  const handleUpload = (values, { resetForm }) => {
     if (file) {
       const formData = new FormData();
-      formData.append("file",file);
-
-      const fileName = file.name;
-      formData.append("filename", fileName);
-
-      const fileType = file.type;
-      formData.append("fileType", fileType);
-
+      formData.append("file", file);
+      formData.append("filename", file.name);
+      formData.append("fileType", file.type);
       formData.append("category", values.category);
+      formData.append("university", values.university);
+      formData.append("course", values.course);
+      formData.append("session", values.session);
+      formData.append("description", values.description);
 
       dispatch(userDocumentUpload({ id, formData, toast }));
+
+      resetForm();
+      setFile(null);
     }
   };
 
   return (
     <section className="file-upload center">
-      <ToastContainer/>
+      <ToastContainer />
       <div className="container p-10 max-w-4xl">
         <p className="text-gray-600 mt-2">Upload your file here.</p>
         <div className="file-upload-form">
           <Formik
-            initialValues={{ file: null, category: "" }}
+            initialValues={{
+              file: null,
+              category: "",
+              university: "",
+              course: "",
+              session: "",
+              description: "",
+            }}
             validationSchema={Yup.object().shape({
               file: Yup.mixed().required("A file is required"),
               category: Yup.string().required("Category is required"),
+              university: Yup.string().required("University is required"),
+              course: Yup.string().required("Course is required"),
+              session: Yup.string().required("Session is required"),
+              description: Yup.string().required("Description is required"),
             })}
             onSubmit={handleUpload}
           >
             {({ setFieldValue, errors, touched, values, isSubmitting }) => (
               <Form encType="multipart/form-data">
-                <div className="form-group upload-box border-2 border-indigo-300 border-dashed rounded p-10 bg-indigo-50 my-2">
+                <div
+                  className="form-group upload-box border-2 border-gray-300 border-dashed rounded p-10 bg-gray-50 my-2 hover:bg-gray-100"
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const droppedFile = e.dataTransfer.files[0];
+                    handleFileChange(
+                      { target: { files: [droppedFile] } },
+                      setFieldValue
+                    );
+                  }}
+                >
                   <input
                     type="file"
                     name="file"
@@ -76,13 +128,13 @@ const FileUpload = () => {
                   <h1 className="center text-xl font-semibold text-gray-600 m-1">
                     Or Upload
                   </h1>
-                  <p className="text-center text-gray-500 mt-2">
+                  <p className="text-center text-gray-500 my-2">
                     Supported files: pdf, doc, docx
                   </p>
                   <button type="button" className="btn block mx-auto">
                     <label
                       htmlFor="file"
-                      className="center my-2 px-6 py-2 bg-indigo-600 rounded text-white font-bold cursor-pointer"
+                      className="center my-2 px-6 py-2 bg-indigo-600 rounded text-white cursor-pointer"
                     >
                       Browse my files
                     </label>
@@ -126,23 +178,127 @@ const FileUpload = () => {
                     name="category"
                     value={values.category}
                     onChange={(e) => setFieldValue("category", e.target.value)}
+                    className="p-2 border-2  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded"
                   >
                     <option value="">Choose File Category</option>
                     <option value="assignment">Assignment</option>
                     <option value="notes">Notes</option>
+                    <option value="practice material">Practice Material</option>
+                    <option value="practical">Practical</option>
+                    <option value="book">Book</option>
                     <option value="other">Other</option>
                   </select>
                   {errors.category && touched.category ? (
-                    <div className="text-red-500 mt-2">{errors.category}</div>
+                    <div className="text-red-500 text-xs font-bold">
+                      {errors.category}
+                    </div>
                   ) : null}
                 </div>
+
+                {values.category && (
+                  <>
+                    <div className="form-group flex flex-col">
+                      <label htmlFor="university" className="block my-2">
+                        University
+                      </label>
+
+                      <StyledDataListInput
+                        value={values.university}
+                        label="Select your university"
+                        showLabel={false}
+                        items={universitiesList.map((university) => ({
+                          id: university.id,
+                          value: university.value,
+                        }))}
+                        onSelect={(item) =>
+                          setFieldValue("university", item.value)
+                        }
+                        className="datalist"
+                      />
+
+                      {errors.university && touched.university && (
+                        <div className="text-red-500 text-xs font-bold">
+                          {errors.university}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="form-group flex flex-col">
+                      <label htmlFor="course" className="block my-2">
+                        Course
+                      </label>
+                      <StyledDataListInput
+                        value={values.course}
+                        label="Select your course"
+                        showLabel={false}
+                        items={coursesList.map((course) => ({
+                          id: course.id,
+                          value: course.value,
+                        }))}
+                        onSelect={(item) => setFieldValue("course", item.value)}
+                        className="datalist"
+                      />
+                      {errors.course && touched.course ? (
+                        <div className="text-red-500 text-xs font-bold">
+                          {errors.course}
+                        </div>
+                      ) : null}
+                    </div>
+
+                    <div className="form-group flex flex-col">
+                      <label htmlFor="session" className="block my-2">
+                        Session
+                      </label>
+                      <StyledDataListInput
+                        value={values.session}
+                        label="Select your course"
+                        showLabel={false}
+                        items={sessionsList.map((session) => ({
+                          id: session.id,
+                          value: session.value,
+                        }))}
+                        onSelect={(item) =>
+                          setFieldValue("session", item.value)
+                        }
+                        className="datalist"
+                      />
+                      {errors.session && touched.session ? (
+                        <div className="text-red-500 text-xs font-bold">
+                          {errors.session}
+                        </div>
+                      ) : null}
+                    </div>
+
+                    <div className="form-group flex flex-col">
+                      <label htmlFor="description" className="block my-2">
+                        Description
+                      </label>
+                      <textarea
+                        name="description"
+                        id="description"
+                        value={values.description}
+                        placeholder="Write subject, topic, or any other details"
+                        onChange={(e) =>
+                          setFieldValue("description", e.target.value)
+                        }
+                        className="p-2 border  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded"
+                      />
+                      {errors.description && touched.description ? (
+                        <div className="text-red-500 text-xs font-bold">
+                          {errors.description}
+                        </div>
+                      ) : null}
+                    </div>
+                  </>
+                )}
 
                 <div className="form-group mt-6">
                   <button
                     type="submit"
                     className="btn btn-indigo rounded bg-indigo-700 w-full p-2 text-white font-bold"
+                    disabled={isSubmitting}
                   >
-                    Upload & Save
+                    {isSubmitting ? "Uploading..." : "Upload & Save"}
                   </button>
                 </div>
               </Form>

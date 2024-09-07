@@ -92,7 +92,7 @@ export const userDocumentUpload = createAsyncThunk(
       }
 
       const responseData = await response.json();
-      toast(responseData.message);
+      toast.success(responseData.message);
       
       return responseData;
     } catch (error) {

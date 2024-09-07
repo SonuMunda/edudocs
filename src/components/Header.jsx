@@ -36,7 +36,7 @@ const Header = () => {
       <div className="logo">
         <NavLink to="/" className="center">
           <img src={logo} alt="logo" className="h-10" />
-          <h1 className="text-2xl uppercase font-bold">edudocs</h1>
+          <h1 className="text-xl font-semibold">Edudocs</h1>
         </NavLink>
       </div>
 
@@ -111,7 +111,7 @@ const Header = () => {
                   </li>
                   <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                     <NavLink
-                      to="/profile"
+                      to={`/profile/${user.username}`}
                       className="block py-2 flex items-center "
                       onClick={() => {
                         setIsMenuOpen(false);
