@@ -30,13 +30,13 @@ const Profile = () => {
 
   return (
     <main className="profile bg-indigo-100 min-h-screen center p-4 ">
-      <div className="container max-w-4xl mx-auto mt-14 mb-4 bg-white p-6 rounded-lg shadow-lg center flex-col">
+      <div className="container max-w-4xl mx-auto mt-14 mb-4 backdrop-blur-3xl p-6 rounded bg-gray-50 center flex-col">
         <div className="avatar m-auto border-2 h-40 w-40 rounded-full center">
           <h1 className="avatar-text text-6xl font-bold text-indigo-500">
             {user?.firstName.charAt(0)}
           </h1>
         </div>
-        <div className="details w-full bg-gray-100 my-4 rounded-xl p-5">
+        <div className="details w-full bg-gray-200 my-4 rounded p-5">
           <h1 className="text-3xl font-bold text-center mt-4">
             {user?.firstName} {user?.lastName}
           </h1>
@@ -55,12 +55,12 @@ const Profile = () => {
           </div>
 
           {id !== user?._id ? (
-            <button className="btn btn-primary bg-indigo-600 text-white py-2 px-4 rounded-lg">
+            <button className="btn btn-primary bg-indigo-600 text-white py-2 px-4 rounded">
               Follow
             </button>
           ) : null}
 
-          <div className="level bg-indigo-100 p-5 my-4 rounded-xl">
+          <div className="level bg-gray-50 p-5 my-4 rounded">
             <div className="points flex justify-between text-xl font-semibold text-gray-500 my-2 px-6">
               <span>Points</span>
               <span>100</span>
@@ -70,12 +70,12 @@ const Profile = () => {
             </div>
           </div>
           <div className="upload-button center">
-            <button className="btn btn-primary bg-indigo-600 text-white py-2 px-4 rounded-lg">
+            <button className="btn btn-primary bg-indigo-600 text-white py-2 px-4 rounded">
               Upload Document to Earn Points
             </button>
           </div>
 
-          <div className="documents-statistics my-6 bg-white p-4 rounded-lg border">
+          <div className="documents-statistics my-6 bg-white p-4 rounded border">
             <div className="header p-3">
               <h1 className="font-semibold text-md mb-2">Uploads</h1>
             </div>
@@ -97,7 +97,7 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="documents-uploaded border m-2 p-4 rounded-xl bg-white max-h-96 overflow-y-auto">
+          <div className="documents-uploaded border m-2 p-4 rounded bg-white max-h-96 overflow-y-auto">
             <div className="header border-b p-4 font-semibold">
               <h1>Uploaded Documents</h1>
             </div>
@@ -130,7 +130,7 @@ const Profile = () => {
                                   <i className="fas fa-thumbs-up mr-2"></i>
                                   <span>10 Likes</span>
                                 </div>
-                                <button className="border rounded-lg py-2 px-4 text-gray-600 hover:bg-gray-100">
+                                <button className="border rounded py-2 px-4 text-gray-600 hover:bg-gray-100">
                                   Share
                                 </button>
                               </div>
