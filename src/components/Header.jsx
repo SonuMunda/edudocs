@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { CiHome, CiLogout, CiSaveUp2, CiUser } from "react-icons/ci";
@@ -40,12 +40,12 @@ const Header = () => {
         </NavLink>
       </div>
 
-      <div className="md: hidden">
+      <div className="">
         <div className="search-bar relative flex items-center">
           <input
             type="text"
             placeholder="Search for documents"
-            className="p-2 border border-gray-300 rounded-full w-80 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out xl: w-full"
+            className="p-2 border border-gray-300 rounded w-80 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out xl: w-full"
           />
           <HiMagnifyingGlass
             size={24}

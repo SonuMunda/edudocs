@@ -18,11 +18,9 @@ const StyledDataListInput = styled(DatalistInput)`
   &.datalist input {
     padding: 0.6rem;
   }
-
   &.datalist input:focus {
     outline: 2px solid #6366f1;
   }
-
   &.datalist {
     border-radius: 0.25rem;
   }
@@ -31,49 +29,55 @@ const StyledDataListInput = styled(DatalistInput)`
 const FileUpload = () => {
   const dispatch = useDispatch();
   const [file, setFile] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
   const id = fetchUserId();
 
   const handleFileChange = (event, setFieldValue) => {
     const selectedFile = event.target.files[0];
-    const validFile = [
+    const validFileTypes = [
       "application/pdf",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ].includes(selectedFile.type);
+    ];
 
-    if (validFile) {
+    if (selectedFile && validFileTypes.includes(selectedFile.type)) {
+      if (selectedFile.size > 10 * 1024 * 1024) {
+        toast.error("File size exceeds the 10MB limit!");
+        setFile(null);
+        setFieldValue("file", null);
+        return;
+      }
       setFile(selectedFile);
       setFieldValue("file", selectedFile);
     } else {
-      toast.error(
-        "Invalid file type! Please upload a valid file (pdf, doc, docx)."
-      );
+      toast.error("Invalid file type! Please upload a pdf, doc, or docx.");
       setFile(null);
       setFieldValue("file", null);
     }
   };
 
-  const handleUpload = (values, { resetForm }) => {
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("filename", file.name);
-      formData.append("fileType", file.type);
-      formData.append("category", values.category);
-      formData.append("university", values.university);
-      formData.append("course", values.course);
-      formData.append("session", values.session);
-      formData.append("description", values.description);
+  const handleUpload = async (values) => {
+    try {
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("title", file.name);
+        formData.append("fileType", file.type);
+        formData.append("category", values.category);
+        formData.append("university", values.university);
+        formData.append("course", values.course);
+        formData.append("session", values.session);
+        formData.append("description", values.description);
 
-      dispatch(userDocumentUpload({ id, formData, toast }));
-
-      resetForm();
-      setFile(null);
+        await dispatch(userDocumentUpload({ id, formData, toast }));
+      }
+    } catch (error) {
+      toast.error("Error during file upload");
     }
   };
 
   return (
-    <section className="file-upload center">
+    <section className="file-upload center min-h-screen bg-gray-100">
       <ToastContainer />
       <div className="container p-10 max-w-4xl">
         <p className="text-gray-600 mt-2">Upload your file here.</p>
@@ -95,19 +99,32 @@ const FileUpload = () => {
               session: Yup.string().required("Session is required"),
               description: Yup.string().required("Description is required"),
             })}
-            onSubmit={handleUpload}
+            onSubmit={async (values, { setSubmitting, resetForm }) => {
+              try {
+                await handleUpload(values);
+              } catch (error) {
+                toast.error(error.message);
+              } finally {
+                setSubmitting(false);
+                resetForm();
+                setFile(null);
+              }
+            }}
           >
             {({ setFieldValue, errors, touched, values, isSubmitting }) => (
               <Form encType="multipart/form-data">
                 <div
-                  className="form-group upload-box border-2 border-gray-300 border-dashed rounded p-10 bg-gray-50 my-2 hover:bg-gray-100"
+                  className={`form-group upload-box border-2 border-indigo-900 ${
+                    isDragging ? "border-indigo-600" : "border-dashed"
+                  } rounded p-10 bg-indigo-50 my-2 hover:bg-indigo-100`}
                   onDragOver={(e) => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    setIsDragging(true);
                   }}
+                  onDragLeave={() => setIsDragging(false)}
                   onDrop={(e) => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    setIsDragging(false);
                     const droppedFile = e.dataTransfer.files[0];
                     handleFileChange(
                       { target: { files: [droppedFile] } },
@@ -134,7 +151,7 @@ const FileUpload = () => {
                   <button type="button" className="btn block mx-auto">
                     <label
                       htmlFor="file"
-                      className="center my-2 px-6 py-2 bg-indigo-600 rounded text-white cursor-pointer"
+                      className="center my-2 px-6 py-2 bg-indigo-800 rounded text-white cursor-pointer"
                     >
                       Browse my files
                     </label>
@@ -201,7 +218,6 @@ const FileUpload = () => {
                       <label htmlFor="university" className="block my-2">
                         University
                       </label>
-
                       <StyledDataListInput
                         value={values.university}
                         label="Select your university"
@@ -215,7 +231,6 @@ const FileUpload = () => {
                         }
                         className="datalist"
                       />
-
                       {errors.university && touched.university && (
                         <div className="text-red-500 text-xs font-bold">
                           {errors.university}
@@ -251,7 +266,7 @@ const FileUpload = () => {
                       </label>
                       <StyledDataListInput
                         value={values.session}
-                        label="Select your course"
+                        label="Select your session"
                         showLabel={false}
                         items={sessionsList.map((session) => ({
                           id: session.id,
@@ -269,20 +284,21 @@ const FileUpload = () => {
                       ) : null}
                     </div>
 
-                    <div className="form-group flex flex-col">
-                      <label htmlFor="description" className="block my-2">
+                    <div className="form-group my-2">
+                      <label htmlFor="description" className="block mb-2">
                         Description
                       </label>
                       <textarea
                         name="description"
                         id="description"
+                        placeholder="Enter document description"
+                        rows="3"
+                        className="p-3 border-2  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded"
                         value={values.description}
-                        placeholder="Write subject, topic, or any other details"
                         onChange={(e) =>
                           setFieldValue("description", e.target.value)
                         }
-                        className="p-2 border  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded"
-                      />
+                      ></textarea>
                       {errors.description && touched.description ? (
                         <div className="text-red-500 text-xs font-bold">
                           {errors.description}
@@ -292,13 +308,13 @@ const FileUpload = () => {
                   </>
                 )}
 
-                <div className="form-group mt-6">
+                <div className="center py-4">
                   <button
                     type="submit"
-                    className="btn btn-indigo rounded bg-indigo-700 w-full p-2 text-white font-bold"
+                    className="px-6 py-2 bg-indigo-800 text-white rounded"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Uploading..." : "Upload & Save"}
+                    {isSubmitting ? "Uploading..." : "Upload"}
                   </button>
                 </div>
               </Form>

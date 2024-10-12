@@ -21,9 +21,12 @@ const App = () => {
           <Route path="/profile/:username" element={<Profile />} />
           <Route path="/uploads" element={<Uploads />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/document/view" element={<DocumentView />} />
+          <Route
+            path="/:username/document/:filename/:fileId/view"
+            element={<DocumentView />}
+          />
         </Routes>
-        <Footer/>
+        <Footer />
       </Router>
     </>
   );

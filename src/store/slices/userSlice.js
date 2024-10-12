@@ -24,6 +24,7 @@ export const fetchUserDetails = createAsyncThunk(
         if (data) {
           dispatch(setUser(data.user));
         }
+
         return data;
       } else {
         return rejectWithValue({ message: "User ID is required." });
@@ -88,16 +89,64 @@ export const userDocumentUpload = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        return rejectWithValue(errorData.message || "Upload failed");
+        toast.error(errorData.message);
       }
 
       const responseData = await response.json();
       toast.success(responseData.message);
-      
+
       return responseData;
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
       return rejectWithValue("An error occurred while uploading the document");
+    }
+  }
+);
+
+export const fetchUserUploads = createAsyncThunk(
+  "fetchUserUploads",
+  async (userId) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/user/uploads/${userId}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch user uploads: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log(responseData);
+      return responseData;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+);
+
+export const fetchFileDetails = createAsyncThunk(
+  "fetchFileDetails",
+  async (fileId) => {
+    try {
+      console.log(fileId);
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/document/${fileId}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch: ${response.message}`);
+      }
+
+      const responseData = await response.json();
+
+      return responseData.data;
+    } catch (error) {
+      console.log(error.message);
+      throw error;
     }
   }
 );

@@ -1,11 +1,28 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FetchUserId from "../utils/FetchUserId";
 import Loader from "../components/Loader";
 import { FiFileText } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { fetchUserUploads } from "../store/slices/userSlice";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
-  const { user, isLoading } = useSelector((state) => state.user);
+  const { user, isLoading } = useSelector((state) => state?.user);
+  const [uploadsData, setUploadsData] = useState(null);
   const id = FetchUserId();
+  const userId = user?._id;
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserUploads(userId)).then((data) => {
+        setUploadsData(data.payload);
+      });
+    }
+  }, [userId, dispatch]);
+
+  // console.log(...uploadsData);
 
   if (isLoading) {
     return <Loader />;
@@ -86,30 +103,43 @@ const Profile = () => {
             </div>
             <div className="documents-lists m-4">
               <ul className="document-list max-h-96 overflow-y-auto">
-                <li className="flex justify-between items-center gap-4 border-b p-4 bg-gray-50 rounded hover:bg-gray-100">
-                  <div className="flex gap-4 items-center">
-                    <div className="document-icon text-2xl text-indigo-800">
-                      <FiFileText />
-                    </div>
-                    <div className="document-details">
-                      <h1 className="document-title font-semibold text-indigo-600">
-                        Document Title
-                      </h1>
-                      <p className="document-subject text-sm text-gray-500">
-                        IOT
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex gap-4 items-center">
-                    <div className="likes flex items-center text-gray-600">
-                      <i className="fas fa-thumbs-up mr-2"></i>
-                      <span>10 Likes</span>
-                    </div>
-                    <button className="border rounded-lg py-2 px-4 text-gray-600 hover:bg-gray-100">
-                      Share
-                    </button>
-                  </div>
-                </li>
+                {uploadsData != null
+                  ? uploadsData?.map((document) => {
+                      return (
+                        <>
+                          <Link
+                            to={`/${user.username}/document/${document.title}/${document._id}/view`}
+                            key={document._id}
+                          >
+                            <li className="flex justify-between items-center gap-4 border-b p-4 bg-gray-50 rounded hover:bg-gray-100">
+                              <div className="flex gap-4 items-center">
+                                <div className="document-icon text-2xl text-indigo-800">
+                                  <FiFileText />
+                                </div>
+                                <div className="document-details">
+                                  <h1 className="document-title font-semibold text-indigo-600">
+                                    {document.title}
+                                  </h1>
+                                  <p className="document-subject text-sm text-gray-500">
+                                    {document.description}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex gap-4 items-center">
+                                <div className="likes flex items-center text-gray-600">
+                                  <i className="fas fa-thumbs-up mr-2"></i>
+                                  <span>10 Likes</span>
+                                </div>
+                                <button className="border rounded-lg py-2 px-4 text-gray-600 hover:bg-gray-100">
+                                  Share
+                                </button>
+                              </div>
+                            </li>
+                          </Link>
+                        </>
+                      );
+                    })
+                  : "You have'nt uploaded any document yet"}
               </ul>
             </div>
           </div>

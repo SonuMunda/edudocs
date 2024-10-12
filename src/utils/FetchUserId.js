@@ -4,7 +4,7 @@ const FetchUserId = () => {
   const { decodedToken, isExpired } = useJwt(token);
   if (token || !isExpired) {
     try {
-      return decodedToken.userId;
+      return decodedToken?.userId;
     } catch (error) {
       console.log(error.message);
     }

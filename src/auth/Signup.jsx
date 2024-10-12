@@ -156,7 +156,7 @@ const Signup = () => {
                 </Link>
               </p>
 
-              <p className="text-center">Or continue with</p>
+              {/* <p className="text-center">Or continue with</p> */}
             </Form>
           </Formik>
         </div>
