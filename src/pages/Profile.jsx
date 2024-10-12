@@ -66,7 +66,7 @@ const Profile = () => {
               <span>100</span>
             </div>
             <div className="flex justify-between text-xl font-semibold text-gray-500 my-2 px-6">
-              <span>Level</span> <span>1</span>
+              <span>Level</span> <span>2</span>
             </div>
           </div>
           <div className="upload-button center">
