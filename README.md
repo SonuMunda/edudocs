@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # edudocs
 =======
 # React + Vite
@@ -10,3 +11,6 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 >>>>>>> fa07ec2 (uploads)
+=======
+# edudocs
+>>>>>>> 0074f437d116d91b9c41e1fa1180cc3cc45e9722

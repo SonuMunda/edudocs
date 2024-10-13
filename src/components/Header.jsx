@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import logo from "../assets/images/logo.svg";
+import logo from "../assets/images/logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { CiHome, CiLogout, CiSaveUp2, CiUser } from "react-icons/ci";
@@ -97,7 +97,7 @@ const Header = () => {
               </div>
 
               {isMenuOpen && (
-                <div className="user-menu absolute top-12 right-0 backdrop-blur-3xl rounded-lg shadow-lg border w-60 z-50">
+                <div className="user-menu absolute top-12 right-0 bg-indigo-50 rounded-lg  border border-2 w-64 z-10">
                   <ul className="menu-list p-4">
                     <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                       <NavLink
