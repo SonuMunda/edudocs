@@ -104,7 +104,7 @@ const Signup = () => {
                   name="lastName"
                   id="lastName"
                   className=" p-2 border focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                  placeholder="Enter your last name (optional)"
+                  placeholder="Enter your last name"
                 />
                 <ErrorMessage
                   name="lastName"

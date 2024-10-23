@@ -1,33 +1,41 @@
-import { useDispatch, useSelector } from "react-redux";
-import FetchUserId from "../utils/FetchUserId";
+import { useDispatch } from "react-redux";
 import Loader from "../components/Loader";
 import { FiFileText } from "react-icons/fi";
 import { useEffect, useState } from "react";
-import { fetchUserUploads } from "../store/slices/userSlice";
-import { Link } from "react-router-dom";
+import {
+  fetchUserDetailsById,
+  fetchUserUploads,
+} from "../store/slices/userSlice";
+import { Link, useParams } from "react-router-dom";
 import ShareButtons from "../components/ShareButtons";
 import { FaTimes } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
+import FetchUserId from "../utils/FetchUserId";
 
 const Profile = () => {
-  const { user, isLoading } = useSelector((state) => state?.user);
+  const [profileData, setProfileData] = useState(null);
   const [uploadsData, setUploadsData] = useState(null);
   const [shareLink, setShareLink] = useState("");
   const [shareTitle, setShareTitle] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
 
   const id = FetchUserId();
-  const userId = user?._id;
 
+  const { userId } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (userId) {
+      if (!profileData) {
+        dispatch(fetchUserDetailsById(userId)).then((data) => {
+          setProfileData(data.payload);
+        });
+      }
       dispatch(fetchUserUploads(userId)).then((data) => {
         setUploadsData(data.payload);
       });
     }
-  }, [userId, dispatch]);
+  }, [userId, dispatch, profileData]);
 
   const toggleShareMenu = (url, title) => {
     setMenuOpen(true);
@@ -41,9 +49,8 @@ const Profile = () => {
       position: "top-right",
     });
   };
-  // console.log(...uploadsData);
 
-  if (isLoading) {
+  if (!profileData) {
     return <Loader />;
   }
 
@@ -53,48 +60,29 @@ const Profile = () => {
       <div className="container max-w-4xl mx-auto mt-14 mb-4 backdrop-blur-3xl p-6 rounded bg-gray-50 center flex-col">
         <div className="avatar m-auto border-2 h-40 w-40 rounded-full center">
           <h1 className="avatar-text text-6xl font-bold text-indigo-500">
-            {user?.firstName.charAt(0)}
+            {profileData.firstName.charAt(0)}
+            {profileData.lastName.charAt(0)}
           </h1>
         </div>
         <div className="details w-full bg-gray-200 my-4 rounded p-5">
           <h1 className="text-3xl font-bold text-center mt-4">
-            {user?.firstName} {user?.lastName}
+            {profileData.firstName} {profileData.lastName}
           </h1>
-          <p className="text-center text-gray-500 my-1">@{user?.username}</p>
-          <p className="text-center text-gray-500 my-1">{user?.university}</p>
-
-          <div className="flex justify-center gap-10 mt-6 font-semibold text-gray-600">
-            <div className="followers center flex-col">
-              <span>1B</span>
-              <span>Followers</span>
+          <p className="text-center text-gray-500 my-1">
+            @{profileData.username}
+          </p>
+          <p className="text-center text-gray-500 my-1">
+            {profileData.university}
+          </p>
+          {id === profileData._id && (
+            <div className="upload-button center my-10">
+              <Link to="/uploads">
+                <button className="btn btn-primary bg-indigo-600 text-white py-2 px-4 rounded">
+                  Upload Document to help buddies!
+                </button>
+              </Link>
             </div>
-            <div className="following center flex-col">
-              <span>224</span>
-              <span>Following</span>
-            </div>
-          </div>
-
-          {id !== user?._id ? (
-            <button className="btn btn-primary bg-indigo-600 text-white py-2 px-4 rounded">
-              Follow
-            </button>
-          ) : null}
-
-          <div className="level bg-gray-50 p-5 my-4 rounded">
-            <div className="points flex justify-between text-xl font-semibold text-gray-500 my-2 px-6">
-              <span>Points</span>
-              <span>1000000</span>
-            </div>
-            <div className="flex justify-between text-xl font-semibold text-gray-500 my-2 px-6">
-              <span>Level</span> <span>Diamond</span>
-            </div>
-          </div>
-          <div className="upload-button center">
-            <button className="btn btn-primary bg-indigo-600 text-white py-2 px-4 rounded">
-              Upload Document to Earn Points
-            </button>
-          </div>
-
+          )}
           <div className="documents-statistics my-6 bg-white p-4 rounded border">
             <div className="header p-3">
               <h1 className="font-semibold text-md mb-2">Uploads</h1>
@@ -103,7 +91,7 @@ const Profile = () => {
             <div className="flex justify-around p-2">
               <div className="uploads center flex-col">
                 <span className="font-bold text-2xl">
-                  {user?.uploads.length}
+                  {profileData.uploads.length}
                 </span>
                 <span>Documents</span>
               </div>
@@ -111,73 +99,68 @@ const Profile = () => {
                 <span className="font-bold text-2xl">0</span>
                 <span>Liked</span>
               </div>
-
               <div className="uploads center flex-col">
                 <span className="font-bold text-2xl">0</span>
                 <span>Votes</span>
               </div>
             </div>
           </div>
-
           <div className="documents-uploaded border m-2 p-4 rounded bg-white max-h-96 overflow-y-auto">
             <div className="header border-b p-4 font-semibold">
               <h1>Uploaded Documents</h1>
             </div>
             <div className="documents-lists m-4">
               <ul className="document-list max-h-96 overflow-y-auto">
-                {uploadsData != null
-                  ? uploadsData?.map((document) => {
-                      return (
-                        <>
-                          <li
-                            className="flex justify-between items-center gap-4 border-b p-4 bg-gray-50 rounded hover:bg-gray-100"
-                            key={document._id}
-                          >
-                            <Link
-                              to={`/${user.username}/document/${document.title}/${document._id}/view`}
-                            >
-                              <div className="flex gap-4 items-center">
-                                <div className="document-icon text-2xl text-indigo-800">
-                                  <FiFileText />
-                                </div>
-                                <div className="document-details">
-                                  <h1 className="document-title font-semibold text-indigo-600">
-                                    {document.title}
-                                  </h1>
-                                  <p className="document-subject text-sm text-gray-500">
-                                    {document.description}
-                                  </p>
-                                </div>
-                              </div>
-                            </Link>
-                            <div className="flex gap-4 items-center">
-                              <div className="likes flex items-center text-gray-600">
-                                <i className="fas fa-thumbs-up mr-2"></i>
-                                <span>{document.like}</span>
-                              </div>
-                              <div className="share-options">
-                                <button
-                                  className="border rounded py-2 px-4 text-gray-600 hover:bg-gray-100"
-                                  onClick={() => {
-                                    const url = `${
-                                      import.meta.env.VITE_CLIENT_URL
-                                    }/${user.username}/document/${
-                                      document.title
-                                    }/${document._id}/view`;
-                                    const title = document.category;
-
-                                    toggleShareMenu(url, title);
-                                  }}
-                                >
-                                  Share
-                                </button>
-                              </div>
+                {uploadsData
+                  ? uploadsData.map((document) => (
+                      <li
+                        className="flex justify-between items-center gap-4 border-b p-4 bg-gray-50 rounded hover:bg-gray-100"
+                        key={document._id}
+                      >
+                        <Link
+                          to={`/${profileData.username}/${profileData._id}/document/${document.title}/${document._id}/view`}
+                        >
+                          <div className="flex gap-4 items-center">
+                            <div className="document-icon text-2xl text-indigo-800">
+                              <FiFileText />
                             </div>
-                          </li>
-                        </>
-                      );
-                    })
-                  : "You have'nt uploaded any document yet"}
+                            <div className="document-details">
+                              <h1 className="document-title font-semibold text-indigo-600">
+                                {document.title}
+                              </h1>
+                              <p className="document-subject text-sm text-gray-500">
+                                {document.description}
+                              </p>
+                            </div>
+                          </div>
+                        </Link>
+                        <div className="flex gap-4 items-center">
+                          <div className="likes flex items-center text-gray-600">
+                            <i className="fas fa-thumbs-up mr-2"></i>
+                            <span>{document.like}</span>
+                          </div>
+                          <div className="share-options">
+                            <button
+                              className="border rounded py-2 px-4 text-gray-600 hover:bg-gray-100"
+                              onClick={() => {
+                                const url = `${
+                                  import.meta.env.VITE_CLIENT_URL
+                                }/${profileData.username}/${
+                                  profileData._id
+                                }/document/${document.title}/${
+                                  document._id
+                                }/view`;
+                                const title = document.category;
+                                toggleShareMenu(url, title);
+                              }}
+                            >
+                              Share
+                            </button>
+                          </div>
+                        </div>
+                      </li>
+                    ))
+                  : "You haven't uploaded any document yet"}
               </ul>
             </div>
           </div>
@@ -198,7 +181,7 @@ const Profile = () => {
           </div>
           <ShareButtons
             url={shareLink}
-            title={`Hi there I am sharing link of ${shareTitle} with you. Hope it helps!`}
+            title={`Hi there! I'm sharing the link of ${shareTitle} with you. Hope it helps!`}
           />
           <h4 className="font-semibold text-gray-700 mt-4 mb-3">
             Share this link
@@ -212,9 +195,7 @@ const Profile = () => {
             />
             <button
               className="copy-btn bg-indigo-600 hover:bg-indigo-700 py-2 px-5 text-white text-sm rounded-lg transition-colors"
-              onClick={() => {
-                handleCopyClipboard();
-              }}
+              onClick={handleCopyClipboard}
             >
               Copy
             </button>

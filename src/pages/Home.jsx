@@ -1,4 +1,19 @@
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { fetchRecentDocuments } from "../store/slices/userSlice";
+import { Link } from "react-router-dom";
+
 const Home = () => {
+  const [documents, setDocuments] = useState([]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchRecentDocuments()).then((data) => {
+      setDocuments(data.payload);
+    });
+  }, [dispatch]);
+
+ 
   return (
     <main>
       <section id="hero" className="center flex-col h-96  bg-indigo-100">
@@ -24,21 +39,43 @@ const Home = () => {
       <hr />
       <section id="notes" className="p-10">
         <div className="container  mx-auto">
-          <h3 className="text-3xl font-bold mb-4 text-indigo-600">Notes</h3>
+          <h3 className="text-3xl font-bold mb-4 text-indigo-600">
+            Recently Uploaded
+          </h3>
           <p className="text-gray-700 mb-4">
             Browse and share notes with your classmates.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Add content or components for notes here */}
-            <div className="note-card bg-gray-100 p-4 rounded-lg shadow">
-              <h4 className="text-xl font-semibold">Sample Note 1</h4>
-              <p className="text-gray-600">Description of the note.</p>
-            </div>
-            <div className="note-card bg-gray-100 p-4 rounded-lg shadow">
-              <h4 className="text-xl font-semibold">Sample Note 2</h4>
-              <p className="text-gray-600">Description of the note.</p>
-            </div>
-            {/* Add more note cards as needed */}
+          <div className="grid xsm:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {documents
+              ?.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))
+              .map((document) => {
+                return (
+                  <Link
+                    to={`/${document.username}/${document.uploadedBy}/document/${document.title}/${document._id}/view`}
+                    key={document._id}
+                  >
+                    <div className="note-card bg-gray-100 h-full p-4 rounded-lg shadow">
+                      <div className="document-image h-64 overflow-hidden">
+                        <img
+                          src={
+                            document.url.endsWith(".doc") ||
+                            document.url.endsWith(".docx")
+                              ? `${document.url}.jpg`
+                              : document.url.replace(/\.[^/.]+$/, ".jpg")
+                          }
+                          alt=""
+                        />
+                      </div>
+                      <div className="details bg-white my-2 p-2">
+                        <h4 className="text-xl font-bold">
+                          {document.title.replace(/\.[^/.]+$/, "")}
+                        </h4>
+                        <p className="text-gray-600">{document.description}</p>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
           </div>
         </div>
       </section>
@@ -71,45 +108,6 @@ const Home = () => {
             Learn more about EduDocs and our mission to facilitate easy sharing
             of educational resources.
           </p>
-        </div>
-      </section>
-      <section id="contact" className="p-10 bg-indigo-100">
-        <div className="container">
-          <h3 className="text-3xl font-bold mb-4 text-indigo-600">
-            Contact Us
-          </h3>
-          <p className="text-gray-700 mb-4">
-            Get in touch with us for any queries or support.
-          </p>
-          <form className="space-y-4 bg-white p-10 rounded-xl">
-            <div>
-              <label className="block text-gray-600 mb-2">Name</label>
-              <input
-                type="text"
-                className="w-full p-2 border border-indigo-200 rounded  focus:outline-none focus:ring-1 focus:ring-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-600 mb-2">Email</label>
-              <input
-                type="email"
-                className="w-full p-2 border border-indigo-200 rounded  focus:outline-none focus:ring-1 focus:ring-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-600 mb-2">Message</label>
-              <textarea
-                className="w-full p-2 border border-indigo-200 rounded  focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                rows="4"
-              ></textarea>
-            </div>
-            <button
-              type="submit"
-              className="bg-indigo-600 text-white py-3 px-10 rounded  hover:bg-indigo-700"
-            >
-              Send
-            </button>
-          </form>
         </div>
       </section>
     </main>

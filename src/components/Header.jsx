@@ -2,19 +2,20 @@ import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/images/logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { HiMagnifyingGlass } from "react-icons/hi2";
-import { CiHome, CiLogout, CiSaveUp2, CiUser } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa6";
-import { IoSettingsOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import Logout from "../utils/Logout";
 import FetchUserId from "../utils/FetchUserId";
 import { fetchUserDetails } from "../store/slices/userSlice";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { BiCloudUpload, BiHome, BiLogOut, BiUser } from "react-icons/bi";
+import { GiBigGear } from "react-icons/gi";
 
 const Header = () => {
   const { user, isLoading } = useSelector((state) => state?.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
@@ -32,7 +33,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center shadow p-2 fixed w-full backdrop-blur-3xl px-10 z-10">
+    <header className="flex justify-between items-center shadow p-2 fixed w-full bg-indigo-50 px-10 z-10">
       <div className="logo">
         <NavLink to="/" className="center">
           <img src={logo} alt="logo" className="h-10" />
@@ -41,15 +42,27 @@ const Header = () => {
       </div>
 
       <div className="search-bar relative flex items-center w-96 hidden md:flex">
-        <input
-          type="text"
-          placeholder="Search for documents"
-          className="p-2 background-transparent border border-gray-300 rounded w-full shadow-sm backdrop-blur-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out xl: w-full"
-        />
-        <HiMagnifyingGlass
-          size={24}
-          className="text-indigo-600 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-        />
+        <form
+          action=""
+          className="w-full"
+          onSubmit={(event) => {
+            event.preventDefault();
+            navigate(`/document-search?${query}`);
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Search for documents"
+            className="p-2 background-transparent border border-gray-300 rounded w-full shadow-sm backdrop-blur-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out xl: w-full"
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
+          />
+          <HiMagnifyingGlass
+            size={24}
+            className="text-indigo-600 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          />
+        </form>
       </div>
 
       <div className="header-btns">
@@ -77,6 +90,14 @@ const Header = () => {
                     Books
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink
+                    to="/solve-doubt"
+                    className="text-gray-600 font-semibold"
+                  >
+                    Chat with AI
+                  </NavLink>
+                </li>
               </ul>
             </nav>
 
@@ -86,7 +107,7 @@ const Header = () => {
                 onClick={toggleMenu}
               >
                 {!isLoading ? (
-                  <div className="mx-1 py-2 px-3 text-white font-semibold bg-indigo-500 rounded center">
+                  <div className="mx-1 p-2 text-white font-semibold bg-indigo-500 rounded center">
                     <span>{user?.firstName.charAt(0)}</span>
                     <span>{user?.lastName.charAt(0)}</span>
                   </div>
@@ -102,60 +123,60 @@ const Header = () => {
                     <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                       <NavLink
                         to="/"
-                        className="block py-2 flex items-center "
+                        className="block py-1 flex items-center "
                         onClick={() => {
                           setIsMenuOpen(false);
                         }}
                       >
-                        <CiHome size={20} className="m-2" />
+                        <BiHome size={20} className="m-2" />
                         Home
                       </NavLink>
                     </li>
                     <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                       <NavLink
-                        to={`/profile/${user.username}`}
-                        className="block py-2 flex items-center "
+                        to={`/profile/${user.username}/${user._id}`}
+                        className="block py-1 flex items-center"
                         onClick={() => {
                           setIsMenuOpen(false);
                         }}
                       >
-                        <CiUser size={20} className="m-2" />
+                        <BiUser size={20} className="m-2" />
                         Profile
                       </NavLink>
                     </li>
                     <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                       <NavLink
                         to="/uploads"
-                        className="block py-2 flex items-center "
+                        className="block py-1 flex items-center "
                         onClick={() => {
                           setIsMenuOpen(false);
                         }}
                       >
-                        <CiSaveUp2 size={20} className="m-2" />
+                        <BiCloudUpload size={20} className="m-2" />
                         Uploads
                       </NavLink>
                     </li>
                     <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                       <NavLink
                         to="/settings"
-                        className="block py-2 flex items-center "
+                        className="block py-1 flex items-center "
                         onClick={() => {
                           setIsMenuOpen(false);
                         }}
                       >
-                        <IoSettingsOutline size={20} className="m-2" />
+                        <GiBigGear size={20} className="m-2" />
                         Settings
                       </NavLink>
                     </li>
-                    <li className="text-gray-600 rounded-lg px-2 hover:bg-red-600 hover:text-white transition-colors border-t border-gray-200">
+                    <li className="text-gray-600 rounded-lg mt-1 px-2 hover:bg-red-600 hover:text-white transition-colors border-t border-gray-200">
                       <button
-                        className="block py-2 flex items-center"
+                        className="block py-1 flex items-center"
                         onClick={() => {
                           Logout({ dispatch, navigate });
                           setIsMenuOpen(false);
                         }}
                       >
-                        <CiLogout size={16} className="m-2" />
+                        <BiLogOut size={20} className="m-2" />
                         Logout
                       </button>
                     </li>

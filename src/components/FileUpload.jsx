@@ -13,6 +13,9 @@ import universitiesList from "../api/universitiesList";
 import coursesList from "../api/coursesList";
 import sessionsList from "../api/sessionsList";
 import styled from "styled-components";
+import { ColorRing } from "react-loader-spinner";
+
+import { BiCloudUpload } from "react-icons/bi";
 
 const StyledDataListInput = styled(DatalistInput)`
   &.datalist input {
@@ -77,11 +80,11 @@ const FileUpload = () => {
   };
 
   return (
-    <section className="file-upload center min-h-screen bg-gray-100">
+    <main className="file-upload center">
       <ToastContainer />
-      <div className="container p-10 max-w-4xl">
-        <p className="text-gray-600 mt-2">Upload your file here.</p>
-        <div className="file-upload-form">
+      <div className="container my-10 p-10 max-w-4xl">
+        <p className="text-xl font-bold my-2">Upload your file here.</p>
+        <div className="file-upload-form  font-semibold">
           <Formik
             initialValues={{
               file: null,
@@ -114,7 +117,7 @@ const FileUpload = () => {
             {({ setFieldValue, errors, touched, values, isSubmitting }) => (
               <Form encType="multipart/form-data">
                 <div
-                  className={`form-group upload-box border-2 border-indigo-900 ${
+                  className={`form-group upload-box ${
                     isDragging ? "border-indigo-600" : "border-dashed"
                   } rounded p-10 bg-indigo-50 my-2 hover:bg-indigo-100`}
                   onDragOver={(e) => {
@@ -151,7 +154,7 @@ const FileUpload = () => {
                   <button type="button" className="btn block mx-auto">
                     <label
                       htmlFor="file"
-                      className="center my-2 px-6 py-2 bg-indigo-800 rounded text-white cursor-pointer"
+                      className="center my-2 px-6 py-2 bg-indigo-600 rounded text-white cursor-pointer"
                     >
                       Browse my files
                     </label>
@@ -187,7 +190,7 @@ const FileUpload = () => {
                   </div>
                 )}
 
-                <div className="form-group">
+                <div className="form-group mt-4">
                   <label htmlFor="category" className="block mb-2">
                     Category
                   </label>
@@ -275,7 +278,7 @@ const FileUpload = () => {
                         onSelect={(item) =>
                           setFieldValue("session", item.value)
                         }
-                        className="datalist"
+                        className="datalist font-semibold"
                       />
                       {errors.session && touched.session ? (
                         <div className="text-red-500 text-xs font-bold">
@@ -291,7 +294,7 @@ const FileUpload = () => {
                       <textarea
                         name="description"
                         id="description"
-                        placeholder="Enter document description"
+                        placeholder="Write something about document."
                         rows="3"
                         className="p-3 border-2  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded"
                         value={values.description}
@@ -311,10 +314,19 @@ const FileUpload = () => {
                 <div className="center py-4">
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-indigo-800 text-white rounded"
+                    className="center w-full h-10 bg-indigo-500 text-white rounded"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Uploading..." : "Upload"}
+                    {isSubmitting ? (
+                      <ColorRing
+                        height={36}
+                        colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
+                      />
+                    ) : (
+                      <span className="center gap-2">
+                        Upload <BiCloudUpload size={34} />
+                      </span>
+                    )}
                   </button>
                 </div>
               </Form>
@@ -322,7 +334,7 @@ const FileUpload = () => {
           </Formik>
         </div>
       </div>
-    </section>
+    </main>
   );
 };
 
