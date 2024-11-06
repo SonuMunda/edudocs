@@ -84,7 +84,7 @@ const Header = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/documents"
+                    to="/books"
                     className="text-gray-600 font-semibold"
                   >
                     Books

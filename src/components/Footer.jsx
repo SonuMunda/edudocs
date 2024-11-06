@@ -12,7 +12,7 @@ const Footer = () => {
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row md:space-x-8">
+          {/* <div className="flex flex-col md:flex-row md:space-x-8">
             <Link
               to="/home"
               className="text-gray-400 hover:text-white mb-2 md:mb-0"
@@ -34,7 +34,7 @@ const Footer = () => {
             <Link to="/documents" className="text-gray-400 hover:text-white">
               Documents
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
 

@@ -53,7 +53,6 @@ export const fetchUserDetailsById = createAsyncThunk(
       }
 
       const responseData = await response.json();
-      console.log(responseData);
       return responseData.user;
     } catch (error) {
       console.log(error.message);
@@ -141,7 +140,6 @@ export const fetchUserUploads = createAsyncThunk(
       }
 
       const responseData = await response.json();
-      console.log(responseData);
       return responseData;
     } catch (error) {
       console.error(error);
@@ -176,8 +174,8 @@ export const fetchFileDetails = createAsyncThunk(
   }
 );
 
-export const fetchRecentDocuments = createAsyncThunk(
-  "fetchRecentDocuments",
+export const fetchAllDocuments = createAsyncThunk(
+  "fetchAllDocuments",
   async () => {
     try {
       const response = await fetch(
@@ -192,8 +190,7 @@ export const fetchRecentDocuments = createAsyncThunk(
       }
 
       const responseData = await response.json();
-
-      return responseData.data;
+      return responseData.documents;
     } catch (error) {
       console.log(error.message);
       throw error;
@@ -236,7 +233,7 @@ export const fetchUserDoubts = createAsyncThunk(
   async (userId) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api//user/doubts-chat/${userId}`,
+        `${import.meta.env.VITE_SERVER_URL}/api/user/doubts-chat/${userId}`,
         {
           method: "GET",
         }
@@ -248,7 +245,7 @@ export const fetchUserDoubts = createAsyncThunk(
 
       const responseData = await response.json();
       console.log(responseData);
-      return responseData.chats;
+      return responseData;
     } catch (error) {
       console.log(error.message);
       throw error;

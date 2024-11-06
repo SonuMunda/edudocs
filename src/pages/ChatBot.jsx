@@ -8,21 +8,26 @@ const ChatBot = () => {
   const { user, isLoading } = useSelector((state) => state?.user);
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([]);
-  const [polling, setPolling] = useState(true);
-  const [isThinking, setIsThinking] = useState(false); // State for thinking status
+  const [isThinking, setIsThinking] = useState(false);
 
   const dispatch = useDispatch();
   const userId = FetchUserId();
 
   const fetchMessages = async () => {
-    const data = await dispatch(fetchUserDoubts(userId));
-    const fetchedMessages = data.payload
-      .map((chat) => [
-        { text: chat.question, sender: "user" },
-        { text: chat.answer, sender: "bot" },
-      ])
-      .flat();
-    setMessages(fetchedMessages);
+    try {
+      const result = await dispatch(fetchUserDoubts(userId));
+      const fetchedMessages = result.payload
+        ? result.payload
+            .map((chat) => [
+              { text: chat.question, sender: "user" },
+              { text: chat.answer, sender: "bot" },
+            ])
+            .flat()
+        : [];
+      setMessages(fetchedMessages);
+    } catch (error) {
+      console.error("Failed to fetch messages:", error);
+    }
   };
 
   const sendMessage = async () => {
@@ -33,15 +38,16 @@ const ChatBot = () => {
 
     setIsThinking(true);
 
-    const response = await dispatch(resolveDoubt({ userId, question }));
-
-    console.log("Bot response:", response); // Debugging
-
-    if (response.payload && response.payload.answer) {
-      const botMessage = { text: response.payload.answer, sender: "bot" };
-      setMessages((prevMessages) => [...prevMessages, botMessage]);
-    } else {
-      console.error("Failed to get bot response", response);
+    try {
+      const response = await dispatch(resolveDoubt({ userId, question }));
+      if (response.payload && response.payload.answer) {
+        const botMessage = { text: response.payload.answer, sender: "bot" };
+        setMessages((prevMessages) => [...prevMessages, botMessage]);
+      } else {
+        console.error("Failed to get bot response", response);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
     }
 
     setIsThinking(false);
@@ -49,19 +55,8 @@ const ChatBot = () => {
   };
 
   useEffect(() => {
-    fetchMessages();
-    window.scrollTo(0, 100);
-  }, [userId]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (polling) {
-        fetchMessages();
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [polling]);
+    if (userId) fetchMessages();
+  }, [userId]); // Ensure useEffect only triggers when userId is available
 
   if (isLoading) {
     return <Loader />;
@@ -76,13 +71,13 @@ const ChatBot = () => {
             className={`mb-4 p-3 rounded-lg max-w-xs w-full ${
               message.sender === "user"
                 ? "bg-blue-500 text-white self-end"
-                : "bg-gray-300 text-black self-start overflow-x-hidden"
+                : "bg-gray-300 text-black self-start"
             }`}
           >
             {message.text}
           </div>
         ))}
-        {isThinking && ( // Show thinking message if processing
+        {isThinking && (
           <div className="mb-4 p-3 rounded-lg max-w-xs w-full bg-gray-200 text-black">
             Thinking...
           </div>

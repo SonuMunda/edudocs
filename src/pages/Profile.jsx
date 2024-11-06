@@ -55,7 +55,7 @@ const Profile = () => {
   }
 
   return (
-    <section className="profile bg-indigo-100 min-h-screen center p-4 ">
+    <section className="profile bg-gradient-to-l from-red-100 to-indigo-100 min-h-screen center p-4 ">
       <ToastContainer />
       <div className="container max-w-4xl mx-auto mt-14 mb-4 backdrop-blur-3xl p-6 rounded bg-gray-50 center flex-col">
         <div className="avatar m-auto border-2 h-40 w-40 rounded-full center">

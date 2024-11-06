@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { fetchFileDetails } from "../store/slices/userSlice";
 import ShareMenu from "../components/ShareMenu";
 import { ToastContainer } from "react-toastify";
-import { FaRegShareSquare, FaShare } from "react-icons/fa";
+import {  FaShare } from "react-icons/fa";
 
 const DocumentView = () => {
   const { fileId, username, userId } = useParams();
