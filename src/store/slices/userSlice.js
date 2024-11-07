@@ -198,60 +198,7 @@ export const fetchAllDocuments = createAsyncThunk(
   }
 );
 
-export const resolveDoubt = createAsyncThunk(
-  "chat/resolveDoubt",
-  async ({ userId, question }) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/chat/solve-doubt/${userId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ question }),
-        }
-      );
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch: ${response.message}`);
-      }
-
-      const responseData = await response.json();
-
-      console.log(userId, question);
-      return responseData.answer;
-    } catch (error) {
-      console.log(error.message);
-      throw error;
-    }
-  }
-);
-
-export const fetchUserDoubts = createAsyncThunk(
-  "fetchUserDoubts",
-  async (userId) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/user/doubts-chat/${userId}`,
-        {
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch: ${response.message}`);
-      }
-
-      const responseData = await response.json();
-      console.log(responseData);
-      return responseData;
-    } catch (error) {
-      console.log(error.message);
-      throw error;
-    }
-  }
-);
 const initialState = {
   user: null,
   isLogin: !!localStorage.getItem("token"),
