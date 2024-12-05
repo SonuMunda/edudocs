@@ -37,18 +37,43 @@ export const fetchUserDetails = createAsyncThunk(
   }
 );
 
-export const fetchUserDetailsById = createAsyncThunk(
-  "fetchUserDetailsById",
-  async (userId) => {
+// export const fetchUserDetailsById = createAsyncThunk(
+//   "fetchUserDetailsById",
+//   async (userId) => {
+//     try {
+//       const response = await fetch(
+//         `${import.meta.env.VITE_SERVER_URL}/api/user/${userId}`,
+//         {
+//           method: "GET",
+//         }
+//       );
+
+//       if (!response.ok) {
+//         throw new Error(`Failed to fetch: ${response.message}`);
+//       }
+
+//       const responseData = await response.json();
+//       return responseData.user;
+//     } catch (error) {
+//       console.log(error.message);
+//       throw error;
+//     }
+//   }
+// );
+
+export const fetchUserDetailsByUsername = createAsyncThunk(
+  "fetchUserDetailsByUsername",
+  async (username) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/user/${userId}`,
+        `${import.meta.env.VITE_SERVER_URL}/api/user/${username}`,
         {
           method: "GET",
         }
       );
 
       if (!response.ok) {
+        console.log("erroro");
         throw new Error(`Failed to fetch: ${response.message}`);
       }
 
@@ -197,7 +222,6 @@ export const fetchAllDocuments = createAsyncThunk(
     }
   }
 );
-
 
 const initialState = {
   user: null,

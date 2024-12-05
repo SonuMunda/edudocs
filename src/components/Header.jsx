@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/images/logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
-import { HiMagnifyingGlass } from "react-icons/hi2";
-import { FaAngleDown } from "react-icons/fa6";
+import { FaBook, FaHome, FaRobot } from "react-icons/fa";
+import { FaAngleDown, FaBars } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import Logout from "../utils/Logout";
 import FetchUserId from "../utils/FetchUserId";
@@ -15,7 +15,7 @@ import { GiBigGear } from "react-icons/gi";
 const Header = () => {
   const { user, isLoading } = useSelector((state) => state?.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [query, setQuery] = useState("");
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
@@ -32,37 +32,22 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  return (
-    <header className="flex justify-between items-center shadow p-2 fixed w-full bg-indigo-50 px-10 z-10">
-      <div className="logo">
-        <NavLink to="/" className="center">
-          <img src={logo} alt="logo" className="h-10" />
-          <h1 className="text-xl font-semibold">Edudocs</h1>
-        </NavLink>
-      </div>
+  const handleToggleNav = () => {
+    setIsNavOpen(!isNavOpen);
+  };
 
-      <div className="search-bar relative flex items-center w-96 hidden md:flex">
-        <form
-          action=""
-          className="w-full"
-          onSubmit={(event) => {
-            event.preventDefault();
-            navigate(`/document-search?${query}`);
-          }}
-        >
-          <input
-            type="text"
-            placeholder="Search for documents"
-            className="p-2 background-transparent border border-gray-300 rounded w-full shadow-sm backdrop-blur-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out xl: w-full"
-            onChange={(e) => {
-              setQuery(e.target.value);
-            }}
-          />
-          <HiMagnifyingGlass
-            size={24}
-            className="text-indigo-600 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-          />
-        </form>
+  return (
+    <header className="flex justify-between items-center shadow p-2 fixed w-full bg-white px-10 z-10">
+      <div className="center gap-2">
+        <div className="menubar sm:hidden" onClick={handleToggleNav}>
+          <FaBars size={24} />
+        </div>
+        <div className="logo">
+          <NavLink to="/" className="center">
+            <img src={logo} alt="logo" className="h-8" />
+            <h1 className="text-xl font-semibold">EduDocs</h1>
+          </NavLink>
+        </div>
       </div>
 
       <div className="header-btns">
@@ -74,28 +59,44 @@ const Header = () => {
             Login
           </NavLink>
         ) : (
-          <div className="center">
-            <nav className="navbar mx-4">
-              <ul className="flex items-center gap-6">
-                <li>
-                  <NavLink to="/" className="text-gray-600 font-semibold">
+          <div className="center gap-4">
+            <nav
+              className={`navbar absolute top-14 left-0 h-screen w-${
+                isNavOpen ? 80 : 0
+              } overflow-hidden bg-slate-50 sm:relative sm:w-fit sm:top-0 sm:h-fit sm:bg-white z-10 transitions duration-100  ease-in-out`}
+            >
+              <ul className="flex flex-col sm:flex-row sm:items-center gap-6 p-8 sm:p-0 ">
+                <li className="list-items">
+                  <NavLink
+                    to="/"
+                    className="text-gray-600 font-semibold flex items-center "
+                  >
+                    <span className="block sm:hidden">
+                      <FaHome size={20} className="mx-1" />
+                    </span>
                     Home
                   </NavLink>
                 </li>
-                <li>
+                <li className="list-items">
                   <NavLink
                     to="/books"
-                    className="text-gray-600 font-semibold"
+                    className="text-gray-600 font-semibold flex items-center"
                   >
+                    <span className="block sm:hidden">
+                      <FaBook size={20} className="mx-1" />
+                    </span>
                     Books
                   </NavLink>
                 </li>
-                <li>
+                <li className="list-items">
                   <NavLink
                     to="/solve-doubt"
-                    className="text-gray-600 font-semibold"
+                    className="text-gray-600 font-semibold flex items-center"
                   >
-                    Chat with AI
+                    <span className="block sm:hidden">
+                      <FaRobot size={20} className="mx-1" />
+                    </span>
+                    Ask AI
                   </NavLink>
                 </li>
               </ul>
@@ -118,7 +119,7 @@ const Header = () => {
               </div>
 
               {isMenuOpen && (
-                <div className="user-menu absolute top-12 right-0 bg-indigo-50 rounded-lg  border border-2 w-64 z-10">
+                <div className="user-menu absolute top-12 right-0 backdrop-blur-xl bg-white rounded-lg  border border-2 w-64 z-10">
                   <ul className="menu-list p-4">
                     <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                       <NavLink
@@ -134,7 +135,7 @@ const Header = () => {
                     </li>
                     <li className="text-gray-600 rounded-lg px-2  hover:bg-indigo-600 hover:text-white transition-colors">
                       <NavLink
-                        to={`/profile/${user.username}/${user._id}`}
+                        to={`/profile/${user.username}`}
                         className="block py-1 flex items-center"
                         onClick={() => {
                           setIsMenuOpen(false);
@@ -187,6 +188,12 @@ const Header = () => {
           </div>
         )}
       </div>
+      <div
+        className={`navbar-overlay absolute left-0 top-14 backdrop-blur-xl h-screen w-full ${
+          isNavOpen ? "block" : "hidden"
+        }`}
+        onClick={() => setIsNavOpen(false)}
+      ></div>
     </header>
   );
 };

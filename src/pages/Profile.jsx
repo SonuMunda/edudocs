@@ -3,7 +3,7 @@ import Loader from "../components/Loader";
 import { FiFileText } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import {
-  fetchUserDetailsById,
+  fetchUserDetailsByUsername,
   fetchUserUploads,
 } from "../store/slices/userSlice";
 import { Link, useParams } from "react-router-dom";
@@ -21,21 +21,25 @@ const Profile = () => {
 
   const id = FetchUserId();
 
-  const { userId } = useParams();
+  const { username } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (userId) {
+    console.log(username);
+    dispatch(fetchUserDetailsByUsername(username));
+
+    if (username) {
       if (!profileData) {
-        dispatch(fetchUserDetailsById(userId)).then((data) => {
+        dispatch(fetchUserDetailsByUsername(username)).then((data) => {
           setProfileData(data.payload);
+          console.log("Data", data.payload);
         });
       }
-      dispatch(fetchUserUploads(userId)).then((data) => {
+      dispatch(fetchUserUploads(profileData?._id)).then((data) => {
         setUploadsData(data.payload);
       });
     }
-  }, [userId, dispatch, profileData]);
+  }, [username, dispatch, profileData]);
 
   const toggleShareMenu = (url, title) => {
     setMenuOpen(true);
@@ -57,14 +61,14 @@ const Profile = () => {
   return (
     <section className="profile bg-gradient-to-l from-red-100 to-indigo-100 min-h-screen center p-4 ">
       <ToastContainer />
-      <div className="container max-w-4xl mx-auto mt-14 mb-4 backdrop-blur-3xl p-6 rounded bg-gray-50 center flex-col">
-        <div className="avatar m-auto border-2 h-40 w-40 rounded-full center">
-          <h1 className="avatar-text text-6xl font-bold text-indigo-500">
+      <div className="container max-w-4xl mx-auto mt-14 mb-4 backdrop-blur-3xl p-6 center flex-col">
+        <div className="avatar m-auto bg-white border-2 h-40 w-40 rounded-full center">
+          <h1 className="avatar-text text-5xl font-bold text-indigo-500">
             {profileData.firstName.charAt(0)}
             {profileData.lastName.charAt(0)}
           </h1>
         </div>
-        <div className="details w-full bg-gray-200 my-4 rounded p-5">
+        <div className="details w-full  my-4 rounded p-5">
           <h1 className="text-3xl font-bold text-center mt-4">
             {profileData.firstName} {profileData.lastName}
           </h1>
@@ -105,7 +109,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <div className="documents-uploaded border m-2 p-4 rounded bg-white max-h-96 overflow-y-auto">
+          <div className="documents-uploaded border my-2 p-4 rounded bg-white max-h-96 overflow-y-auto">
             <div className="header border-b p-4 font-semibold">
               <h1>Uploaded Documents</h1>
             </div>

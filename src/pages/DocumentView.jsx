@@ -4,7 +4,9 @@ import { Link, useParams } from "react-router-dom";
 import { fetchFileDetails } from "../store/slices/userSlice";
 import ShareMenu from "../components/ShareMenu";
 import { ToastContainer } from "react-toastify";
-import {  FaShare } from "react-icons/fa";
+import { FaShare } from "react-icons/fa";
+import { FaThumbsUp } from "react-icons/fa6";
+import { BiSolidUpvote } from "react-icons/bi";
 
 const DocumentView = () => {
   const { fileId, username, userId } = useParams();
@@ -35,7 +37,7 @@ const DocumentView = () => {
       <ToastContainer />
       <div className="container document-viewer flex flex-col gap-4 md:flex-row my-10">
         {/* Document Description */}
-        <div className="document-description w-full md:w-4/12 p-4 border-r bg-indigo-100 rounded">
+        <div className="document-description w-full md:w-4/12 p-4 border-r rounded">
           <div className="flex flex-col gap-2 my-4">
             <h2 className="text-gray-800 font-bold text-2xl">
               {fileDetails?.title.replace(/\.[^/.]+$/, "")}
@@ -61,7 +63,7 @@ const DocumentView = () => {
           <div className="owner mb-2">
             <h4 className="text-lg font-semibold">Uploaded by</h4>
             <Link
-              to={`/profile/${username}/${userId}`}
+              to={`/profile/${username}`}
               className="text-indigo-600 font-semibold hover:text-indigo-700"
             >
               {username}
@@ -69,24 +71,40 @@ const DocumentView = () => {
           </div>
 
           {/* Share button */}
-          <button
-            className="share-btn center border  border-4 border-indigo-600 text-indigo-600 px-4 py-1 rounded-full mt-4"
-            onClick={() =>
-              toggleShareMenu(
-                `${
-                  import.meta.env.VITE_CLIENT_URL
-                }/${username}/${userId}/document/${
+          <div className="document-btns flex gap-4">
+            <button
+              className="share-btn center bg-indigo-600 text-white px-4 py-2 rounded"
+              onClick={() =>
+                toggleShareMenu(
+                  `${
+                    import.meta.env.VITE_CLIENT_URL
+                  }/${username}/${userId}/document/${
+                    fileDetails?.title
+                  }/${fileId}/view`,
                   fileDetails?.title
-                }/${fileId}/view`,
-                fileDetails?.title
-              )
-            }
-          >
-            <div className="icon me-2">
-              <FaShare />
-            </div>
-            <span className="font-bold">Share</span>
-          </button>
+                )
+              }
+            >
+              <div className="icon me-2">
+                <FaShare />
+              </div>
+              <span className="font-bold">Share</span>
+            </button>
+
+            <button className="like-btn center bg-green-600 text-white px-4 py-2 rounded">
+              <div className="icon me-2">
+                <FaThumbsUp />
+              </div>
+              <span className="font-bold">Like</span>
+            </button>
+
+            <button className="vote center bg-red-600 text-white px-4 py-2 rounded">
+              <div className="icon me-2">
+              <BiSolidUpvote/>
+              </div>
+              <span className="font-bold">Vote</span>
+            </button>
+          </div>
         </div>
 
         {/* Document Viewer */}

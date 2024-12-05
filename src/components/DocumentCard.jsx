@@ -7,8 +7,8 @@ const DocumentCard = ({ document }) => {
       to={`/${document.username}/${document.uploadedBy}/document/${document.title}/${document._id}/view`}
       key={document._id}
     >
-      <div className="document-card h-full bg-gray-50 p-4 rounded shadow">
-        <div className="document-image h-64 overflow-hidden rounded-xl">
+      <div className="document-card h-full bg-gray-50 p-4 rounded-2xl shadow">
+        <div className="document-image overflow-hidden rounded-xl">
           <img
             src={
               document.url.endsWith(".doc") || document.url.endsWith(".docx")
@@ -16,12 +16,12 @@ const DocumentCard = ({ document }) => {
                 : document.url.replace(/\.[^/.]+$/, ".jpg")
             }
             alt={document.title.replace(/\.[^/.]+$/, "")}
+            className="object-cover w-full h-36 sm:h-56"
           />
         </div>
-        <h4 className="text-lg font-bold mt-2">
+        <h4 className="text-sm font-bold mt-4 sm:text-lg">
           {document.title.replace(/\.[^/.]+$/, "")}
         </h4>
-        <p className="text-gray-600 text-sm">{document.description}</p>
       </div>
     </Link>
   );

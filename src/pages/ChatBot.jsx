@@ -4,19 +4,19 @@ import { sendMessageToChatbot, clearConversation } from '../store/slices/chatbot
 
 const Chatbot = () => {
   const dispatch = useDispatch();
-  const { status, error, isLoading, conversation } = useSelector((state) => state.chatbot || {});
+  const { error, isLoading, conversation } = useSelector((state) => state.chatbot || {});
   const [message, setMessage] = useState('');
 
   const handleSendMessage = () => {
     if (message.trim()) {
       dispatch(sendMessageToChatbot(message));
-      dispatch({ type: 'chatbot/addUserMessage', payload: message }); // Add the user's message to conversation
+      dispatch({ type: 'chatbot/addUserMessage', payload: message }); 
       setMessage('');
     }
   };
 
   return (
-    <div className="h-screen bg-gray-100 flex flex-col">
+    <div className="h-screen bg-gray-100 flex flex-col bg-gradient-to-l from-red-800 to-indigo-600">
       <div className="bg-blue-600 text-white py-4 px-6 shadow-md">
         <h1 className="text-2xl font-semibold mt-12">Chatbot</h1>
       </div>
