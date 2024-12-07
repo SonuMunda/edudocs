@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+
 export const fetchUserDetails = createAsyncThunk(
   "auth/fetchUserDetails",
   async ({ id }, { rejectWithValue, dispatch }) => {
@@ -201,6 +202,36 @@ export const addDocumentLike = createAsyncThunk(
     } catch (error) {
       console.error("Error adding like", error);
       return rejectWithValue("An error occurred while adding like");
+    }
+  }
+);
+
+export const addDocumentVote = createAsyncThunk(
+  "addDocumentVote",
+  async ({ documentId, userId }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/api/documents/document/vote/${documentId}/${userId}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue(errorData.message);
+      }
+
+      const responseData = await response.json();
+      return responseData.message;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.message);
     }
   }
 );

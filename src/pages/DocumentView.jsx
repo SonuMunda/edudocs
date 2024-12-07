@@ -57,6 +57,28 @@ const DocumentView = () => {
     }
   };
 
+  const handleVote = async () => {
+    if (currentUserId && currentUserId !== userId) {
+      dispatch(
+        addDocumentLike({ documentId: fileId, userId: currentUserId })
+      ).then((data) => {
+        if (data.payload) {
+          toast.success(data.payload, {
+            position: "top-right",
+          });
+        } else if (data.error) {
+          toast.error(data.error.message || "Failed to vote document", {
+            position: "top-right",
+          });
+        }
+      });
+    } else {
+      toast.warn("You cannot vote your own document", {
+        position: "top-right",
+      });
+    }
+  };
+
   return (
     <main className="bg-gray-50 min-h-screen p-6 flex justify-center items-center">
       <ToastContainer />
@@ -126,7 +148,7 @@ const DocumentView = () => {
               <span className="font-bold">Like</span>
             </button>
 
-            <button className="vote center bg-red-600 text-white px-4 py-2 rounded">
+            <button className="vote center bg-red-600 text-white px-4 py-2 rounded" onClick={handleVote}>
               <div className="icon me-2">
                 <BiSolidUpvote />
               </div>
