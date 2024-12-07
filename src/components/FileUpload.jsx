@@ -115,11 +115,11 @@ const FileUpload = () => {
             }}
           >
             {({ setFieldValue, errors, touched, values, isSubmitting }) => (
-              <Form encType="multipart/form-data">
+              <Form encType="multipart/form-data" className="form">
                 <div
-                  className={`form-group upload-box ${
-                    isDragging ? "border-indigo-600" : "border-dashed"
-                  } rounded p-10 bg-white my-2 hover:bg-indigo-50`}
+                  className={`form-group upload-box border-2 border-indigo-800 ${
+                    isDragging ? "border-indigo-800" : "border-dashed"
+                  } rounded p-10 bg-white my-2`}
                   onDragOver={(e) => {
                     e.preventDefault();
                     setIsDragging(true);
@@ -198,18 +198,21 @@ const FileUpload = () => {
                     name="category"
                     value={values.category}
                     onChange={(e) => setFieldValue("category", e.target.value)}
-                    className="p-2 border-2  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded"
+                    className={`p-2 border  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded ${
+                      errors.category && touched.category
+                        ? "border-red-500"
+                        : ""
+                    }`}
                   >
                     <option value="">Choose File Category</option>
                     <option value="assignment">Assignment</option>
                     <option value="notes">Notes</option>
                     <option value="practice material">Practice Material</option>
                     <option value="practical">Practical</option>
-                    <option value="book">Book</option>
                     <option value="other">Other</option>
                   </select>
                   {errors.category && touched.category ? (
-                    <div className="text-red-500 text-xs font-bold">
+                    <div className="text-red-500 text-xs">
                       {errors.category}
                     </div>
                   ) : null}
@@ -232,10 +235,14 @@ const FileUpload = () => {
                         onSelect={(item) =>
                           setFieldValue("university", item.value)
                         }
-                        className="datalist"
+                        className={`datalist ${
+                          errors.university && touched.university
+                            ? "border border-red-500"
+                            : ""
+                        }`}
                       />
                       {errors.university && touched.university && (
-                        <div className="text-red-500 text-xs font-bold">
+                        <div className="text-red-500 text-xs">
                           {errors.university}
                         </div>
                       )}
@@ -254,10 +261,14 @@ const FileUpload = () => {
                           value: course.value,
                         }))}
                         onSelect={(item) => setFieldValue("course", item.value)}
-                        className="datalist"
+                        className={`datalist ${
+                          errors.course && touched.course
+                            ? "border border-red-500"
+                            : ""
+                        }`}
                       />
                       {errors.course && touched.course ? (
-                        <div className="text-red-500 text-xs font-bold">
+                        <div className="text-red-500 text-xs">
                           {errors.course}
                         </div>
                       ) : null}
@@ -278,10 +289,14 @@ const FileUpload = () => {
                         onSelect={(item) =>
                           setFieldValue("session", item.value)
                         }
-                        className="datalist font-semibold"
+                        className={`datalist ${
+                          errors.session && touched.session
+                            ? "border border-red-500"
+                            : ""
+                        }`}
                       />
                       {errors.session && touched.session ? (
-                        <div className="text-red-500 text-xs font-bold">
+                        <div className="text-red-500 text-xs">
                           {errors.session}
                         </div>
                       ) : null}
@@ -296,14 +311,18 @@ const FileUpload = () => {
                         id="description"
                         placeholder="Write something about document."
                         rows="3"
-                        className="p-3 border-2  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded"
+                        className={`p-3 border  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded ${
+                          errors.description && touched.description
+                            ? "border-red-500"
+                            : ""
+                        }`}
                         value={values.description}
                         onChange={(e) =>
                           setFieldValue("description", e.target.value)
                         }
                       ></textarea>
                       {errors.description && touched.description ? (
-                        <div className="text-red-500 text-xs font-bold">
+                        <div className="text-red-500 text-xs">
                           {errors.description}
                         </div>
                       ) : null}
@@ -314,7 +333,7 @@ const FileUpload = () => {
                 <div className="center py-4">
                   <button
                     type="submit"
-                    className="center w-full h-10 bg-indigo-500 text-white rounded"
+                    className="center w-full h-10 bg-indigo-500 text-white rounded hover:bg-indigo-600"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (

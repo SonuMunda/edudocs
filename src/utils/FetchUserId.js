@@ -1,5 +1,8 @@
 import { useJwt } from "react-jwt";
+import { useNavigate } from "react-router-dom";
 const FetchUserId = () => {
+  const navigate = useNavigate();
+
   const token = localStorage.getItem("token");
   const { decodedToken, isExpired } = useJwt(token);
   if (token || !isExpired) {
@@ -9,7 +12,8 @@ const FetchUserId = () => {
       console.log(error.message);
     }
   } else {
-    console.warn("No token found");
+    localStorage?.removeItem("token");
+    navigate("/login");
   }
 };
 

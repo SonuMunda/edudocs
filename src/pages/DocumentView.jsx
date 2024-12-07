@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { fetchFileDetails } from "../store/slices/userSlice";
+import { addDocumentLike, fetchFileDetails } from "../store/slices/userSlice";
 import ShareMenu from "../components/ShareMenu";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { FaShare } from "react-icons/fa";
 import { FaThumbsUp } from "react-icons/fa6";
 import { BiSolidUpvote } from "react-icons/bi";
+import FetchUserId from "../utils/FetchUserId";
 
 const DocumentView = () => {
   const { fileId, username, userId } = useParams();
@@ -15,6 +16,8 @@ const DocumentView = () => {
   const [shareLink, setShareLink] = useState("");
   const [shareTitle, setShareTitle] = useState("");
   const dispatch = useDispatch();
+
+  const currentUserId = FetchUserId();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -32,10 +35,32 @@ const DocumentView = () => {
     setShareTitle(title);
   };
 
+  const handleLike = async () => {
+    if (currentUserId && currentUserId !== userId) {
+      dispatch(addDocumentLike({ documentId: fileId, currentUserId })).then(
+        (data) => {
+          if (data.payload) {
+            toast.success(data.payload, {
+              position: "top-right",
+            });
+          } else if (data.error) {
+            toast.error(data.error.message || "Failed to like document", {
+              position: "top-right",
+            });
+          }
+        }
+      );
+    } else {
+      toast.error("You cannot like your own document", {
+        position: "top-right",
+      });
+    }
+  };
+
   return (
     <main className="bg-gray-50 min-h-screen p-6 flex justify-center items-center">
       <ToastContainer />
-      <div className="container document-viewer flex flex-col gap-4 md:flex-row my-10">
+      <div className="container document-viewer flex flex-col gap-4 lg:flex-row my-10">
         {/* Document Description */}
         <div className="document-description w-full md:w-4/12 p-4 border-r rounded">
           <div className="flex flex-col gap-2 my-4">
@@ -91,7 +116,10 @@ const DocumentView = () => {
               <span className="font-bold">Share</span>
             </button>
 
-            <button className="like-btn center bg-green-600 text-white px-4 py-2 rounded">
+            <button
+              className="like-btn center bg-green-600 text-white px-4 py-2 rounded"
+              onClick={handleLike}
+            >
               <div className="icon me-2">
                 <FaThumbsUp />
               </div>
@@ -100,7 +128,7 @@ const DocumentView = () => {
 
             <button className="vote center bg-red-600 text-white px-4 py-2 rounded">
               <div className="icon me-2">
-              <BiSolidUpvote/>
+                <BiSolidUpvote />
               </div>
               <span className="font-bold">Vote</span>
             </button>

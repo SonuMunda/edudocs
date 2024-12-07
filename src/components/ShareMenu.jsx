@@ -1,6 +1,8 @@
 import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 import ShareButtons from "./ShareButtons";
+import { FaCopy } from "react-icons/fa6";
+import PropTypes from "prop-types";
 
 const ShareMenu = ({ shareLink, shareTitle, menuOpen, setMenuOpen }) => {
   const handleCopyClipboard = () => {
@@ -13,11 +15,11 @@ const ShareMenu = ({ shareLink, shareTitle, menuOpen, setMenuOpen }) => {
   if (!menuOpen) return null;
 
   return (
-    <div className="share-menu fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg p-6 border border-gray-200 rounded-lg max-w-sm w-full">
-      <div className="flex items-center justify-between mb-6">
+    <div className="share-menu fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-indigo-100 p-6 border border-gray-200 rounded-3xl max-w-sm w-full">
+      <div className="flex items-center justify-between pb-2 border-b border-gray-400">
         <h4 className="font-bold text-2xl text-indigo-700">Share</h4>
         <button
-          className="close-btn text-gray-500 hover:text-gray-700 transition-colors"
+          className="close-btn text-gray-800 hover:text-gray-700 transition-colors"
           onClick={() => setMenuOpen(false)}
         >
           <FaTimes />
@@ -27,7 +29,7 @@ const ShareMenu = ({ shareLink, shareTitle, menuOpen, setMenuOpen }) => {
         url={shareLink}
         title={`Hi there! I'm sharing the link of ${shareTitle} with you. Hope it helps!`}
       />
-      <h4 className="font-semibold text-gray-700 mt-4 mb-3">Share this link</h4>
+      <h4 className="font-semibold text-gray-900 mt-4 mb-3">Share this link</h4>
       <div className="share-link flex items-center gap-2">
         <input
           type="text"
@@ -39,7 +41,7 @@ const ShareMenu = ({ shareLink, shareTitle, menuOpen, setMenuOpen }) => {
           className="copy-btn bg-indigo-600 hover:bg-indigo-700 py-2 px-5 text-white text-sm rounded-lg transition-colors"
           onClick={handleCopyClipboard}
         >
-          Copy
+          <FaCopy size={20} />
         </button>
       </div>
     </div>
@@ -47,3 +49,10 @@ const ShareMenu = ({ shareLink, shareTitle, menuOpen, setMenuOpen }) => {
 };
 
 export default ShareMenu;
+
+ShareMenu.propTypes = {
+  shareLink: PropTypes.string,
+  shareTitle: PropTypes.string,
+  menuOpen: PropTypes.bool,
+  setMenuOpen: PropTypes.func,
+};
