@@ -26,20 +26,20 @@ const Home = () => {
     <main>
       <section
         id="hero"
-        className="center flex-col h-96 bg-gradient-to-l from-red-800 to-indigo-600"
+        className="center flex-col h-96 bg-gradient-to-l from-red-900 to-blue-900"
       >
-        <div className="container center flex-col">
-          <h2 className="text-5xl font-semibold mb-4 text-indigo-100 text-center">
+        <div className="container center flex-col p-4">
+          <h2 className="text-5xl font-semibold mb-4 text-blue-100 text-center">
             Welcome to EduDocs
           </h2>
-          <p className="text-lg mt-4 mb-4 text-indigo-50 text-md text-center">
+          <p className="text-lg mt-4 mb-4 text-blue-50 text-md text-center">
             Your ultimate platform for sharing notes and assignments.
           </p>
           <div className="search w-full relative">
             <form onSubmit={handleSearch}>
               <input
                 type="text"
-                className="w-full py-2 px-4 border border-2 rounded-full"
+                className="w-full py-2 px-4 outline-none  rounded-full hover:shadow hover:shadow-white"
                 placeholder="Type to search for documents"
                 onChange={(e) => setQuery(e.target.value)}
               />
@@ -50,18 +50,16 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <hr />
+
       <section
         id="recently-uploaded"
-        className="p-10 bg-gradient-to-l from-red-100 to-indigo-100"
+        className="p-10 bg-gradient-to-l from-red-100 to-blue-100"
       >
         <div className="recently-uploaded-container">
-          <h3 className="text-3xl font-bold mb-4 text-indigo-600">
+          <h3 className="text-3xl font-bold mb-2 text-blue-600">
             Recently Uploaded
           </h3>
-          <p className="text-gray-700 mb-4">
-            Browse and share notes with your classmates.
-          </p>
+          <div className="border-4 border-blue-600 w-40 rounded-full mb-10"></div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {documents
               ?.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))
@@ -71,18 +69,14 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <hr />
       <section
         id="assignments"
-        className="p-10 bg-gradient-to-l from-red-100 to-indigo-100"
+        className="p-10 bg-gradient-to-l from-red-100 to-blue-100"
       >
         <div className="assignments-container">
-          <h3 className="text-3xl font-bold mb-4 text-indigo-600">
-            Assignments
-          </h3>
-          <p className="text-gray-700 mb-4">
-            Upload and download assignments with ease.
-          </p>
+          <h3 className="text-3xl font-bold mb-4 text-blue-600">Assignments</h3>
+          <div className="border-4 border-blue-600 w-40 rounded-full mb-10"></div>
+
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {documents.filter((doc) => doc.category === "assignment").length >
             0 ? (
@@ -102,13 +96,12 @@ const Home = () => {
 
       <section
         id="notes"
-        className="p-10 bg-gradient-to-l from-red-100 to-indigo-100"
+        className="p-10 bg-gradient-to-l from-red-100 to-blue-100"
       >
         <div className="notes-container">
-          <h3 className="text-3xl font-bold mb-4 text-indigo-600">Notes</h3>
-          <p className="text-gray-700 mb-4">
-            Upload and download notes with ease.
-          </p>
+          <h3 className="text-3xl font-bold mb-4 text-blue-600">Notes</h3>
+          <div className="border-4 border-blue-600 w-40 rounded-full mb-10"></div>
+
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {documents.filter((doc) => doc.category === "notes").length > 0 ? (
               documents

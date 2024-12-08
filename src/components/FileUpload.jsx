@@ -16,16 +16,17 @@ import styled from "styled-components";
 import { ColorRing } from "react-loader-spinner";
 
 import { BiCloudUpload } from "react-icons/bi";
+import { MdOutlineFileUpload, } from "react-icons/md";
 
 const StyledDataListInput = styled(DatalistInput)`
   &.datalist input {
-    padding: 0.6rem;
+    padding: 0.7rem;
   }
   &.datalist input:focus {
-    outline: 2px solid #6366f1;
+    outline: 1px solid #6366f1;
   }
   &.datalist {
-    border-radius: 0.25rem;
+    border-radius: 0.4rem;
   }
 `;
 
@@ -80,10 +81,9 @@ const FileUpload = () => {
   };
 
   return (
-    <main className="file-upload center bg-gradient-to-l from-red-100 to-indigo-100">
+    <main className="file-upload flex justify-center bg-gray-100 min-h-screen">
       <ToastContainer />
-      <div className="container my-10 p-10 max-w-4xl">
-        <p className="text-xl font-bold my-2">Upload your file here.</p>
+      <div className="container my-14 p-4 max-w-6xl">
         <div className="file-upload-form font-semibold">
           <Formik
             initialValues={{
@@ -115,11 +115,14 @@ const FileUpload = () => {
             }}
           >
             {({ setFieldValue, errors, touched, values, isSubmitting }) => (
-              <Form encType="multipart/form-data" className="form">
+              <Form
+                encType="multipart/form-data"
+                className="form flex-col md:flex-row flex gap-10"
+              >
                 <div
-                  className={`form-group upload-box border-2 border-indigo-800 ${
-                    isDragging ? "border-indigo-800" : "border-dashed"
-                  } rounded p-10 bg-white my-2`}
+                  className={`form-group center flex-col upload-box border-4 border-blue-800 ${
+                    isDragging ? "border-blue-800" : "border-dashed"
+                  } rounded-3xl p-10 bg-white my-2 w-full`}
                   onDragOver={(e) => {
                     e.preventDefault();
                     setIsDragging(true);
@@ -142,6 +145,7 @@ const FileUpload = () => {
                     className="hidden"
                     onChange={(event) => handleFileChange(event, setFieldValue)}
                   />
+                  <MdOutlineFileUpload size={64} className="center text-blue-800" />
                   <h1 className="center text-xl font-semibold text-gray-600 m-1">
                     Drag & Drop Your File
                   </h1>
@@ -154,7 +158,7 @@ const FileUpload = () => {
                   <button type="button" className="btn block mx-auto">
                     <label
                       htmlFor="file"
-                      className="center my-2 px-6 py-2 bg-indigo-600 rounded text-white cursor-pointer"
+                      className="center my-2 px-6 py-2 bg-blue-600 rounded-3xl text-white cursor-pointer"
                     >
                       Browse my files
                     </label>
@@ -166,59 +170,65 @@ const FileUpload = () => {
                   ) : null}
                 </div>
 
-                {file && (
-                  <div className="my-5">
-                    <h4 className="text-lg font-semibold">Selected File:</h4>
-                    <div className="flex items-center justify-between p-3 bg-gray-100">
-                      <span className="text-gray-700">{file.name}</span>
-                      <div className="flex gap-6">
-                        <span className="text-gray-500 text-sm">
-                          {(file.size / 1024).toFixed(2)} KB
-                        </span>
-                        <button
-                          type="button"
-                          className="text-red-600 text-lg"
-                          onClick={() => {
-                            setFile(null);
-                            setFieldValue("file", null);
-                          }}
-                        >
-                          <CiTrash />
-                        </button>
+                <div className="form-right w-full">
+                  {file && (
+                    <div className="my-5">
+                      <h4 className="text-lg font-semibold mb-1">
+                        Selected File:
+                      </h4>
+                      <div className="flex items-center justify-between p-3 bg-white rounded">
+                        <span className="text-gray-900">{file.name}</span>
+                        <div className="flex gap-6">
+                          <span className="text-gray-800 text-sm">
+                            {(file.size / 1024).toFixed(2)} KB
+                          </span>
+                          <button
+                            type="button"
+                            className="text-red-600 text-xl"
+                            onClick={() => {
+                              setFile(null);
+                              setFieldValue("file", null);
+                            }}
+                          >
+                            <CiTrash />
+                          </button>
+                        </div>
                       </div>
                     </div>
+                  )}
+
+                  <div className="form-group mt-4">
+                    <label htmlFor="category" className="block mb-2">
+                      Category
+                    </label>
+                    <select
+                      name="category"
+                      value={values.category}
+                      onChange={(e) =>
+                        setFieldValue("category", e.target.value)
+                      }
+                      className={`p-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
+                        errors.category && touched.category
+                          ? "border-red-500"
+                          : ""
+                      }`}
+                    >
+                      <option value="">Choose File Category</option>
+                      <option value="assignment">Assignment</option>
+                      <option value="notes">Notes</option>
+                      <option value="practice material">
+                        Practice Material
+                      </option>
+                      <option value="practical">Practical</option>
+                      <option value="other">Other</option>
+                    </select>
+                    {errors.category && touched.category ? (
+                      <div className="text-red-500 text-xs">
+                        {errors.category}
+                      </div>
+                    ) : null}
                   </div>
-                )}
 
-                <div className="form-group mt-4">
-                  <label htmlFor="category" className="block mb-2">
-                    Category
-                  </label>
-                  <select
-                    name="category"
-                    value={values.category}
-                    onChange={(e) => setFieldValue("category", e.target.value)}
-                    className={`p-2 border  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded ${
-                      errors.category && touched.category
-                        ? "border-red-500"
-                        : ""
-                    }`}
-                  >
-                    <option value="">Choose File Category</option>
-                    <option value="assignment">Assignment</option>
-                    <option value="notes">Notes</option>
-                    <option value="practice material">Practice Material</option>
-                    <option value="practical">Practical</option>
-                    <option value="other">Other</option>
-                  </select>
-                  {errors.category && touched.category ? (
-                    <div className="text-red-500 text-xs">
-                      {errors.category}
-                    </div>
-                  ) : null}
-                </div>
-
-                {values.category && (
                   <>
                     <div className="form-group flex flex-col">
                       <label htmlFor="university" className="block my-2">
@@ -311,7 +321,7 @@ const FileUpload = () => {
                         id="description"
                         placeholder="Write something about document."
                         rows="3"
-                        className={`p-3 border  focus:outline-none focus:ring-1 focus:ring-indigo-700 w-full rounded ${
+                        className={`p-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
                           errors.description && touched.description
                             ? "border-red-500"
                             : ""
@@ -328,25 +338,25 @@ const FileUpload = () => {
                       ) : null}
                     </div>
                   </>
-                )}
 
-                <div className="center py-4">
-                  <button
-                    type="submit"
-                    className="center w-full h-10 bg-indigo-500 text-white rounded hover:bg-indigo-600"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <ColorRing
-                        height={36}
-                        colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
-                      />
-                    ) : (
-                      <span className="center gap-2">
-                        Upload <BiCloudUpload size={34} />
-                      </span>
-                    )}
-                  </button>
+                  <div className="center py-4">
+                    <button
+                      type="submit"
+                      className="center w-full h-10 bg-blue-500 text-white rounded-3xl hover:bg-blue-600"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <ColorRing
+                          height={36}
+                          colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
+                        />
+                      ) : (
+                        <span className="center gap-2">
+                          Upload <BiCloudUpload size={34} />
+                        </span>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </Form>
             )}

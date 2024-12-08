@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { addDocumentLike, fetchFileDetails } from "../store/slices/userSlice";
+import { addDocumentLike, addDocumentVote, fetchFileDetails } from "../store/slices/userSlice";
 import ShareMenu from "../components/ShareMenu";
 import { toast, ToastContainer } from "react-toastify";
 import { FaShare } from "react-icons/fa";
@@ -60,7 +60,7 @@ const DocumentView = () => {
   const handleVote = async () => {
     if (currentUserId && currentUserId !== userId) {
       dispatch(
-        addDocumentLike({ documentId: fileId, userId: currentUserId })
+        addDocumentVote({ documentId: fileId, userId: currentUserId })
       ).then((data) => {
         if (data.payload) {
           toast.success(data.payload, {

@@ -66,8 +66,8 @@ const Settings = () => {
   return (
     <main>
       <ToastContainer />
-      <section id="settings" className="p-10 w-full bg-indigo-100 center">
-        <div className="container xs:max-w-full mt-10 mb-8 bg-white p-10 shadow shadow-xl">
+      <section id="settings" className="p-10 w-full bg-blue-100 center">
+        <div className="container xs:max-w-full mt-10 mb-8 bg-white p-10 rounded-3xl shadow shadow-xl">
           <h3 className="text-3xl font-bold mb-4 border-b-2 pb-4">Settings</h3>
           <h4 className="text-xl font-semibold my-4">Account Settings</h4>
           <p className="text-gray-600 mb-4">
@@ -88,7 +88,7 @@ const Settings = () => {
                     <Field
                       type="text"
                       name="firstName"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <ErrorMessage
                       name="firstName"
@@ -104,7 +104,7 @@ const Settings = () => {
                     <Field
                       type="text"
                       name="lastName"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <ErrorMessage
                       name="lastName"
@@ -120,7 +120,7 @@ const Settings = () => {
                     <Field
                       type="text"
                       name="username"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <ErrorMessage
                       name="username"
@@ -137,13 +137,13 @@ const Settings = () => {
                       type="email"
                       name="email"
                       disabled
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="bg-indigo-600 text-white py-2 px-6 mt-4 rounded hover:bg-indigo-700"
+                    className="bg-blue-600 text-white py-2 px-6 mt-4 rounded-full hover:bg-blue-700"
                     disabled={isSumitting}
                   >
                     {!isSumitting ? (
@@ -177,7 +177,7 @@ const Settings = () => {
                   <Field
                     type="password"
                     name="password"
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                   <ErrorMessage
                     name="password"
@@ -196,7 +196,7 @@ const Settings = () => {
                   <Field
                     type="password"
                     name="confirmPassword"
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                   <ErrorMessage
                     name="confirmPassword"
@@ -207,7 +207,7 @@ const Settings = () => {
 
                 <button
                   type="submit"
-                  className="bg-indigo-600 text-white py-2 px-6 mt-4 rounded hover:bg-indigo-700"
+                  className="bg-blue-600 text-white py-2 px-6 mt-4 rounded-full hover:bg-blue-700"
                 >
                   Update
                 </button>

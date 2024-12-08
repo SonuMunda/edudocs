@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import ChatBot from "./pages/ChatBot";
 import DocumentSearch from "./pages/DocumentSearch";
+import Books from "./pages/Books";
 
 const App = () => {
   useEffect(() => {
@@ -34,6 +35,7 @@ const App = () => {
             element={<DocumentView />}
           />
           <Route path="/document-search" element={<DocumentSearch />} />
+          <Route path="/books" element={<Books />} />
           <Route path="/solve-doubt" element={<ChatBot />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
