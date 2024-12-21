@@ -18,11 +18,11 @@ import {
   MdSettings,
   MdUploadFile,
 } from "react-icons/md";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 
 const Header = () => {
-  const { user, isLoading, isError } = useSelector((state) => state?.user);
+  const { user, isLoading } = useSelector((state) => state?.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();

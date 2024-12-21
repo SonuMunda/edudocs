@@ -19,7 +19,7 @@ const Profile = () => {
   const [shareLink, setShareLink] = useState("");
   const [shareTitle, setShareTitle] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-  const token = localStorage.getItem("token");
+
 
   const id = FetchUserId();
 
