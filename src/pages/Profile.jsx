@@ -19,6 +19,7 @@ const Profile = () => {
   const [shareLink, setShareLink] = useState("");
   const [shareTitle, setShareTitle] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const token = localStorage.getItem("token");
 
   const id = FetchUserId();
 
@@ -108,11 +109,11 @@ const Profile = () => {
                 <span>Documents</span>
               </div>
               <div className="uploads center flex-col">
-                <span className="font-bold text-2xl">{totalLikes}</span>
+                <span className="font-bold text-2xl">{totalLikes || 0}</span>
                 <span>Likes</span>
               </div>
               <div className="uploads center flex-col">
-                <span className="font-bold text-2xl">{totalVotes}</span>
+                <span className="font-bold text-2xl">{totalVotes || 0}</span>
                 <span>Votes</span>
               </div>
             </div>
@@ -121,8 +122,8 @@ const Profile = () => {
             <div className="header border-b p-4 font-semibold">
               <h1>Uploaded Documents</h1>
             </div>
-            <div className="documents-lists m-4">
-              <ul className="document-list max-h-96 overflow-y-auto">
+            <div className="documents-lists my-4">
+              <ul className="document-list max-h-96">
                 {uploadsData
                   ? uploadsData.map((document) => (
                       <li
@@ -148,7 +149,10 @@ const Profile = () => {
                         </Link>
                         <div className="flex gap-4 items-center">
                           <div className="likes flex items-center text-gray-600">
-                            <MdThumbUp size={20} className="mx-2 text-blue-500"/>
+                            <MdThumbUp
+                              size={20}
+                              className="mx-2 text-blue-500"
+                            />
                             <span>{document.likes.length}</span>
                           </div>
                           <div className="share-options">
@@ -172,7 +176,9 @@ const Profile = () => {
                         </div>
                       </li>
                     ))
-                  : "You haven't uploaded any document yet"}
+                  : `${
+                      id == profileData._id ? "You" : "User"
+                    } haven't uploaded any document yet`}
               </ul>
             </div>
           </div>

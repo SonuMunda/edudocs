@@ -7,7 +7,7 @@ export const signup = createAsyncThunk(
   async ({ data, toast }, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/auth/signup`,
+        `${import.meta.env.VITE_SERVER_URL}/api/user/auth/signup`,
         {
           method: "POST",
           headers: {
@@ -47,7 +47,7 @@ export const login = createAsyncThunk(
   async ({ data, toast, navigate }, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/auth/signin`,
+        `${import.meta.env.VITE_SERVER_URL}/api/user/auth/signin`,
         {
           method: "POST",
           headers: {
@@ -77,7 +77,87 @@ export const login = createAsyncThunk(
 
       setTimeout(() => {
         navigate("/");
-      }, 2000);
+      }, 1000);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      toast.error(errorMessage, {
+        position: "top-center",
+      });
+      return rejectWithValue({ message: errorMessage });
+    }
+  }
+);
+
+export const updateUserProfile = createAsyncThunk(
+  "updateUserProfile",
+  async ({ id, data, toast }, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/user/auth/update/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ ...data }),
+        }
+      );
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        toast.error(responseData.message);
+        return rejectWithValue(responseData.message);
+      }
+
+      toast.success(responseData.message, {
+        position: "top-center",
+      });
+      dispatch(setUser(responseData.user));
+      return responseData;
+    } catch (error) {
+      console.log(error.message);
+      toast.error("An error occurred while updating the profile.");
+      return rejectWithValue("An error occurred while updating the profile.");
+    }
+  }
+);
+
+export const updatePassword = createAsyncThunk(
+  "auth/updatePassword",
+  async ({ id, data, toast }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/api/user/auth/update-password/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        const errorResponseData = await response.json();
+        toast.error(errorResponseData.message, {
+          position: "top-center",
+        });
+        return rejectWithValue(errorResponseData);
+      }
+
+      const responseData = await response.json();
+      toast.success(responseData.message, {
+        position: "top-center",
+      });
+
+      return responseData;
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";

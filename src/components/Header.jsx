@@ -18,10 +18,11 @@ import {
   MdSettings,
   MdUploadFile,
 } from "react-icons/md";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Header = () => {
-  const { user, isLoading } = useSelector((state) => state?.user);
+  const { user, isLoading, isError } = useSelector((state) => state?.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
@@ -45,11 +46,13 @@ const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center shadow p-2 fixed w-full bg-white px-10 z-10">
+    <header className="flex justify-between items-center shadow  p-2 sm:px-10 fixed w-full bg-white  z-10">
       <div className="center gap-2">
-        <div className="menubar sm:hidden" onClick={handleToggleNav}>
-          <FaBars size={24} />
-        </div>
+        {token && (
+          <div className="menubar sm:hidden" onClick={handleToggleNav}>
+            <FaBars size={24} />
+          </div>
+        )}
         <div className="logo">
           <NavLink to="/" className="center">
             <img src={logo} alt="logo" className="h-8" />
@@ -58,14 +61,20 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="header-btns">
+      <div className="header-btns flex gap-2">
         {!token ? (
-          <NavLink
-            to="/login"
-            className="btn btn-primary bg-blue-600 font-medium text-white py-3 px-6 rounded"
-          >
-            Login
-          </NavLink>
+          <>
+            <NavLink
+              to="/login"
+              className="bg-blue-600 text-white py-2 px-4 rounded"
+            >
+              Login
+            </NavLink>
+
+            <NavLink to="/signup" className="bg-gray-200 py-2 px-4 rounded">
+              Signup
+            </NavLink>
+          </>
         ) : (
           <div className="center gap-4">
             <nav
@@ -128,7 +137,7 @@ const Header = () => {
                 onClick={toggleMenu}
               >
                 {!isLoading ? (
-                  <div className="mx-1 p-2 text-white font-semibold bg-blue-500 rounded center">
+                  <div className="mx-1 p-2 text-white font-semibold bg-blue-500 rounded-xl center">
                     <span>{user?.firstName.charAt(0)}</span>
                     <span>{user?.lastName.charAt(0)}</span>
                   </div>
@@ -208,12 +217,14 @@ const Header = () => {
           </div>
         )}
       </div>
-      <div
-        className={`navbar-overlay absolute left-0 top-14 backdrop-blur-xl h-screen w-full ${
-          isNavOpen ? "block" : "hidden"
-        }`}
-        onClick={() => setIsNavOpen(false)}
-      ></div>
+      {token && (
+        <div
+          className={`navbar-overlay absolute left-0 top-14 backdrop-blur-xl h-screen w-full ${
+            isNavOpen ? "block" : "hidden"
+          }`}
+          onClick={() => setIsNavOpen(false)}
+        ></div>
+      )}
     </header>
   );
 };

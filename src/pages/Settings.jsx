@@ -3,9 +3,10 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import { ToastContainer, toast } from "react-toastify";
-import { updateUserProfile } from "../store/slices/userSlice";
+import { updateUserProfile } from "../store/slices/authSlice";
 import FetchUserId from "../utils/FetchUserId";
-import { ThreeCircles,} from "react-loader-spinner";
+import { ThreeCircles } from "react-loader-spinner";
+import { updatePassword } from "../store/slices/authSlice";
 
 const Settings = () => {
   const { user, isLoading } = useSelector((state) => state?.user);
@@ -17,6 +18,11 @@ const Settings = () => {
     lastName: user?.lastName,
     email: user?.email,
     username: user?.username,
+  };
+
+  const passwordIntitialValues = {
+    currentPassword: "",
+    newPassword: "",
   };
 
   const usernameRegex = /^[a-z][a-z0-9._]*[a-z0-9]$/i;
@@ -44,10 +50,12 @@ const Settings = () => {
   });
 
   const passwordValidationSchema = Yup.object({
-    password: Yup.string().required("Password is required"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .required("Confirm Password is required"),
+    currentPassword: Yup.string().required("Current password is required"),
+    newPassword: Yup.string()
+      .required("New password is required")
+      .min(8, "Password to short")
+      .max(20, "Password to long")
+      .trim(),
   });
 
   const handleUpdateProfile = (values, { setSubmitting }) => {
@@ -55,8 +63,10 @@ const Settings = () => {
     setSubmitting(false);
   };
 
-  const handlePasswordChange = () => {
-    alert("Bhakua");
+  const handlePasswordChange = (values, { setSubmitting }) => {
+    dispatch(updatePassword({ id, data: values, toast })).then(() => {
+      setSubmitting(false);
+    });
   };
 
   if (isLoading) {
@@ -66,8 +76,8 @@ const Settings = () => {
   return (
     <main>
       <ToastContainer />
-      <section id="settings" className="p-10 w-full bg-blue-100 center">
-        <div className="container xs:max-w-full mt-10 mb-8 bg-white p-10 rounded-3xl shadow shadow-xl">
+      <section id="settings" className="p-4 sm:p-10 w-full bg-blue-100 center">
+        <div className="container xs:max-w-full mt-12 mb-8 bg-white p-10 rounded-3xl shadow shadow-xl">
           <h3 className="text-3xl font-bold mb-4 border-b-2 pb-4">Settings</h3>
           <h4 className="text-xl font-semibold my-4">Account Settings</h4>
           <p className="text-gray-600 mb-4">
@@ -88,6 +98,7 @@ const Settings = () => {
                     <Field
                       type="text"
                       name="firstName"
+                      id="firstName"
                       className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <ErrorMessage
@@ -104,6 +115,7 @@ const Settings = () => {
                     <Field
                       type="text"
                       name="lastName"
+                      id="lastName"
                       className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <ErrorMessage
@@ -120,6 +132,7 @@ const Settings = () => {
                     <Field
                       type="text"
                       name="username"
+                      id="username"
                       className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <ErrorMessage
@@ -136,6 +149,7 @@ const Settings = () => {
                     <Field
                       type="email"
                       name="email"
+                      id="email"
                       disabled
                       className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
@@ -149,8 +163,7 @@ const Settings = () => {
                     {!isSumitting ? (
                       "Update"
                     ) : (
-                      <ThreeCircles height={24} 
-                      width={42} color="white" />
+                      <ThreeCircles height={24} width={42} color="white" />
                     )}
                   </button>
                 </Form>
@@ -165,53 +178,66 @@ const Settings = () => {
 
           <div className="update-profile-form">
             <Formik
-              initialValues={initialValues}
+              initialValues={passwordIntitialValues}
               validationSchema={passwordValidationSchema}
               onSubmit={handlePasswordChange}
             >
-              <Form action="">
-                <div className="form-group relative flex flex-col pb-5 mb-3">
-                  <label htmlFor="password" className="block text-gray-600">
-                    Current Password
-                  </label>
-                  <Field
-                    type="password"
-                    name="password"
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  />
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="text-red-500 text-xs font-semibold absolute bottom-0"
-                  />
-                </div>
+              {({ isSumitting }) => (
+                <Form action="">
+                  <div className="form-group relative flex flex-col pb-5 mb-3">
+                    <label
+                      htmlFor="currentPassword"
+                      className="block text-gray-600"
+                    >
+                      Current Password
+                    </label>
+                    <Field
+                      type="password"
+                      name="currentPassword"
+                      id="currentPassword"
+                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                    <ErrorMessage
+                      name="currentPassword"
+                      component="div"
+                      className="text-red-500 text-xs font-semibold absolute bottom-0"
+                    />
+                  </div>
 
-                <div className="form-group relative flex flex-col pb-5 mb-3">
-                  <label
-                    htmlFor="confirmPassword"
-                    className="block text-gray-600"
+                  <div className="form-group relative flex flex-col pb-5 mb-3">
+                    <label
+                      htmlFor="newPassword"
+                      className="block text-gray-600"
+                    >
+                      New Password
+                    </label>
+                    <Field
+                      type="password"
+                      name="newPassword"
+                      id="newPassword"
+                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                    <ErrorMessage
+                      name="newPassword"
+                      id="newPassword"
+                      component="div"
+                      className="text-red-500 text-xs font-semibold absolute bottom-0"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="bg-blue-600 text-white py-2 px-6 mt-4 rounded-full hover:bg-blue-700"
+                    disabled={isSumitting}
                   >
-                    New Password
-                  </label>
-                  <Field
-                    type="password"
-                    name="confirmPassword"
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  />
-                  <ErrorMessage
-                    name="confirmPassword"
-                    component="div"
-                    className="text-red-500 text-xs font-semibold absolute bottom-0"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="bg-blue-600 text-white py-2 px-6 mt-4 rounded-full hover:bg-blue-700"
-                >
-                  Update
-                </button>
-              </Form>
+                    {!isSumitting ? (
+                      "Update"
+                    ) : (
+                      <ThreeCircles height={24} width={42} color="white" />
+                    )}
+                  </button>
+                </Form>
+              )}
             </Formik>
           </div>
         </div>

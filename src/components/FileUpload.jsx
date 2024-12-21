@@ -14,9 +14,7 @@ import coursesList from "../api/coursesList";
 import sessionsList from "../api/sessionsList";
 import styled from "styled-components";
 import { ColorRing } from "react-loader-spinner";
-
-import { BiCloudUpload } from "react-icons/bi";
-import { MdOutlineFileUpload, } from "react-icons/md";
+import { MdOutlineFileUpload, MdUpload } from "react-icons/md";
 
 const StyledDataListInput = styled(DatalistInput)`
   &.datalist input {
@@ -81,9 +79,9 @@ const FileUpload = () => {
   };
 
   return (
-    <main className="file-upload flex justify-center bg-gray-100 min-h-screen">
+    <main className="file-upload center bg-blue-100 min-h-screen p-4">
       <ToastContainer />
-      <div className="container my-14 p-4 max-w-6xl">
+      <div className="container my-14 p-4 max-w-6xl bg-white rounded-3xl">
         <div className="file-upload-form font-semibold">
           <Formik
             initialValues={{
@@ -120,7 +118,7 @@ const FileUpload = () => {
                 className="form flex-col md:flex-row flex gap-10"
               >
                 <div
-                  className={`form-group center flex-col upload-box border-4 border-blue-800 ${
+                  className={`form-group center flex-col upload-box border-4 border-blue-200 ${
                     isDragging ? "border-blue-800" : "border-dashed"
                   } rounded-3xl p-10 bg-white my-2 w-full`}
                   onDragOver={(e) => {
@@ -145,7 +143,10 @@ const FileUpload = () => {
                     className="hidden"
                     onChange={(event) => handleFileChange(event, setFieldValue)}
                   />
-                  <MdOutlineFileUpload size={64} className="center text-blue-800" />
+                  <MdOutlineFileUpload
+                    size={64}
+                    className="center text-blue-500"
+                  />
                   <h1 className="center text-xl font-semibold text-gray-600 m-1">
                     Drag & Drop Your File
                   </h1>
@@ -170,7 +171,7 @@ const FileUpload = () => {
                   ) : null}
                 </div>
 
-                <div className="form-right w-full">
+                <div className="form-right w-full p-10">
                   {file && (
                     <div className="my-5">
                       <h4 className="text-lg font-semibold mb-1">
@@ -197,17 +198,21 @@ const FileUpload = () => {
                     </div>
                   )}
 
-                  <div className="form-group mt-4">
-                    <label htmlFor="category" className="block mb-2">
+                  <div className="form-group pb-1">
+                    <label
+                      htmlFor="category"
+                      className="block mb-2 font-normal"
+                    >
                       Category
                     </label>
                     <select
                       name="category"
                       value={values.category}
+                      id="category"
                       onChange={(e) =>
                         setFieldValue("category", e.target.value)
                       }
-                      className={`p-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
+                      className={`font-normal p-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
                         errors.category && touched.category
                           ? "border-red-500"
                           : ""
@@ -229,120 +234,124 @@ const FileUpload = () => {
                     ) : null}
                   </div>
 
-                  <>
-                    <div className="form-group flex flex-col">
-                      <label htmlFor="university" className="block my-2">
-                        University
-                      </label>
-                      <StyledDataListInput
-                        value={values.university}
-                        label="Select your university"
-                        showLabel={false}
-                        items={universitiesList.map((university) => ({
-                          id: university.id,
-                          value: university.value,
-                        }))}
-                        onSelect={(item) =>
-                          setFieldValue("university", item.value)
-                        }
-                        className={`datalist ${
-                          errors.university && touched.university
-                            ? "border border-red-500"
-                            : ""
-                        }`}
-                      />
-                      {errors.university && touched.university && (
-                        <div className="text-red-500 text-xs">
-                          {errors.university}
-                        </div>
-                      )}
-                    </div>
+                  <div className="form-group ">
+                    <label
+                      htmlFor="university"
+                      className="block my-2 font-normal"
+                    >
+                      University
+                    </label>
+                    <StyledDataListInput
+                      value={values.university}
+                      label="Select your university"
+                      showLabel={false}
+                      items={universitiesList.map((university) => ({
+                        id: university.id,
+                        value: university.value,
+                      }))}
+                      onSelect={(item) =>
+                        setFieldValue("university", item.value)
+                      }
+                      className={`datalist font-normal ${
+                        errors.university && touched.university
+                          ? "border border-red-500"
+                          : ""
+                      }`}
+                    />
+                    {errors.university && touched.university && (
+                      <div className="text-red-500 text-xs">
+                        {errors.university}
+                      </div>
+                    )}
+                  </div>
 
-                    <div className="form-group flex flex-col">
-                      <label htmlFor="course" className="block my-2">
-                        Course
-                      </label>
-                      <StyledDataListInput
-                        value={values.course}
-                        label="Select your course"
-                        showLabel={false}
-                        items={coursesList.map((course) => ({
-                          id: course.id,
-                          value: course.value,
-                        }))}
-                        onSelect={(item) => setFieldValue("course", item.value)}
-                        className={`datalist ${
-                          errors.course && touched.course
-                            ? "border border-red-500"
-                            : ""
-                        }`}
-                      />
-                      {errors.course && touched.course ? (
-                        <div className="text-red-500 text-xs">
-                          {errors.course}
-                        </div>
-                      ) : null}
-                    </div>
+                  <div className="form-group my-2">
+                    <label htmlFor="course" className="block font-normal">
+                      Course
+                    </label>
+                    <StyledDataListInput
+                      value={values.course}
+                      id="course"
+                      label="Select your course"
+                      showLabel={false}
+                      items={coursesList.map((course) => ({
+                        id: course.id,
+                        value: course.value,
+                      }))}
+                      onSelect={(item) => setFieldValue("course", item.value)}
+                      className={`datalist font-normal ${
+                        errors.course && touched.course
+                          ? "border border-red-500"
+                          : ""
+                      }`}
+                    />
+                    {errors.course && touched.course ? (
+                      <div className="text-red-500 text-xs">
+                        {errors.course}
+                      </div>
+                    ) : null}
+                  </div>
 
-                    <div className="form-group flex flex-col">
-                      <label htmlFor="session" className="block my-2">
-                        Session
-                      </label>
-                      <StyledDataListInput
-                        value={values.session}
-                        label="Select your session"
-                        showLabel={false}
-                        items={sessionsList.map((session) => ({
-                          id: session.id,
-                          value: session.value,
-                        }))}
-                        onSelect={(item) =>
-                          setFieldValue("session", item.value)
-                        }
-                        className={`datalist ${
-                          errors.session && touched.session
-                            ? "border border-red-500"
-                            : ""
-                        }`}
-                      />
-                      {errors.session && touched.session ? (
-                        <div className="text-red-500 text-xs">
-                          {errors.session}
-                        </div>
-                      ) : null}
-                    </div>
+                  <div className="form-group my-2">
+                    <label htmlFor="session" className="block font-normal">
+                      Session
+                    </label>
+                    <StyledDataListInput
+                      value={values.session}
+                      id="session"
+                      label="Select your session"
+                      showLabel={false}
+                      items={sessionsList.map((session) => ({
+                        id: session.id,
+                        value: session.value,
+                      }))}
+                      onSelect={(item) => setFieldValue("session", item.value)}
+                      className={`datalist font-normal ${
+                        errors.session && touched.session
+                          ? "border border-red-500"
+                          : ""
+                      }`}
+                    />
+                    {errors.session && touched.session ? (
+                      <div className="text-red-500 text-xs">
+                        {errors.session}
+                      </div>
+                    ) : null}
+                  </div>
 
-                    <div className="form-group my-2">
-                      <label htmlFor="description" className="block mb-2">
-                        Description
-                      </label>
-                      <textarea
-                        name="description"
-                        id="description"
-                        placeholder="Write something about document."
-                        rows="3"
-                        className={`p-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
-                          errors.description && touched.description
-                            ? "border-red-500"
-                            : ""
-                        }`}
-                        value={values.description}
-                        onChange={(e) =>
-                          setFieldValue("description", e.target.value)
-                        }
-                      ></textarea>
-                      {errors.description && touched.description ? (
-                        <div className="text-red-500 text-xs">
-                          {errors.description}
-                        </div>
-                      ) : null}
-                    </div>
-                  </>
+                  <div className="form-group my-2">
+                    <label
+                      htmlFor="description"
+                      className="block font-normal"
+                    >
+                      Description
+                    </label>
+                    <textarea
+                      name="description"
+                      id="description"
+                      placeholder="Write something about document."
+                      rows="3"
+                      className={`font-normal p-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
+                        errors.description && touched.description
+                          ? "border-red-500"
+                          : ""
+                      }`}
+                      value={values.description}
+                      onChange={(e) =>
+                        setFieldValue("description", e.target.value)
+                      }
+                    ></textarea>
+                    {errors.description && touched.description ? (
+                      <div className="text-red-500 text-xs">
+                        {errors.description}
+                      </div>
+                    ) : null}
+                  </div>
 
                   <div className="center py-4">
                     <button
                       type="submit"
-                      className="center w-full h-10 bg-blue-500 text-white rounded-3xl hover:bg-blue-600"
+                      className="font-normal center w-full h-10 bg-blue-500 text-white rounded-3xl hover:bg-blue-600"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
@@ -352,7 +361,7 @@ const FileUpload = () => {
                         />
                       ) : (
                         <span className="center gap-2">
-                          Upload <BiCloudUpload size={34} />
+                          Upload <MdUpload size={24} />
                         </span>
                       )}
                     </button>

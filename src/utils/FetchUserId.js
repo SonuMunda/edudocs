@@ -1,20 +1,18 @@
-import { useJwt } from "react-jwt";
-import { useNavigate } from "react-router-dom";
-const FetchUserId = () => {
-  const navigate = useNavigate();
+import { isExpired, decodeToken } from "react-jwt";
 
+const FetchUserId = () => {
   const token = localStorage.getItem("token");
-  const { decodedToken, isExpired } = useJwt(token);
-  if (token || !isExpired) {
-    try {
-      return decodedToken?.userId;
-    } catch (error) {
-      console.log(error.message);
-    }
-  } else {
-    localStorage?.removeItem("token");
-    navigate("/login");
+  if (token) {
+    const decodedToken = decodeToken(token);
+    const userId = decodedToken?.userId;
+    return userId;
   }
+
+  if (isExpired(token)) {
+    return null;
+  }
+
+  return null;
 };
 
 export default FetchUserId;

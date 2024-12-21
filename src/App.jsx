@@ -9,20 +9,26 @@ import Uploads from "./pages/Uploads";
 import Footer from "./components/Footer";
 import DocumentView from "./pages/DocumentView";
 import NotFound from "./pages/NotFound";
-import { useEffect } from "react";
 import ChatBot from "./pages/ChatBot";
 import DocumentSearch from "./pages/DocumentSearch";
 import Books from "./pages/Books";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchDocuments } from "./store/slices/documentSlice";
+import { ToastContainer } from "react-toastify";
+import EmailVerified from "./pages/EmailVerified";
 
 const App = () => {
+  const dispatch = useDispatch();
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    dispatch(fetchDocuments());
+  }, [dispatch]);
 
   return (
-    <>
+    <div className="bg-blue-100">
       <Router>
         <Header />
+        <ToastContainer />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
@@ -37,11 +43,12 @@ const App = () => {
           <Route path="/document-search" element={<DocumentSearch />} />
           <Route path="/books" element={<Books />} />
           <Route path="/solve-doubt" element={<ChatBot />} />
+          <Route path="/email-verified" element={<EmailVerified />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </Router>
-    </>
+    </div>
   );
 };
 

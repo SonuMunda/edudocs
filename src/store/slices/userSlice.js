@@ -86,40 +86,6 @@ export const fetchUserDetailsByUsername = createAsyncThunk(
   }
 );
 
-//update profile
-export const updateUserProfile = createAsyncThunk(
-  "updateUserProfile",
-  async ({ id, data, toast }, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/user/auth/update/${id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        toast.error(responseData.message);
-        return rejectWithValue(responseData.message);
-      }
-
-      toast.success(responseData.message);
-      dispatch(setUser(responseData.user));
-      return responseData;
-    } catch (error) {
-      console.log(error);
-      toast.error("An error occurred while updating the profile.");
-      return rejectWithValue("An error occurred while updating the profile.");
-    }
-  }
-);
 
 export const userDocumentUpload = createAsyncThunk(
   "userDocumentUpload",
@@ -289,6 +255,7 @@ const initialState = {
   user: null,
   isLogin: !!localStorage.getItem("token"),
   isLoading: true,
+  isError: false,
 };
 
 const userSlice = createSlice({
@@ -308,6 +275,7 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchUserDetails.rejected, (state) => {
       state.isLoading = false;
+      state.isError = true;
     });
   },
 });

@@ -7,7 +7,7 @@ const DocumentCard = ({ document }) => {
       to={`/${document.username}/${document.uploadedBy}/document/${document.title}/${document._id}/view`}
       key={document._id}
     >
-      <div className="document-card h-full bg-gray-50 p-4 rounded-2xl shadow">
+      <div className="document-card h-full bg-gray-50 p-4 rounded-2xl border-2 shadow">
         <div className="document-image overflow-hidden rounded-xl">
           <img
             src={
