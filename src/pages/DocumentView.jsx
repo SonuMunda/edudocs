@@ -136,7 +136,7 @@ const DocumentView = () => {
               <Skeleton height={20} />
             ) : (
               <Link
-                to={`/${fileDetails?.owner?.username}/${fileDetails?.owner?._id}`}
+                to={`/profile/${fileDetails?.username}`}
                 className="text-blue-800"
               >
                 {fileDetails?.username}
