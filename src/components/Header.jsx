@@ -35,6 +35,11 @@ const Header = () => {
     if (token) {
       dispatch(fetchUserDetails({ id }));
     }
+
+    document.addEventListener("click", (e) => {
+      if (e.target.closest(".user")) return;
+      setIsMenuOpen(false);
+    });
   }, [token, dispatch, id]);
 
   const toggleMenu = () => {

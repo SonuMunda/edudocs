@@ -15,9 +15,9 @@ const ShareMenu = ({ shareLink, shareTitle, menuOpen, setMenuOpen }) => {
   if (!menuOpen) return null;
 
   return (
-    <div className="share-menu fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-indigo-100 p-6 border border-gray-200 rounded-3xl max-w-sm w-full">
+    <div className="share-menu fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop-blur-3xl p-6 border border-gray-200 bg-white rounded-3xl max-w-sm w-full">
       <div className="flex items-center justify-between pb-2 border-b border-gray-400">
-        <h4 className="font-bold text-2xl text-indigo-700">Share</h4>
+        <h4 className="font-bold text-2xl text-blue-700">Share</h4>
         <button
           className="close-btn text-gray-800 hover:text-gray-700 transition-colors"
           onClick={() => setMenuOpen(false)}

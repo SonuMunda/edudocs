@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { fetchDocuments } from "./store/slices/documentSlice";
 import { ToastContainer } from "react-toastify";
 import EmailVerified from "./pages/EmailVerified";
+import AuthGuard from "../guards/AuthGuard";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -34,8 +35,11 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile/:username" element={<Profile />} />
-          <Route path="/uploads" element={<Uploads />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route
+            path="/uploads"
+            element={<AuthGuard component={<Uploads />} />}
+          />
+          <Route path="/settings" element={<AuthGuard component={<Settings />} />} />
           <Route
             path="/:username/:userId/document/:filename/:fileId/view"
             element={<DocumentView />}

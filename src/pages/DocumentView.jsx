@@ -1,13 +1,23 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { addDocumentLike, addDocumentVote, fetchFileDetails } from "../store/slices/userSlice";
+import {
+  addDocumentLike,
+  addDocumentVote,
+  fetchFileDetails,
+} from "../store/slices/userSlice";
 import ShareMenu from "../components/ShareMenu";
 import { toast, ToastContainer } from "react-toastify";
 import { FaShare } from "react-icons/fa";
 import { FaThumbsUp } from "react-icons/fa6";
 import { BiSolidUpvote } from "react-icons/bi";
 import FetchUserId from "../utils/FetchUserId";
+import { Worker } from "@react-pdf-viewer/core";
+import { Viewer } from "@react-pdf-viewer/core";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import Skeleton from "react-loading-skeleton";
+import { toolbarPlugin } from "@react-pdf-viewer/toolbar";
+import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 
 const DocumentView = () => {
   const { fileId, username, userId } = useParams();
@@ -18,6 +28,9 @@ const DocumentView = () => {
   const dispatch = useDispatch();
 
   const currentUserId = FetchUserId();
+
+  const toolbarPluginInstance = toolbarPlugin();
+  const { Toolbar } = toolbarPluginInstance;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -36,85 +49,99 @@ const DocumentView = () => {
   };
 
   const handleLike = async () => {
-    if (currentUserId && currentUserId !== userId) {
-      dispatch(addDocumentLike({ documentId: fileId, currentUserId })).then(
-        (data) => {
-          if (data.payload) {
-            toast.success(data.payload, {
-              position: "top-right",
-            });
-          } else if (data.error) {
-            toast.error(data.error.message || "Failed to like document", {
-              position: "top-right",
-            });
-          }
-        }
-      );
-    } else {
-      toast.error("You cannot like your own document", {
-        position: "top-right",
-      });
-    }
-  };
-
-  const handleVote = async () => {
-    if (currentUserId && currentUserId !== userId) {
-      dispatch(
-        addDocumentVote({ documentId: fileId, userId: currentUserId })
-      ).then((data) => {
+    dispatch(addDocumentLike({ documentId: fileId, currentUserId })).then(
+      (data) => {
         if (data.payload) {
           toast.success(data.payload, {
             position: "top-right",
           });
         } else if (data.error) {
-          toast.error(data.error.message || "Failed to vote document", {
+          toast.error(data.error.message || "Failed to like document", {
             position: "top-right",
           });
         }
-      });
-    } else {
-      toast.warn("You cannot vote your own document", {
-        position: "top-right",
-      });
-    }
+      }
+    );
+  };
+
+  const handleVote = async () => {
+    dispatch(
+      addDocumentVote({ documentId: fileId, userId: currentUserId })
+    ).then((data) => {
+      if (data.payload) {
+        toast.success(data.payload, {
+          position: "top-right",
+        });
+      } else if (data.error) {
+        toast.error(data.error.message || "Failed to vote document", {
+          position: "top-right",
+        });
+      }
+    });
   };
 
   return (
-    <main className="bg-gray-50 min-h-screen p-6 flex justify-center items-center">
+    <main className="bg-blue-100 min-h-screen p-4 flex justify-center items-center">
       <ToastContainer />
-      <div className="container document-viewer flex flex-col gap-4 lg:flex-row my-10">
+      <div className="container document-viewer flex flex-col gap-4 lg:flex-row my-12">
         {/* Document Description */}
-        <div className="document-description w-full md:w-4/12 p-4 border-r rounded">
+        <div className="document-description bg-white w-full md:w-4/12 p-4 rounded-3xl">
           <div className="flex flex-col gap-2 my-4">
-            <h2 className="text-gray-800 font-bold text-2xl">
-              {fileDetails?.title.replace(/\.[^/.]+$/, "")}
-            </h2>
-            <p className="text-gray-700 text-xl">{fileDetails?.description}</p>
+            {!fileDetails?.title ? (
+              <Skeleton height={40} />
+            ) : (
+              <h2 className="text-2xl font-semibold text-gray-800">
+                {fileDetails?.title}
+              </h2>
+            )}
+            {!fileDetails?.description ? (
+              <Skeleton height={20} />
+            ) : (
+              <p className="text-gray-700 text-xl">
+                {fileDetails?.description}
+              </p>
+            )}
           </div>
 
           <div className="course mb-2">
             <h4 className="text-lg font-semibold">Course</h4>
-            <p className="text-gray-800">{fileDetails?.course}</p>
+            {!fileDetails?.course ? (
+              <Skeleton height={20} />
+            ) : (
+              <p className="text-gray-800">{fileDetails?.course}</p>
+            )}
           </div>
 
           <div className="university mb-2">
             <h4 className="text-lg font-semibold">University</h4>
-            <p className="text-gray-800">{fileDetails?.university}</p>
+            {!fileDetails?.university ? (
+              <Skeleton height={20} />
+            ) : (
+              <p className="text-gray-800">{fileDetails?.university}</p>
+            )}
           </div>
 
           <div className="academic-year mb-2">
             <h4 className="text-lg font-semibold">Academic Year</h4>
-            <p className="text-gray-800">{fileDetails?.session}</p>
+            {!fileDetails?.session ? (
+              <Skeleton height={20} />
+            ) : (
+              <p className="text-gray-800">{fileDetails?.session}</p>
+            )}
           </div>
 
           <div className="owner mb-2">
             <h4 className="text-lg font-semibold">Uploaded by</h4>
-            <Link
-              to={`/profile/${username}`}
-              className="text-indigo-600 font-semibold hover:text-indigo-700"
-            >
-              {username}
-            </Link>
+            {!fileDetails?.username ? (
+              <Skeleton height={20} />
+            ) : (
+              <Link
+                to={`/${fileDetails?.owner?.username}/${fileDetails?.owner?._id}`}
+                className="text-blue-800"
+              >
+                {fileDetails?.username}
+              </Link>
+            )}
           </div>
 
           {/* Share button */}
@@ -135,35 +162,51 @@ const DocumentView = () => {
               <div className="icon me-2">
                 <FaShare />
               </div>
-              <span className="font-bold">Share</span>
+              <span className="btn-text">Share</span>
             </button>
+            {currentUserId && currentUserId !== fileDetails?.uploadedBy && (
+              <>
+                <button
+                  className="like-btn center bg-green-600 text-white px-4 py-2 rounded"
+                  onClick={handleLike}
+                >
+                  <div className="icon me-2">
+                    <FaThumbsUp />
+                  </div>
+                  <span className="btn-text">Like</span>
+                </button>
 
-            <button
-              className="like-btn center bg-green-600 text-white px-4 py-2 rounded"
-              onClick={handleLike}
-            >
-              <div className="icon me-2">
-                <FaThumbsUp />
-              </div>
-              <span className="font-bold">Like</span>
-            </button>
-
-            <button className="vote center bg-red-600 text-white px-4 py-2 rounded" onClick={handleVote}>
-              <div className="icon me-2">
-                <BiSolidUpvote />
-              </div>
-              <span className="font-bold">Vote</span>
-            </button>
+                <button
+                  className="vote center bg-red-600 text-white px-4 py-2 rounded"
+                  onClick={handleVote}
+                >
+                  <div className="icon me-2">
+                    <BiSolidUpvote />
+                  </div>
+                  <span className="btn-text">Vote</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
 
         {/* Document Viewer */}
-        <div className="relative w-full h-screen">
-          <iframe
-            src={fileDetails?.url}
-            className="w-full h-full rounded object-contain"
-            title="file Viewer"
-          />
+        <div className="relative w-full h-screen rounded-3xl overflow-hidden shadow-md bg-blue-50">
+          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+            {fileDetails?.url ? (
+              <div className="w-full h-full">
+                <div className="pdf-toolbar p-2">
+                  <Toolbar />
+                </div>
+                <Viewer
+                  fileUrl={fileDetails?.url}
+                  plugins={[toolbarPluginInstance]}
+                />
+              </div>
+            ) : (
+              <Skeleton height={"100%"} />
+            )}
+          </Worker>
         </div>
       </div>
 

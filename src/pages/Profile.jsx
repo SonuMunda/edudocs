@@ -7,11 +7,10 @@ import {
   fetchUserUploads,
 } from "../store/slices/userSlice";
 import { Link, useParams } from "react-router-dom";
-import ShareButtons from "../components/ShareButtons";
-import { FaTimes } from "react-icons/fa";
-import { toast, ToastContainer } from "react-toastify";
+import {ToastContainer } from "react-toastify";
 import FetchUserId from "../utils/FetchUserId";
 import { MdThumbUp } from "react-icons/md";
+import ShareMenu from "../components/ShareMenu";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
@@ -19,7 +18,6 @@ const Profile = () => {
   const [shareLink, setShareLink] = useState("");
   const [shareTitle, setShareTitle] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-
 
   const id = FetchUserId();
 
@@ -56,28 +54,22 @@ const Profile = () => {
     setShareTitle(title);
   };
 
-  const handleCopyClipboard = () => {
-    navigator.clipboard.writeText(shareLink);
-    toast.success("Link copied", {
-      position: "top-right",
-    });
-  };
 
   if (!profileData) {
     return <Loader />;
   }
 
   return (
-    <section className="profile bg-blue-200 min-h-screen center p-4">
+    <section className="profile bg-blue-100 min-h-screen center p-4">
       <ToastContainer />
       <div className="container max-w-4xl mx-auto mt-14 mb-4 backdrop-blur-3xl center flex-col">
-        <div className="avatar m-auto bg-neutral-100 border-2 h-40 w-40 rounded-full center">
+        <div className="avatar m-auto bg-white border-2 h-40 w-40 rounded-full center">
           <h1 className="avatar-text text-5xl font-bold text-blue-500">
             {profileData.firstName.charAt(0)}
             {profileData.lastName.charAt(0)}
           </h1>
         </div>
-        <div className="details w-full  my-4 rounded">
+        <div className="details w-full my-4 rounded">
           <h1 className="text-3xl font-bold text-center mt-4">
             {profileData.firstName} {profileData.lastName}
           </h1>
@@ -96,7 +88,7 @@ const Profile = () => {
               </Link>
             </div>
           )}
-          <div className="documents-statistics my-6 bg-blue-100 p-4 rounded-3xl border">
+          <div className="documents-statistics my-6 bg-white p-4 rounded-3xl border">
             <div className="header p-3">
               <h1 className="font-semibold text-md mb-2">Uploads</h1>
             </div>
@@ -118,7 +110,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <div className="documents-uploaded shadow my-2 p-4 rounded-3xl bg-blue-100 max-h-96 overflow-y-auto">
+          <div className="documents-uploaded shadow my-2 p-4 rounded-3xl bg-white max-h-96 overflow-y-auto">
             <div className="header border-b p-4 font-semibold">
               <h1>Uploaded Documents</h1>
             </div>
@@ -127,7 +119,7 @@ const Profile = () => {
                 {uploadsData
                   ? uploadsData.map((document) => (
                       <li
-                        className="flex flex-col sm:flex-row justify-between items-center gap-4 border-b p-4 my-2 bg-blue-50 rounded-3xl "
+                        className="flex flex-col sm:flex-row justify-between items-center gap-4 border-b p-4 my-2 bg-blue-100 rounded-3xl "
                         key={document._id}
                       >
                         <Link
@@ -157,7 +149,7 @@ const Profile = () => {
                           </div>
                           <div className="share-options">
                             <button
-                              className="border rounded py-2 px-4 text-gray-800 bg-blue-100 rounded-3xl"
+                              className="border rounded py-2 px-4 text-white bg-blue-500 rounded-3xl"
                               onClick={() => {
                                 const url = `${
                                   import.meta.env.VITE_CLIENT_URL
@@ -184,42 +176,13 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      {menuOpen && (
-        <div className="share-menu fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg shadow-gray-200 p-6 border border-gray-200 rounded-3xl max-w-sm w-full">
-          <div className="flex items-center justify-between mb-6">
-            <h4 className="font-bold text-2xl text-blue-700">Share</h4>
-            <button
-              className="close-btn text-gray-500 hover:text-gray-700 transition-colors"
-              onClick={() => {
-                setMenuOpen(false);
-              }}
-            >
-              <FaTimes />
-            </button>
-          </div>
-          <ShareButtons
-            url={shareLink}
-            title={`Hi there! I'm sharing the link of ${shareTitle} with you. Hope it helps!`}
-          />
-          <h4 className="font-semibold text-gray-700 mt-4 mb-3">
-            Share this link
-          </h4>
-          <div className="share-link flex items-center gap-2">
-            <input
-              type="text"
-              value={shareLink}
-              disabled
-              className="border border-blue-300 p-2 rounded-lg w-full bg-gray-100 text-gray-500"
-            />
-            <button
-              className="copy-btn bg-blue-600 hover:bg-blue-700 py-2 px-5 text-white text-sm rounded-lg transition-colors"
-              onClick={handleCopyClipboard}
-            >
-              Copy
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Share Menu */}
+      <ShareMenu
+        shareLink={shareLink}
+        shareTitle={shareTitle}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+      />
     </section>
   );
 };
