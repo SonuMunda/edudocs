@@ -120,7 +120,7 @@ const FileUpload = () => {
                 <div
                   className={`form-group center flex-col upload-box border-4 border-blue-200 ${
                     isDragging ? "border-blue-800" : "border-dashed"
-                  } rounded-3
+                  } rounded-3xl
                   xl p-10 bg-white my-2 w-full`}
                   onDragOver={(e) => {
                     e.preventDefault();
