@@ -60,7 +60,7 @@ const Profile = () => {
   }
 
   return (
-    <section className="profile bg-blue-100 min-h-screen center p-4">
+    <section className="profile min-h-screen center p-4">
       <ToastContainer />
       <div className="container max-w-4xl mx-auto mt-14 mb-4 backdrop-blur-3xl center flex-col">
         <div className="avatar m-auto bg-white border-2 h-40 w-40 rounded-full center">
@@ -115,11 +115,11 @@ const Profile = () => {
               <h1>Uploaded Documents</h1>
             </div>
             <div className="documents-lists my-4">
-              <ul className="document-list max-h-96">
+              <ul className="document-list max-h-96 mb-10">
                 {uploadsData
                   ? uploadsData.map((document) => (
                       <li
-                        className="flex flex-col sm:flex-row justify-between items-center gap-4 border-b p-4 my-2 bg-blue-100 rounded-3xl "
+                        className="flex flex-col sm:flex-row justify-between gap-4 border-b p-4 my-2 bg-gray-100 rounded-3xl "
                         key={document._id}
                       >
                         <Link

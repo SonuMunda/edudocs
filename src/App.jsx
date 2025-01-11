@@ -26,7 +26,7 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div className="bg-blue-100">
+    <div className="bg-gray-100">
       <Router>
         <Header />
         <ToastContainer />

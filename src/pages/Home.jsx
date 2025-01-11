@@ -22,7 +22,7 @@ const Home = () => {
 
   return (
     <main>
-      <section id="hero" className="center flex-col h-96 bg-blue-950">
+      <section id="hero" className="center flex-col bg-gray-900" style={{height:"75vh"}}>
         <div className="container center flex-col p-4 max-w-6xl">
           <h2 className="text-5xl font-semibold text-blue-100 text-center">
             Welcome to EduDocs
@@ -48,7 +48,7 @@ const Home = () => {
 
       <section
         id="recently-uploaded"
-        className="py-10 px-4 sm:px-10 bg-blue-100"
+        className="py-10 px-4 sm:px-10 "
       >
         <div className="recently-uploaded-container">
           <h3 className="text-3xl font-bold mb-8 text-gray-800 pb-3">
@@ -68,7 +68,7 @@ const Home = () => {
       </section>
       <section
         id="assignments"
-        className="py-10 px-4 sm:px-10 bg-gradient-to-l bg-blue-50"
+        className="py-10 px-4 sm:px-10 bg-gradient-to-l "
       >
         <div className="assignments-container">
           <h3 className="text-3xl font-bold mb-8 text-gray-800  pb-3">
@@ -95,7 +95,7 @@ const Home = () => {
 
       <section
         id="notes"
-        className="py-10 px-4 sm:px-10 bg-gradient-to-l bg-blue-100"
+        className="py-10 px-4 sm:px-10 bg-gradient-to-l "
       >
         <div className="notes-container">
           <h3 className="text-3xl font-bold mb-8 text-gray-800  pb-3">Notes</h3>

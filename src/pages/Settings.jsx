@@ -76,8 +76,8 @@ const Settings = () => {
   return (
     <main>
       <ToastContainer />
-      <section id="settings" className="p-4 sm:p-10 w-full bg-blue-100 center">
-        <div className="container xs:max-w-full mt-12 mb-8 bg-white p-10 rounded-3xl shadow shadow-xl">
+      <section id="settings" className="p-4 sm:p-10 w-full center">
+        <div className="container xs:max-w-full mt-12 mb-8 bg-gray-50 p-10 rounded-3xl ring ring-gray-200">
           <h3 className="text-3xl font-bold mb-4 border-b-2 pb-4">Settings</h3>
           <h4 className="text-xl font-semibold my-4">Account Settings</h4>
           <p className="text-gray-600 mb-4">

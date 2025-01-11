@@ -1,19 +1,22 @@
+import {FaFaceSadTear } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 const NotFound = () => {
   return (
-    <section className="not-found center min-h-screen bg-red-900">
-      <div className="center flex-col backdrop-blur-4">
+    <section className="not-found center min-h-screen p-2">
+      <div className="center flex-col">
         <div className="text-center">
-          <h1 className="text-9xl font-extrabold text-white mb-4">404</h1>
-          <p className="text-2xl text-white mb-6">
+          <div className=" center text-9xl font-extrabold text-red-800 mb-4">
+            4<FaFaceSadTear className="text-red-800" />4
+          </div>
+          <p className="text-2xl text-gray-500 mb-6">
             Oops! The page you're looking for doesn't exist.
           </p>
 
           <div className="mt-4">
             <Link
               to="/"
-              className="px-6 py-3 bg-blue-100 text-blue-600 font-semibold text-lg rounded-full shadow-lg transition-all duration-300 hover:bg-blue-500 hover:text-white"
+              className="px-6 py-3 bg-gray-300 text-gray-600 rounded-full shadow-lg transition-all duration-300 hover:bg-blue-500 hover:text-white"
             >
               Go Back Home
             </Link>

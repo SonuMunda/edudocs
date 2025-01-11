@@ -15,6 +15,10 @@ const sessionsList = [
     id: "2024 - 2025",
     value: "2024-2025",
   },
+  {
+    id: "2025 - 2026",
+    value: "2025-2026",
+  },
 ];
 
 export default sessionsList;

@@ -37,17 +37,17 @@ const DocumentSearch = () => {
   }
 
   return (
-    <main className="bg-blue-200">
+    <main>
       <section
         className={`hero ${
           !query ? "h-screen" : "h-96"
-        } w-full center bg-blue-200`}
+        } w-full center bg-gray-900`}
       >
         <div className="container p-10 center flex-col max-w-6xl">
-          <h1 className="text-4xl font-semibold text-gray-800 text-center">
+          <h1 className="text-4xl font-semibold text-gray-200 text-center">
             Which document do you want to find?
           </h1>
-          <p className="mt-8 mb-2 text-gray-600 text-lg text-center">
+          <p className="mt-8 mb-2 text-gray-300 text-lg text-center">
             Search for notes, assignments, study materials, or documents
           </p>
           <div className="search w-full relative">
@@ -70,7 +70,7 @@ const DocumentSearch = () => {
 
       {/* Section to display filtered documents */}
       {filteredDocuments?.length > 0 && (
-        <section className="filtered-documents py-10 px-6 bg-blue-100">
+        <section className="filtered-documents py-10 px-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-2">
             Searched Documents
           </h2>
@@ -110,7 +110,7 @@ const DocumentSearch = () => {
         </section>
       )}
       {query && filteredDocuments?.length <= 0 && (
-        <section className="filtered-documents py-10 px-6 bg-blue-100">
+        <section className="filtered-documents py-10 px-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-2">
             Document you are looking for is not available!
           </h2>

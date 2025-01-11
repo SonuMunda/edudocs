@@ -47,7 +47,7 @@ const Footer = () => {
       <div className="border-t border-gray-700 my-6"></div>
 
       <div className="text-center text-gray-400 text-sm">
-        &copy; {new Date().getFullYear()} EduDocs | Designed by Sonu Munda. All rights reserved.
+        &copy; 2024 - {new Date().getFullYear()} EduDocs | Designed by Sonu Munda. All rights reserved.
       </div>
     </footer>
   );

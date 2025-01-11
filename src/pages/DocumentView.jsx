@@ -81,7 +81,7 @@ const DocumentView = () => {
   };
 
   return (
-    <main className="bg-blue-100 min-h-screen p-4 flex justify-center items-center">
+    <main className="min-h-screen p-4 flex justify-center items-center">
       <ToastContainer />
       <div className="container document-viewer flex flex-col gap-4 lg:flex-row my-12">
         {/* Document Description */}
@@ -147,7 +147,7 @@ const DocumentView = () => {
           {/* Share button */}
           <div className="document-btns flex gap-4">
             <button
-              className="share-btn center bg-indigo-600 text-white px-4 py-2 rounded"
+              className="share-btn center bg-blue-600 text-white px-4 py-2 rounded-3xl"
               onClick={() =>
                 toggleShareMenu(
                   `${
@@ -167,7 +167,7 @@ const DocumentView = () => {
             {currentUserId && currentUserId !== fileDetails?.uploadedBy && (
               <>
                 <button
-                  className="like-btn center bg-green-600 text-white px-4 py-2 rounded"
+                  className="like-btn center bg-green-600 text-white px-4 py-2 rounded-full"
                   onClick={handleLike}
                 >
                   <div className="icon me-2">
@@ -177,7 +177,7 @@ const DocumentView = () => {
                 </button>
 
                 <button
-                  className="vote center bg-red-600 text-white px-4 py-2 rounded"
+                  className="vote center bg-red-600 text-white px-4 py-2 rounded-full"
                   onClick={handleVote}
                 >
                   <div className="icon me-2">
@@ -191,7 +191,7 @@ const DocumentView = () => {
         </div>
 
         {/* Document Viewer */}
-        <div className="relative w-full h-screen rounded-3xl overflow-hidden shadow-md bg-blue-50">
+        <div className="relative w-full h-screen rounded-xl overflow-hidden shadow-md bg-gray-200">
           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
             {fileDetails?.url ? (
               <div className="w-full h-full">
