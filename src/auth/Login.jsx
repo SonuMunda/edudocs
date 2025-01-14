@@ -22,7 +22,7 @@ const Login = () => {
   });
 
   return (
-    <main className="min-h-screen center bg-blue-200 py-10">
+    <main className="min-h-screen center py-10">
       <ToastContainer />
       <section className="flex flex-col lg:flex-row w-10/12 max-w-4xl shadow-lg bg-white overflow-hidden rounded-3xl mt-14 mx-auto lg:w-3/4 sm:w-5/6">
         <div className="center flex-col lg:w-1/2 bg-blue-500 lg:rounded-r-3xl p-10 ">
@@ -40,7 +40,7 @@ const Login = () => {
           </Link>
         </div>
         <div className="h-full w-full p-8 lg:w-1/2 overflow-y-auto scrollbar-hidden">
-          <h2 className="text-3xl font-bold text-blue-400 my-4">
+          <h2 className="text-3xl font-bold text-blue-500 my-4">
             Login
           </h2>
           <Formik

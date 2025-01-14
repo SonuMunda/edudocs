@@ -61,14 +61,15 @@ const Chatbot = () => {
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="loader">
+                <Comment height={42} backgroundColor="#4382ec" />
+              </div>
+            )}
+            {error && (
+              <p className="text-center text-red-500">Error: {error}</p>
+            )}
           </div>
-
-          {isLoading && (
-            <div className="loader ms-10">
-              <Comment height={42} backgroundColor="#4382ec" />
-            </div>
-          )}
-          {error && <p className="text-center text-red-500">Error: {error}</p>}
         </div>
       )}
 

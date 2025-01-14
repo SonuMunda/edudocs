@@ -49,9 +49,9 @@ const Signup = () => {
   });
 
   return (
-    <main className="min-h-screen p-4 sm:p-10 center bg-blue-200">
+    <main className="min-h-screen px-4 py-10 sm:p-10 center">
       <ToastContainer />
-      <div className="flex flex-col w-10/12 lg:flex-row gap-10 w-full lg:max-w-4xl bg-white shadow mt-10 mx-auto rounded-3xl overflow-hidden">
+      <div className="flex flex-col w-10/12 lg:flex-row gap-10 w-full lg:max-w-4xl bg-white shadow mt-14 mx-auto rounded-3xl overflow-hidden">
         <div className="center flex-col lg:w-1/2 bg-blue-500 lg:rounded-r-3xl p-10 ">
           <h2 className="text-3xl font-bold mb-2 text-center text-white">
             Welcome to Edudocs!
@@ -67,7 +67,7 @@ const Signup = () => {
           </Link>
         </div>
         <div className="h-full overflow-y-auto scrollbar-hide w-full px-6 py-4 lg:w-1/2">
-          <h2 className="text-3xl font-semibold mb-4 text-blue-500text-3xl font-bold text-blue-400  lg:my-4  ">
+          <h2 className="text-3xl font-semibold mb-4 text-blue-500 text-3xl font-bold  lg:my-4  ">
             Signup
           </h2>
           <Formik
