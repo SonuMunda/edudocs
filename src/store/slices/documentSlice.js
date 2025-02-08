@@ -1,33 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-// export const fetchAllDocuments = createAsyncThunk(
-//   "fetchAllDocuments",
-//   async ({ rejectWithValue, dispatch }) => {
-//     try {
-//       {
-//         console.log("fetching documents");
-//         const response = await fetch(
-//           `${import.meta.env.VITE_SERVER_URL}/api/documents`,
-//           {
-//             method: "GET",
-//           }
-//         );
-
-//         if (!response.ok) {
-//           throw new Error(`Failed to fetch: ${response.message}`);
-//         }
-
-//         const data = await response.json();
-//         if (data) {
-//           dispatch(setDocuments(data.documents));
-//           console.log(data);
-//         }
-//       }
-//     } catch (error) {
-//       rejectWithValue(error.message);
-//     }
-//   }
-// );
 
 export const fetchDocuments = createAsyncThunk(
   "fetchDocuments",

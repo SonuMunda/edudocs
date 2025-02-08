@@ -1,28 +1,33 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import DocumentCard from "../components/DocumentCard";
-
-import Loader from "../components/Loader";
+import { fetchDocuments } from "../store/slices/documentSlice";
+import DocumentSkeleton from "../components/DocumentSkeleton";
 
 const Home = () => {
   const { documents, loading } = useSelector((state) => state?.documents);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchDocuments());
+    window.scrollTo(0, 0);
+  }, [dispatch]);
 
   const handleSearch = (event) => {
     event.preventDefault();
     navigate(`/document-search?${query}`);
   };
 
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
     <main>
-      <section id="hero" className="center flex-col bg-gray-900" style={{height:"75vh"}}>
+      <section
+        id="hero"
+        className="center flex-col bg-gray-900"
+        style={{ height: "75vh" }}
+      >
         <div className="container center flex-col p-4 max-w-6xl">
           <h2 className="text-5xl font-semibold text-blue-100 text-center">
             Welcome to EduDocs
@@ -46,23 +51,26 @@ const Home = () => {
         </div>
       </section>
 
-      <section
-        id="recently-uploaded"
-        className="py-10 px-4 sm:px-10 "
-      >
+      <section id="recently-uploaded" className="py-10 px-4 sm:px-10 ">
         <div className="recently-uploaded-container">
           <h3 className="text-3xl font-bold mb-8 text-gray-800 pb-3">
-            Recently Uploaded
+            Recently Uploaded Documents
           </h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {documents?.length > 0 &&
-              [...documents]
-                .sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))
+            {loading ? (
+              Array(4).fill(<DocumentSkeleton />)
+            ) : documents?.length > 0 ? (
+              documents
                 .slice(0, 5)
                 .map((document) => (
                   <DocumentCard document={document} key={document._id} />
-                ))}
+                ))
+            ) : (
+              <p className="text-gray-800">
+                No documents available at the moment. Check back soon!
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -76,8 +84,10 @@ const Home = () => {
           </h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {documents.filter((doc) => doc.category === "assignment").length >
-            0 ? (
+            {loading ? (
+              Array(4).fill(<DocumentSkeleton />)
+            ) : documents?.filter((doc) => doc.category === "assignment").length >
+              0 ? (
               documents
                 .filter((doc) => doc.category === "assignment")
                 .slice(0, 5)
@@ -86,22 +96,22 @@ const Home = () => {
                 ))
             ) : (
               <p className="text-gray-800">
-                No assignments available at the moment. Check back soon!
+                No notes available at the moment. Check back soon!
               </p>
             )}
           </div>
         </div>
       </section>
 
-      <section
-        id="notes"
-        className="py-10 px-4 sm:px-10 bg-gradient-to-l "
-      >
+      <section id="notes" className="py-10 px-4 sm:px-10 bg-gradient-to-l ">
         <div className="notes-container">
           <h3 className="text-3xl font-bold mb-8 text-gray-800  pb-3">Notes</h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {documents.filter((doc) => doc.category === "notes").length > 0 ? (
+            {loading ? (
+              Array(4).fill(<DocumentSkeleton />)
+            ) : documents?.filter((doc) => doc.category === "notes").length >
+              0 ? (
               documents
                 .filter((doc) => doc.category === "notes")
                 .slice(0, 5)

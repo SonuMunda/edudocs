@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signup from "./auth/Signup";
 import Header from "./components/Header";
 import Home from "./pages/Home";
-import Login from "./auth/Login";
+import Signin from "./auth/Signin";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Uploads from "./pages/Uploads";
@@ -12,18 +12,13 @@ import NotFound from "./pages/NotFound";
 import ChatBot from "./pages/ChatBot";
 import DocumentSearch from "./pages/DocumentSearch";
 import Books from "./pages/Books";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { fetchDocuments } from "./store/slices/documentSlice";
 import { ToastContainer } from "react-toastify";
 import EmailVerified from "./pages/EmailVerified";
 import AuthGuard from "../guards/AuthGuard";
+import ForgetPassword from "./pages/ForgetPassword";
+import ResetPassword from "./auth/ResetPassword";
 
 const App = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchDocuments());
-  }, [dispatch]);
 
   return (
     <div className="bg-gray-100">
@@ -33,13 +28,16 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/signin" element={<Signin />} />
           <Route path="/profile/:username" element={<Profile />} />
           <Route
             path="/uploads"
             element={<AuthGuard component={<Uploads />} />}
           />
-          <Route path="/settings" element={<AuthGuard component={<Settings />} />} />
+          <Route
+            path="/settings"
+            element={<AuthGuard component={<Settings />} />}
+          />
           <Route
             path="/:username/:userId/document/:filename/:fileId/view"
             element={<DocumentView />}
@@ -48,6 +46,11 @@ const App = () => {
           <Route path="/books" element={<Books />} />
           <Route path="/solve-doubt" element={<ChatBot />} />
           <Route path="/email-verified" element={<EmailVerified />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route
+            path="/reset-password/:token"
+            element={<AuthGuard component={<ResetPassword />} />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />

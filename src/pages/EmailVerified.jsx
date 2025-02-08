@@ -6,8 +6,8 @@ const EmailVerified = () => {
   const email = searchParams.get("email");
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-blue-100 p-4">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-3xl p-6 text-center">
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <div className="max-w-md w-full bg-white ring ring-gray-200 rounded-3xl p-6 text-center">
         <div className="mb-6">
           <MdCheckCircleOutline
             size={100}

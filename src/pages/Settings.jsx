@@ -4,14 +4,17 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import { updateUserProfile } from "../store/slices/authSlice";
-import FetchUserId from "../utils/FetchUserId";
-import { ThreeCircles } from "react-loader-spinner";
+import { ColorRing } from "react-loader-spinner";
 import { updatePassword } from "../store/slices/authSlice";
+import { useState } from "react";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 const Settings = () => {
-  const { user, isLoading } = useSelector((state) => state?.user);
+  const { user, isLoading } = useSelector((state) => state?.auth);
+  const [showCurrentPass, setShowCurrentPass] = useState(false);
+  const [showNewPass, setShowNewPass] = useState(false);
+
   const dispatch = useDispatch();
-  const id = FetchUserId();
 
   const initialValues = {
     firstName: user?.firstName,
@@ -59,12 +62,12 @@ const Settings = () => {
   });
 
   const handleUpdateProfile = (values, { setSubmitting }) => {
-    dispatch(updateUserProfile({ id, data: values, toast }));
+    dispatch(updateUserProfile({ data: values, toast }));
     setSubmitting(false);
   };
 
   const handlePasswordChange = (values, { setSubmitting }) => {
-    dispatch(updatePassword({ id, data: values, toast })).then(() => {
+    dispatch(updatePassword({ data: values, toast })).then(() => {
       setSubmitting(false);
     });
   };
@@ -157,13 +160,19 @@ const Settings = () => {
 
                   <button
                     type="submit"
-                    className="bg-blue-600 text-white py-2 px-6 mt-4 rounded-full hover:bg-blue-700"
+                    className={`bg-blue-600 text-white py-2 px-6 mt-4 rounded-full hover:bg-blue-700 ${
+                      isSumitting && "cursor-not-allowed"
+                    }`}
                     disabled={isSumitting}
                   >
                     {!isSumitting ? (
                       "Update"
                     ) : (
-                      <ThreeCircles height={24} width={42} color="white" />
+                      <ColorRing
+                        height={24}
+                        width={42}
+                        colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
+                      />
                     )}
                   </button>
                 </Form>
@@ -191,12 +200,28 @@ const Settings = () => {
                     >
                       Current Password
                     </label>
-                    <Field
-                      type="password"
-                      name="currentPassword"
-                      id="currentPassword"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    />
+
+                    <div className="relative">
+                      <Field
+                        type={showCurrentPass ? "text" : "password"}
+                        name="currentPassword"
+                        id="currentPassword"
+                        className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-2 flex items-center"
+                        onClick={() => setShowCurrentPass(!showCurrentPass)}
+                      >
+                        {showCurrentPass ? (
+                          <IoMdEye className="text-gray-600" size={24} />
+                        ) : (
+                          <IoMdEyeOff className="text-gray-600" size={24} />
+                        )}
+                      </button>
+                    </div>
+
                     <ErrorMessage
                       name="currentPassword"
                       component="div"
@@ -211,12 +236,26 @@ const Settings = () => {
                     >
                       New Password
                     </label>
-                    <Field
-                      type="password"
-                      name="newPassword"
-                      id="newPassword"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    />
+                    <div className="relative">
+                      <Field
+                        type={showNewPass ? "text" : "password"}
+                        name="newPassword"
+                        id="newPassword"
+                        className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-2 flex items-center"
+                        onClick={() => setShowNewPass(!showNewPass)}
+                      >
+                        {showNewPass ? (
+                          <IoMdEye className="text-gray-600" size={24} />
+                        ) : (
+                          <IoMdEyeOff className="text-gray-600" size={24} />
+                        )}
+                      </button>
+                    </div>
                     <ErrorMessage
                       name="newPassword"
                       id="newPassword"
@@ -227,13 +266,19 @@ const Settings = () => {
 
                   <button
                     type="submit"
-                    className="bg-blue-600 text-white py-2 px-6 mt-4 rounded-full hover:bg-blue-700"
+                    className={`bg-blue-600 text-white py-2 px-6 mt-4 rounded-full hover:bg-blue-700 ${
+                      isSumitting && "cursor-not-allowed"
+                    }`}
                     disabled={isSumitting}
                   >
                     {!isSumitting ? (
                       "Update"
                     ) : (
-                      <ThreeCircles height={24} width={42} color="white" />
+                      <ColorRing
+                        height={24}
+                        width={42}
+                        colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
+                      />
                     )}
                   </button>
                 </Form>

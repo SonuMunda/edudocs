@@ -33,6 +33,7 @@ const FileUpload = () => {
   const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const id = fetchUserId();
+  window.scrollTo(0, 0);
 
   const handleFileChange = (event, setFieldValue) => {
     const selectedFile = event.target.files[0];

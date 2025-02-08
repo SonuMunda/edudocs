@@ -1,42 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const fetchUserDetails = createAsyncThunk(
-  "auth/fetchUserDetails",
-  async ({ id }, { rejectWithValue, dispatch }) => {
-    try {
-      if (id) {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/api/user/auth/${id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          const errorResponseData = await response.json();
-          return rejectWithValue(errorResponseData);
-        }
-
-        const data = await response.json();
-        if (data) {
-          dispatch(setUser(data.user));
-        }
-
-        return data;
-      } else {
-        return rejectWithValue({ message: "User ID is required." });
-      }
-    } catch (error) {
-      const errorMessage =
-        error.message || "An unexpected error occurred during fetchUserDetails";
-      return rejectWithValue({ message: errorMessage });
-    }
-  }
-);
-
 // export const fetchUserDetailsById = createAsyncThunk(
 //   "fetchUserDetailsById",
 //   async (userId) => {
@@ -73,7 +36,7 @@ export const fetchUserDetailsByUsername = createAsyncThunk(
       );
 
       if (!response.ok) {
-        console.log("erroro");
+        console.log("error");
         throw new Error(`Failed to fetch: ${response.message}`);
       }
 
@@ -85,7 +48,6 @@ export const fetchUserDetailsByUsername = createAsyncThunk(
     }
   }
 );
-
 
 export const userDocumentUpload = createAsyncThunk(
   "userDocumentUpload",
@@ -120,7 +82,7 @@ export const userDocumentUpload = createAsyncThunk(
 
 export const fetchUserUploads = createAsyncThunk(
   "fetchUserUploads",
-  async (userId) => {
+  async ({ userId }) => {
     try {
       if (userId) {
         const response = await fetch(
@@ -253,6 +215,7 @@ export const fetchAllDocuments = createAsyncThunk(
 
 const initialState = {
   user: null,
+  documents: [],
   isLogin: !!localStorage.getItem("token"),
   isLoading: true,
   isError: false,
@@ -261,19 +224,29 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    setUser(state, action) {
-      state.user = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchUserDetails.fulfilled, (state) => {
+    builder.addCase(fetchUserDetailsByUsername.fulfilled, (state, action) => {
       state.isLoading = false;
+      state.isError = false;
+      state.user = action.payload;
     });
-    builder.addCase(fetchUserDetails.pending, (state) => {
+    builder.addCase(fetchUserDetailsByUsername.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(fetchUserDetails.rejected, (state) => {
+    builder.addCase(fetchUserDetailsByUsername.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    builder.addCase(fetchUserUploads.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.documents = action.payload;
+    });
+    builder.addCase(fetchUserUploads.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchUserUploads.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });

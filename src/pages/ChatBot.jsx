@@ -11,6 +11,7 @@ const Chatbot = () => {
     (state) => state.chatbot || {}
   );
   const [message, setMessage] = useState("");
+  window.scrollTo(0, 0);
 
   const handleSendMessage = () => {
     if (message.trim()) {

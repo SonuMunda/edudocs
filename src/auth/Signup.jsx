@@ -5,13 +5,24 @@ import { signup } from "../store/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ThreeDots } from "react-loader-spinner";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useState } from "react";
 
 const Signup = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const dispatch = useDispatch();
 
-  const handleSubmit = async (values) => {
-    dispatch(signup({ data: values, toast }));
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      await dispatch(signup({ data: values, toast }));
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-center",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const usernameRegex = /^[a-z][a-z0-9._]*[a-z0-9]$/i;
@@ -43,31 +54,20 @@ const Signup = () => {
       .trim(),
     password: Yup.string()
       .required("Password is required")
-      .min(8, "Password to short")
-      .max(20, "Password to long")
+      .min(8, "Password must be 8 characters long")
+      .matches(/[0-9]/, "Password requires a number")
+      .matches(/[a-z]/, "Password requires a lowercase letter")
+      .matches(/[A-Z]/, "Password requires an uppercase letter")
+      .matches(/[^\w]/, "Password requires a symbol")
       .trim(),
   });
 
   return (
-    <main className="min-h-screen px-4 py-10 sm:p-10 center">
+    <main className="min-h-screen center">
       <ToastContainer />
-      <div className="flex flex-col w-10/12 lg:flex-row gap-10 w-full lg:max-w-4xl bg-white shadow mt-14 mx-auto rounded-3xl overflow-hidden">
-        <div className="center flex-col lg:w-1/2 bg-blue-500 lg:rounded-r-3xl p-10 ">
-          <h2 className="text-3xl font-bold mb-2 text-center text-white">
-            Welcome to Edudocs!
-          </h2>
-          <p className="text-white text-center mb-1">
-            Provide your details to create an account.
-          </p>
-          <Link
-            to="/login"
-            className="border-2 border-white text-white py-2 px-6 rounded-full hidden lg:block"
-          >
-            Login
-          </Link>
-        </div>
-        <div className="h-full overflow-y-auto scrollbar-hide w-full px-6 py-4 lg:w-1/2">
-          <h2 className="text-3xl font-semibold mb-4 text-blue-500 text-3xl font-bold  lg:my-4  ">
+      <section className="signup w-full p-4">
+        <div className="h-full sm:max-w-md bg-white p-8 rounded-3xl ring ring-gray-200 shadow mt-12 mx-auto">
+          <h2 className="text-3xl font-semibold mb-6 text-blue-500 text-center">
             Signup
           </h2>
           <Formik
@@ -80,15 +80,8 @@ const Signup = () => {
             }}
             validationSchema={validationSchema}
             onSubmit={async (values, { setSubmitting }) => {
-              try {
-                await handleSubmit(values);
-              } catch (error) {
-                toast.error(error.message, {
-                  position: "top-center",
-                });
-              } finally {
-                setSubmitting(false);
-              }
+              setSubmitting(true);
+              await handleSubmit(values, { setSubmitting });
             }}
           >
             {({ isSubmitting }) => (
@@ -101,7 +94,7 @@ const Signup = () => {
                     type="text"
                     name="username"
                     id="username"
-                    className=" p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 "
+                    className="p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 "
                     placeholder="Enter your username"
                   />
                   <ErrorMessage
@@ -166,13 +159,24 @@ const Signup = () => {
                   <label htmlFor="password" className="text-gray-600">
                     Password
                   </label>
-                  <Field
-                    type="password"
-                    name="password"
-                    id="password"
-                    className=" p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    placeholder="Enter your password"
-                  />
+
+                  <div className="relative">
+                    <Field
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      id="password"
+                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      placeholder="Enter your password"
+                    />
+
+                    <div
+                      className="icon absolute top-1/2 -translate-y-1/2 right-0 text-xl p-2"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <FaEye /> : <FaEyeSlash />}
+                    </div>
+                  </div>
+
                   <ErrorMessage
                     name="password"
                     component="div"
@@ -185,18 +189,12 @@ const Signup = () => {
                   className="w-full my-2 py-2 px-4 bg-blue-600 rounded hover:bg-blue-700 text-white  shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? (
-                    <span className="center py-1">
-                      <ThreeDots color="#fff" height={12} width={30} />
-                    </span>
-                  ) : (
-                    "Signup"
-                  )}
+                  {isSubmitting ? "Signing You Up..." : "Signup"}
                 </button>
 
                 <p className="text-center my-2">
                   Already have an account?
-                  <Link to="/login" className="text-blue-800 ms-1">
+                  <Link to="/signin" className="text-blue-800 ms-1">
                     Login
                   </Link>
                 </p>
@@ -206,7 +204,7 @@ const Signup = () => {
             )}
           </Formik>
         </div>
-      </div>
+      </section>
     </main>
   );
 };

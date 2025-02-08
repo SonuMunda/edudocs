@@ -32,9 +32,7 @@ const DocumentView = () => {
   const toolbarPluginInstance = toolbarPlugin();
   const { Toolbar } = toolbarPluginInstance;
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  window.scrollTo(0, 0);
 
   useEffect(() => {
     dispatch(fetchFileDetails(fileId)).then((data) => {
@@ -44,7 +42,8 @@ const DocumentView = () => {
 
   const toggleShareMenu = (url, title) => {
     setMenuOpen(true);
-    setShareLink(url);
+    const encodedUrl = encodeURI(url);
+    setShareLink(encodedUrl);
     setShareTitle(title);
   };
 
