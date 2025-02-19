@@ -67,7 +67,7 @@ const Header = () => {
 
   return (
     <header
-      className={`flex justify-between items-center p-2 fixed w-full bg-gray-100 z-10 transition-shadow duration-300 ${
+      className={`flex justify-between items-center p-2 fixed w-full bg-white z-10 transition-shadow duration-300 ${
         hasShadow ? "border-b" : ""
       }`}
     >
@@ -79,7 +79,9 @@ const Header = () => {
         <div className="logo">
           <NavLink to="/" className="center">
             <img src={logo} alt="logo" className="h-8 block" />
-            <h2 className="text-2xl font-bold text-blue-500"><span className="text-black">Edu</span>Docs</h2>
+            <h2 className="text-2xl font-bold text-blue-500">
+              <span className="text-black">Edu</span>Docs
+            </h2>
           </NavLink>
         </div>
       </div>
@@ -87,16 +89,18 @@ const Header = () => {
         <nav
           className={`navbar absolute top-0 left-0 h-screen w-80 ${
             isNavOpen ? "-translate-x-0" : "-translate-x-full"
-          } overflow-hidden bg-gray-100 sm:relative sm:w-fit sm:top-0 sm:h-fit z-10 transitions duration-100 ease-in-out transition-transform-full sm:translate-x-0`}
+          } overflow-hidden bg-white sm:relative sm:w-fit sm:top-0 sm:h-fit z-10 transitions duration-100 ease-in-out transition-transform-full sm:translate-x-0`}
         >
           <div className="flex gap-4 p-2 items-center cursor-pointer sm:hidden border-b">
             <div className="close-btn bg-gray-100 hover:bg-gray-200 p-2 rounded">
               <MdClose size={24} onClick={() => setIsNavOpen(false)} />
             </div>
             <div className="logo">
-              <NavLink to="/" className="center">
-                <img src={logo} alt="logo" className="h-8 hidden sm:block" />
-                <h1 className="text-xl font-semibold text-gray-700">edudocs</h1>
+              <NavLink to="/" className="flex items-center">
+                <img src={logo} alt="logo" className="h-8 block" />
+                <h2 className="text-2xl font-bold text-blue-500">
+                  <span className="text-black">Edu</span>Docs
+                </h2>
               </NavLink>
             </div>
           </div>
@@ -107,7 +111,7 @@ const Header = () => {
                 setIsNavOpen(false);
               }}
             >
-              <NavLink to="/" className="flex items-center p-2 text-gray-700">
+              <NavLink to="/" className="flex items-center text- p-2 text-gray-700">
                 <span className="block sm:hidden">
                   <MdHome size={24} className="me-2" />
                 </span>
@@ -122,7 +126,7 @@ const Header = () => {
             >
               <NavLink
                 to="/books"
-                className="flex items-center p-2 text-gray-700 "
+                className="flex items-center text- p-2 text-gray-700 "
               >
                 <span className="block  sm:hidden">
                   <MdBook size={24} className="me-2" />
@@ -138,7 +142,7 @@ const Header = () => {
             >
               <NavLink
                 to="/solve-doubt"
-                className="flex items-center p-2 text-gray-700"
+                className="flex items-center text- p-2 text-gray-700"
               >
                 <span className="block sm:hidden">
                   <FaRobot size={24} className="me-2" />
@@ -150,7 +154,7 @@ const Header = () => {
             <li className="list-items hover:bg-gray-200 rounded sm:hidden">
               <NavLink
                 to={`${token ? `/profile/${user?.username}` : "/signin"}`}
-                className="flex items-center p-2 text-gray-700"
+                className="flex items-center text- p-2 text-gray-700"
                 onClick={() => {
                   setIsNavOpen(false);
                 }}
@@ -165,7 +169,7 @@ const Header = () => {
             <li className="list-items  hover:bg-gray-200 rounded sm:hidden">
               <NavLink
                 to={`${token ? "uploads" : "/signin"}`}
-                className="flex items-center p-2 text-gray-700"
+                className="flex items-center text- p-2 text-gray-700"
                 onClick={() => {
                   setIsNavOpen(false);
                 }}
@@ -180,7 +184,7 @@ const Header = () => {
             <li className="list-items hover:bg-gray-200 rounded sm:hidden">
               <NavLink
                 to={`${token ? "/settings" : "/signin"}`}
-                className="flex items-center p-2 text-gray-700"
+                className="flex items-center text- p-2 text-gray-700"
                 onClick={() => {
                   setIsNavOpen(false);
                 }}
@@ -229,7 +233,7 @@ const Header = () => {
             </div>
 
             {isMenuOpen && (
-              <div className="user-menu absolute top-11 right-0 bg-gray-100 rounded ring-2  ring-gray-200 w-64 z-10">
+              <div className="user-menu absolute top-11 right-0 bg-white rounded ring-2  ring-gray-200 w-64 z-10">
                 <ul className="menu-list p-4">
                   <li className="text-gray-600 rounded px-2 hover:bg-blue-600 hover:text-white transition-colors">
                     <NavLink
@@ -310,9 +314,10 @@ const Header = () => {
       </div>
 
       <div
-        className={`navbar-overlay absolute left-0 top-0 backdrop-blur-3xl h-screen w-full ${
+        className={`navbar-overlay absolute left-0 top-0 h-screen w-full ${
           isNavOpen ? "block" : "hidden"
         }`}
+        style={{backgroundColor:"rgba(0,0,0,0.4)"}}
         onClick={() => setIsNavOpen(false)}
       ></div>
     </header>

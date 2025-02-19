@@ -25,14 +25,14 @@ const Home = () => {
     <>
       <section
         id="hero"
-        className="center flex-col bg-gray-900"
+        className="center flex-col bg-white"
         style={{ height: "75vh" }}
       >
         <div className="container center flex-col p-4 max-w-6xl">
-          <h2 className="text-5xl font-semibold text-blue-100 text-center">
-            Welcome to EduDocs
+          <h2 className="text-4xl font-semibold  text-center">
+            Welcome to Edu<span className="text-blue-500">Docs</span>
           </h2>
-          <p className="text-lg mt-4 mb-2 text-gray-400 text-md text-center">
+          <p className="mt-4 mb-2 text-gray-600 text-md text-center">
             Empowering students and educators with a seamless platform to share
             notes, documents, and assignments.
           </p>
@@ -40,7 +40,7 @@ const Home = () => {
             <form onSubmit={handleSearch}>
               <input
                 type="text"
-                className="w-full py-3 px-4 outline-none  rounded"
+                className="w-full py-3 px-4 outline-none border bg-gray-100 rounded"
                 placeholder="Type to search for documents"
                 onChange={(e) => setQuery(e.target.value)}
               />
@@ -51,10 +51,10 @@ const Home = () => {
           </div>
         </div>
       </section>
-
+      <hr />
       <section id="recently-uploaded" className="py-10 px-4 sm:px-10 ">
         <div className="recently-uploaded-container">
-          <h3 className="text-3xl font-bold mb-8 text-gray-800 pb-3">
+          <h3 className="text-2xl font-bold mb-8 text-gray-800 pb-3">
             Recently Uploaded Documents
           </h3>
 
@@ -79,12 +79,13 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <hr />
       <section
         id="assignments"
         className="py-10 px-4 sm:px-10 bg-gradient-to-l "
       >
         <div className="assignments-container">
-          <h3 className="text-3xl font-bold mb-8 text-gray-800  pb-3">
+          <h3 className="text-2xl font-bold mb-8 text-gray-800  pb-3">
             Assignments
           </h3>
 
@@ -109,10 +110,10 @@ const Home = () => {
           </div>
         </div>
       </section>
-
+      <hr />
       <section id="notes" className="py-10 px-4 sm:px-10 bg-gradient-to-l ">
         <div className="notes-container">
-          <h3 className="text-3xl font-bold mb-8 text-gray-800  pb-3">Notes</h3>
+          <h3 className="text-2xl font-bold mb-8 text-gray-800  pb-3">Notes</h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {loading ? (

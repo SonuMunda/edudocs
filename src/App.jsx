@@ -20,6 +20,7 @@ import ResetPassword from "./auth/ResetPassword";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import HeaderWrapper from "./components/HeaderWrapper";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
                 "/forget-password",
                 "/reset-password",
                 "/email-verified",
+                "/privacy-policies",
               ]}
             >
               <Header />
@@ -67,6 +69,7 @@ const App = () => {
                 <Route path="/email-verified/" element={<EmailVerified />} />
                 <Route path="/forget-password" element={<ForgetPassword />} />
                 <Route path="/reset-password/" element={<ResetPassword />} />
+                <Route path="/privacy-policies" element={<PrivacyPolicy />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

@@ -40,38 +40,36 @@ const DocumentSearch = () => {
   };
 
   return (
-    <main>
+    <>
       <section
         className={`hero ${
           !query ? "h-screen" : "h-96"
-        } w-full center bg-gray-900`}
+        } w-full center bg-white`}
       >
         <div className="container p-4 center flex-col max-w-6xl mt-12">
-          <h1 className="text-4xl font-semibold text-gray-200 text-center">
+          <h1 className="text-4xl font-semibold text-gray-900 text-center">
             Which document do you want to find?
           </h1>
-          <p className="mt-8 mb-2 text-gray-300 text-lg text-center">
+          <p className="mt-8 mb-2 text-gray-700 text-lg text-center">
             Search for notes, assignments, study materials, or documents
           </p>
 
-
-            <div className="search w-full relative">
-              <form onSubmit={handleSearch}>
-                <input
-                  type="text"
-                  name="search"
-                  id="search"
-                  className="w-full py-3 px-4 outline-none  rounded bg-blue-50"
-                  placeholder="Type to search for documents"
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  disabled={loading}
-                />
-                <div className="icon absolute top-1/2 -translate-y-1/2 right-4 text-xl">
-                  <FaMagnifyingGlass />
-                </div>
-              </form>
-            </div>
-        
+          <div className="search w-full relative">
+            <form onSubmit={handleSearch}>
+              <input
+                type="text"
+                name="search"
+                id="search"
+                className="w-full py-3 px-4 outline-none rounded border bg-gray-100"
+                placeholder="Type to search for documents"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                disabled={loading}
+              />
+              <div className="icon absolute top-1/2 -translate-y-1/2 right-4 text-xl">
+                <FaMagnifyingGlass />
+              </div>
+            </form>
+          </div>
         </div>
       </section>
 
@@ -80,10 +78,9 @@ const DocumentSearch = () => {
       {/* Section to display filtered documents */}
       {filteredDocuments?.length > 0 && (
         <section className="filtered-documents py-10 px-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-8">
             Searched Documents
           </h2>
-          <div className="border-4 border-blue-600 w-40 rounded mb-10"></div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {filteredDocuments.map((document) => (
@@ -91,8 +88,8 @@ const DocumentSearch = () => {
                 to={`/${document.username}/${document.uploadedBy}/document/${document.title}/${document._id}/view`}
                 key={document._id}
               >
-                <div className="note-card h-full rounded shadow bg-gray-200 p-4">
-                  <div className="document-image  h-20 sm:h-56 overflow-hidden">
+                <div className="note-card h-full rounded border bg-gray-200 p-2">
+                  <div className="document-image h-20 sm:h-56 overflow-hidden">
                     <img
                       src={
                         document.url.endsWith(".doc") ||
@@ -127,7 +124,7 @@ const DocumentSearch = () => {
           <p className="text-gray-700">Try searching for another document.</p>
         </section>
       )}
-    </main>
+    </>
   );
 };
 
