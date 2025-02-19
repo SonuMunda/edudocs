@@ -3,7 +3,7 @@ import { useState } from "react";
 import * as Yup from "yup";
 import { CiTrash } from "react-icons/ci";
 import { useDispatch } from "react-redux";
-import { userDocumentUpload } from "../store/slices/userSlice";
+import { userDocumentUpload } from "../store/slices/authSlice";
 import fetchUserId from "../utils/FetchUserId";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,7 +13,6 @@ import universitiesList from "../api/universitiesList";
 import coursesList from "../api/coursesList";
 import sessionsList from "../api/sessionsList";
 import styled from "styled-components";
-import { ColorRing } from "react-loader-spinner";
 import { MdOutlineFileUpload, MdUpload } from "react-icons/md";
 
 const StyledDataListInput = styled(DatalistInput)`
@@ -59,7 +58,7 @@ const FileUpload = () => {
     }
   };
 
-  const handleUpload = async (values) => {
+  const handleUpload = async (values, { setSubmitting, resetForm }) => {
     try {
       if (file) {
         const formData = new FormData();
@@ -75,15 +74,18 @@ const FileUpload = () => {
         await dispatch(userDocumentUpload({ id, formData, toast }));
       }
     } catch (error) {
-      toast.error("Error during file upload");
+      toast.error("Failed to upload");
+    } finally {
+      setSubmitting(false);
+      resetForm();
     }
   };
 
   return (
-    <main className="file-upload center min-h-screen p-4">
+    <section className="file-upload center min-h-screen sm:p-4">
       <ToastContainer />
-      <div className="container my-14 p-4 max-w-6xl bg-gray-50 rounded-2xl">
-        <div className="file-upload-form font-semibold">
+      <div className="container xs:max-w-4xl mt-12 mb-8 bg-white p-10 rounded border">
+        <div className="file-upload-form">
           <Formik
             initialValues={{
               file: null,
@@ -101,28 +103,18 @@ const FileUpload = () => {
               session: Yup.string().required("Session is required"),
               description: Yup.string().required("Description is required"),
             })}
-            onSubmit={async (values, { setSubmitting, resetForm }) => {
-              try {
-                await handleUpload(values);
-              } catch (error) {
-                toast.error(error.message);
-              } finally {
-                setSubmitting(false);
-                resetForm();
-                setFile(null);
-              }
-            }}
+            onSubmit={handleUpload}
           >
             {({ setFieldValue, errors, touched, values, isSubmitting }) => (
               <Form
                 encType="multipart/form-data"
-                className="form flex-col md:flex-row flex gap-10"
+                className="form flex-col  flex gap-10"
               >
                 <div
                   className={`form-group center flex-col upload-box border-4 border-blue-200 ${
-                    isDragging ? "border-blue-800" : "border-dashed"
-                  } rounded-2xl
-                  xl p-10 bg-white my-2 w-full`}
+                    isDragging ? "border-blue-500 bg-blue-200" : "border-dashed"
+                  } rounded
+                  xl p-10 bg-gray-50 my-2 w-full`}
                   onDragOver={(e) => {
                     e.preventDefault();
                     setIsDragging(true);
@@ -161,7 +153,7 @@ const FileUpload = () => {
                   <button type="button" className="btn block mx-auto">
                     <label
                       htmlFor="file"
-                      className="center my-2 px-6 py-2 bg-blue-600 rounded-3xl text-white cursor-pointer"
+                      className="center my-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white cursor-pointer font-normal"
                     >
                       Browse my files
                     </label>
@@ -174,7 +166,7 @@ const FileUpload = () => {
                 </div>
 
                 <div className="form-right w-full sm:p-10">
-                  {file && (
+                  {file != null && (
                     <div className="my-5">
                       <h4 className="text-lg font-semibold mb-1">
                         Selected File:
@@ -214,9 +206,9 @@ const FileUpload = () => {
                       onChange={(e) =>
                         setFieldValue("category", e.target.value)
                       }
-                      className={`font-normal p-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
+                      className={`font-normal p-2 ring-1 ring-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
                         errors.category && touched.category
-                          ? "border-red-500"
+                          ? "ring-red-500"
                           : ""
                       }`}
                     >
@@ -240,6 +232,7 @@ const FileUpload = () => {
                     <label
                       htmlFor="university"
                       className="block my-2 font-normal"
+                      id="university"
                     >
                       University
                     </label>
@@ -268,7 +261,11 @@ const FileUpload = () => {
                   </div>
 
                   <div className="form-group my-2">
-                    <label htmlFor="course" className="block font-normal">
+                    <label
+                      htmlFor="course"
+                      className="block font-normal"
+                      id="course"
+                    >
                       Course
                     </label>
                     <StyledDataListInput
@@ -322,10 +319,7 @@ const FileUpload = () => {
                   </div>
 
                   <div className="form-group my-2">
-                    <label
-                      htmlFor="description"
-                      className="block font-normal"
-                    >
+                    <label htmlFor="description" className="block font-normal">
                       Description
                     </label>
                     <textarea
@@ -333,9 +327,9 @@ const FileUpload = () => {
                       id="description"
                       placeholder="Write something about document."
                       rows="3"
-                      className={`font-normal p-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
+                      className={`font-normal p-3 ring-1 ring-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
                         errors.description && touched.description
-                          ? "border-red-500"
+                          ? "ring-red-500"
                           : ""
                       }`}
                       value={values.description}
@@ -353,14 +347,13 @@ const FileUpload = () => {
                   <div className="center py-4">
                     <button
                       type="submit"
-                      className="font-normal center w-full h-10 bg-blue-500 text-white rounded-3xl hover:bg-blue-600"
+                      className={`w-full my-6 py-2 px-4 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 ${
+                        isSubmitting && "cursor-not-allowed"
+                      }`}
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
-                        <ColorRing
-                          height={36}
-                          colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
-                        />
+                        <span>Uploading...</span>
                       ) : (
                         <span className="center gap-2">
                           Upload <MdUpload size={24} />
@@ -374,7 +367,7 @@ const FileUpload = () => {
           </Formik>
         </div>
       </div>
-    </main>
+    </section>
   );
 };
 

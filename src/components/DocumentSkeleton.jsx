@@ -3,8 +3,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 const DocumentSkeleton = () => {
   return (
-    <div className="document-card h-full bg-gray-50 p-4 rounded-3xl border-2 shadow">
-      <div className="document-image overflow-hidden rounded-xl">
+    <div className="document-card h-full bg-gray-50 p-4 rounded border-2 shadow">
+      <div className="document-image overflow-hidden rounded">
         <Skeleton height={144} className="sm:h-56" />
       </div>
       <h4 className="text-sm font-bold mt-4 sm:text-lg">

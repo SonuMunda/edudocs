@@ -22,7 +22,7 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="h-screen bg-gray-100 flex flex-col">
+    <section className="chat-bot h-screen bg-gray-100 flex flex-col">
       {conversation == [] || conversation == "" ? (
         <div className="h-full center flex-col p-2">
           <div className="bot-icon text-gray-700">
@@ -52,7 +52,7 @@ const Chatbot = () => {
                   </div>
                 )}
                 <div
-                  className={`p-4 rounded-3xl break-words  ${
+                  className={`p-4 rounded break-words  ${
                     msg.role === "bot"
                       ? "bg-green-200 text-gray-800 "
                       : "bg-gray-200 text-gray-700"
@@ -81,17 +81,17 @@ const Chatbot = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type a message"
-            className="flex-1 p-3 ring-2 ring-gray-300 rounded-3xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="flex-1 p-3 ring-2 ring-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
           />
           <button
             onClick={handleSendMessage}
-            className="bg-blue-600 text-white h-12 w-12 center m-auto rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-blue-600 text-white h-12 w-12 center m-auto rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <PiPaperPlaneRightBold size={24} />
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

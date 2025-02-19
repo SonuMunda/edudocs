@@ -43,7 +43,7 @@ export const signup = createAsyncThunk(
 
 export const signin = createAsyncThunk(
   "auth/signin",
-  async ({ data, toast, navigate }, { rejectWithValue, dispatch }) => {
+  async ({ data, toast, navigate }, { rejectWithValue }) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/auth/signin`,
@@ -68,7 +68,6 @@ export const signin = createAsyncThunk(
 
       const { token } = responseData;
       localStorage.setItem("token", token);
-      dispatch(setUserProfile(responseData.user));
 
       toast.success(responseData.message, {
         position: "top-center",
@@ -84,6 +83,47 @@ export const signin = createAsyncThunk(
         position: "top-center",
       });
       return rejectWithValue({ message: errorMessage });
+    }
+  }
+);
+
+export const googleSignin = createAsyncThunk(
+  "/auth/googleSignin",
+  async ({ credential, toast, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/google/signin`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ credential }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorResponseData = await response.json();
+        toast.error(errorResponseData.message, {
+          position: "top-center",
+        });
+        return rejectWithValue(errorResponseData);
+      }
+
+      const responseData = await response.json();
+
+      const { token } = responseData;
+      localStorage.setItem("token", token);
+
+      toast.success(responseData.message, {
+        position: "top-center",
+      });
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } catch (error) {
+      console.error(error);
     }
   }
 );
@@ -110,6 +150,37 @@ export const fetchUserDetails = createAsyncThunk(
       }
     } catch (error) {
       return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const userDocumentUpload = createAsyncThunk(
+  "userDocumentUpload",
+  async ({ id, formData, toast }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/upload/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast.error(errorData.message);
+      }
+
+      const responseData = await response.json();
+      toast.success(responseData.message);
+
+      return responseData;
+    } catch (error) {
+      toast.error(error.message);
+      return rejectWithValue("An error occurred while uploading the document");
     }
   }
 );
@@ -238,7 +309,7 @@ export const resetPassword = createAsyncThunk(
         {
           method: "PATCH",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("resetToken")}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ newPassword }),
@@ -256,12 +327,13 @@ export const resetPassword = createAsyncThunk(
       const responseData = await response.json();
       toast.success(responseData.message, {
         position: "top-center",
+        autoClose: 1500,
       });
 
       localStorage.removeItem("token");
       setTimeout(() => {
         navigate("/signin");
-      }, 1000);
+      }, 3000);
 
       return responseData;
     } catch (error) {
@@ -278,7 +350,6 @@ export const resetPassword = createAsyncThunk(
 const initialState = {
   user: null,
   isLoading: true,
-  isLoggedIn: false,
 };
 
 // Slice
@@ -291,15 +362,10 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       state.user = null;
-      state.isLoggedIn = false;
       localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(signin.fulfilled, (state) => {
-      state.isLoggedIn = true;
-    });
-
     builder.addCase(fetchUserDetails.fulfilled, (state) => {
       state.isLoading = false;
     });

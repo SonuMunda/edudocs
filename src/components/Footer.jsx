@@ -2,7 +2,7 @@ import { FiMail, FiPhone, FiCheckCircle } from "react-icons/fi";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 p-8 text-gray-200 rounded-t-3xl">
+    <footer className="bg-gray-900 p-8 text-gray-200">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-start gap-8">
         <div className="md:w-1/3">
           <h1 className="text-3xl font-bold text-white mb-2">EduDocs</h1>

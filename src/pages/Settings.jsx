@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import { updateUserProfile } from "../store/slices/authSlice";
-import { ColorRing } from "react-loader-spinner";
 import { updatePassword } from "../store/slices/authSlice";
 import { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
@@ -21,6 +20,7 @@ const Settings = () => {
     lastName: user?.lastName,
     email: user?.email,
     username: user?.username,
+    university: user?.university,
   };
 
   const passwordIntitialValues = {
@@ -50,6 +50,11 @@ const Settings = () => {
       .min(3, "Last name to short")
       .max(20, "Last name to long")
       .trim(),
+    university: Yup.string()
+      .required("University is required")
+      .min(3, "University to short")
+      .max(50, "University to long")
+      .trim(),
   });
 
   const passwordValidationSchema = Yup.object({
@@ -61,15 +66,28 @@ const Settings = () => {
       .trim(),
   });
 
-  const handleUpdateProfile = (values, { setSubmitting }) => {
-    dispatch(updateUserProfile({ data: values, toast }));
-    setSubmitting(false);
+  const handleUpdateProfile = async (values, { setSubmitting }) => {
+    try {
+      await dispatch(updateUserProfile({ data: values, toast }));
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const handlePasswordChange = (values, { setSubmitting }) => {
-    dispatch(updatePassword({ data: values, toast })).then(() => {
+  const handlePasswordChange = async (values, { setSubmitting }) => {
+    try {
+      await dispatch(updatePassword({ data: values, toast }));
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+      });
+    } finally {
       setSubmitting(false);
-    });
+    }
   };
 
   if (isLoading) {
@@ -77,10 +95,10 @@ const Settings = () => {
   }
 
   return (
-    <main>
+    <>
       <ToastContainer />
-      <section id="settings" className="p-4 sm:p-10 w-full center">
-        <div className="container xs:max-w-full mt-12 mb-8 bg-gray-50 p-10 rounded-3xl ring ring-gray-200">
+      <section id="settings" className="sm:p-10 w-full center">
+        <div className="container xs:max-w-full mt-12 bg-white p-10 rounded border">
           <h3 className="text-3xl font-bold mb-4 border-b-2 pb-4">Settings</h3>
           <h4 className="text-xl font-semibold my-4">Account Settings</h4>
           <p className="text-gray-600 mb-4">
@@ -92,7 +110,7 @@ const Settings = () => {
               validationSchema={profileValidationSchema}
               onSubmit={handleUpdateProfile}
             >
-              {({ isSumitting }) => (
+              {({ isSubmitting }) => (
                 <Form className="update-form">
                   <div className="form-group relative flex flex-col pb-5 mb-3">
                     <label htmlFor="firstName" className="block text-gray-600">
@@ -102,7 +120,7 @@ const Settings = () => {
                       type="text"
                       name="firstName"
                       id="firstName"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full p-2 ring-1 ring-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <ErrorMessage
                       name="firstName"
@@ -119,7 +137,7 @@ const Settings = () => {
                       type="text"
                       name="lastName"
                       id="lastName"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full p-2 ring-1 ring-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <ErrorMessage
                       name="lastName"
@@ -136,10 +154,26 @@ const Settings = () => {
                       type="text"
                       name="username"
                       id="username"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full p-2 ring-1 ring-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <ErrorMessage
                       name="username"
+                      component="div"
+                      className="text-red-500 text-xs font-semibold absolute bottom-0"
+                    />
+                  </div>
+
+                  <div className="form-group relative flex flex-col pb-5 mb-3">
+                    <label htmlFor="university">University</label>
+                    <Field
+                      type="text"
+                      name="university"
+                      id="university"
+                      className="w-full p-2 ring-1 ring-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+
+                    <ErrorMessage
+                      name="university"
                       component="div"
                       className="text-red-500 text-xs font-semibold absolute bottom-0"
                     />
@@ -154,26 +188,18 @@ const Settings = () => {
                       name="email"
                       id="email"
                       disabled
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full p-2 ring-1 ring-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className={`bg-blue-600 text-white py-2 px-6 mt-4 rounded-full hover:bg-blue-700 ${
-                      isSumitting && "cursor-not-allowed"
+                    className={`my-6 py-2 px-4 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 ${
+                      isSubmitting && "cursor-not-allowed"
                     }`}
-                    disabled={isSumitting}
+                    disabled={isSubmitting}
                   >
-                    {!isSumitting ? (
-                      "Update"
-                    ) : (
-                      <ColorRing
-                        height={24}
-                        width={42}
-                        colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
-                      />
-                    )}
+                    {!isSubmitting ? "Update" : "Updating..."}
                   </button>
                 </Form>
               )}
@@ -191,7 +217,7 @@ const Settings = () => {
               validationSchema={passwordValidationSchema}
               onSubmit={handlePasswordChange}
             >
-              {({ isSumitting }) => (
+              {({ isSubmitting }) => (
                 <Form action="">
                   <div className="form-group relative flex flex-col pb-5 mb-3">
                     <label
@@ -206,7 +232,7 @@ const Settings = () => {
                         type={showCurrentPass ? "text" : "password"}
                         name="currentPassword"
                         id="currentPassword"
-                        className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-full p-2 ring-1 ring-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                       />
 
                       <button
@@ -241,7 +267,7 @@ const Settings = () => {
                         type={showNewPass ? "text" : "password"}
                         name="newPassword"
                         id="newPassword"
-                        className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-full p-2 ring-1 ring-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                       />
 
                       <button
@@ -266,20 +292,12 @@ const Settings = () => {
 
                   <button
                     type="submit"
-                    className={`bg-blue-600 text-white py-2 px-6 mt-4 rounded-full hover:bg-blue-700 ${
-                      isSumitting && "cursor-not-allowed"
+                    className={`my-6 py-2 px-4 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 ${
+                      isSubmitting && "cursor-not-allowed"
                     }`}
-                    disabled={isSumitting}
+                    disabled={isSubmitting}
                   >
-                    {!isSumitting ? (
-                      "Update"
-                    ) : (
-                      <ColorRing
-                        height={24}
-                        width={42}
-                        colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
-                      />
-                    )}
+                    {!isSubmitting ? "Update" : "Updating..."}
                   </button>
                 </Form>
               )}
@@ -287,7 +305,7 @@ const Settings = () => {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 };
 

@@ -23,10 +23,10 @@ const ForgetPassword = () => {
   };
 
   return (
-    <main className="px-4 py-10 sm:p-10">
-      <section className="forget-password flex justify-center">
+    <main className="main">
+      <section className="forget-password sm:p-4">
         <ToastContainer />
-        <div className="container max-w-2xl mt-14 bg-white p-10 ring ring-gray-200 rounded-3xl">
+        <div className="container max-w-2xl bg-white p-10 sm:border rounded mx-auto">
           <Formik
             initialValues={{
               email: "",
@@ -61,7 +61,7 @@ const ForgetPassword = () => {
                     type="email"
                     name="email"
                     id="email"
-                    className="p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full px-2 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
                     placeholder="Enter your email"
                   />
                   <ErrorMessage
@@ -72,14 +72,12 @@ const ForgetPassword = () => {
                 </div>
                 <button
                   type="submit"
-                  className={`w-full bg-blue-500 text-white mt-4 py-2 px-4 rounded hover:bg-blue-600 ${
+                  className={`w-full my-6 p-3 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 ${
                     isSubmitting ? "cursor-not-allowed" : ""
                   }`}
                   disabled={isSubmitting}
                 >
-                  {isSubmitting
-                    ? "Sending Mail..."
-                    : "Recover Password"}
+                  {isSubmitting ? "Sending Mail..." : "Recover Password"}
                 </button>
               </Form>
             )}

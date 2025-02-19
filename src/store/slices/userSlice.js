@@ -49,36 +49,6 @@ export const fetchUserDetailsByUsername = createAsyncThunk(
   }
 );
 
-export const userDocumentUpload = createAsyncThunk(
-  "userDocumentUpload",
-  async ({ id, formData, toast }, { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/user/upload/${id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast.error(errorData.message);
-      }
-
-      const responseData = await response.json();
-      toast.success(responseData.message);
-
-      return responseData;
-    } catch (error) {
-      toast.error(error.message);
-      return rejectWithValue("An error occurred while uploading the document");
-    }
-  }
-);
 
 export const fetchUserUploads = createAsyncThunk(
   "fetchUserUploads",

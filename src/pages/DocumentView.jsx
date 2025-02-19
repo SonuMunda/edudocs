@@ -84,7 +84,7 @@ const DocumentView = () => {
       <ToastContainer />
       <div className="container document-viewer flex flex-col gap-4 lg:flex-row my-12">
         {/* Document Description */}
-        <div className="document-description bg-white w-full md:w-4/12 p-4 rounded-3xl">
+        <div className="document-description bg-white w-full md:w-4/12 p-4 rounded">
           <div className="flex flex-col gap-2 my-4">
             {!fileDetails?.title ? (
               <Skeleton height={40} />
@@ -146,7 +146,7 @@ const DocumentView = () => {
           {/* Share button */}
           <div className="document-btns flex gap-4">
             <button
-              className="share-btn center bg-blue-600 text-white px-4 py-2 rounded-3xl"
+              className="share-btn center bg-blue-600 text-white px-4 py-2 rounded"
               onClick={() =>
                 toggleShareMenu(
                   `${
@@ -166,7 +166,7 @@ const DocumentView = () => {
             {currentUserId && currentUserId !== fileDetails?.uploadedBy && (
               <>
                 <button
-                  className="like-btn center bg-green-600 text-white px-4 py-2 rounded-full"
+                  className="like-btn center bg-green-600 text-white px-4 py-2 rounded"
                   onClick={handleLike}
                 >
                   <div className="icon me-2">
@@ -176,7 +176,7 @@ const DocumentView = () => {
                 </button>
 
                 <button
-                  className="vote center bg-red-600 text-white px-4 py-2 rounded-full"
+                  className="vote center bg-red-600 text-white px-4 py-2 rounded"
                   onClick={handleVote}
                 >
                   <div className="icon me-2">
@@ -190,7 +190,7 @@ const DocumentView = () => {
         </div>
 
         {/* Document Viewer */}
-        <div className="relative w-full h-screen rounded-xl overflow-hidden shadow-md bg-gray-200">
+        <div className="relative w-full h-screen rounded overflow-hidden shadow-md bg-gray-200">
           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
             {fileDetails?.url ? (
               <div className="w-full h-full">

@@ -22,7 +22,7 @@ const Home = () => {
   };
 
   return (
-    <main>
+    <>
       <section
         id="hero"
         className="center flex-col bg-gray-900"
@@ -32,14 +32,15 @@ const Home = () => {
           <h2 className="text-5xl font-semibold text-blue-100 text-center">
             Welcome to EduDocs
           </h2>
-          <p className="text-lg mt-4 mb-2 text-blue-50 text-md text-center">
-            Your ultimate platform for sharing notes and assignments.
+          <p className="text-lg mt-4 mb-2 text-gray-400 text-md text-center">
+            Empowering students and educators with a seamless platform to share
+            notes, documents, and assignments.
           </p>
           <div className="search w-full relative">
             <form onSubmit={handleSearch}>
               <input
                 type="text"
-                className="w-full py-3 px-4 outline-none  rounded-full"
+                className="w-full py-3 px-4 outline-none  rounded"
                 placeholder="Type to search for documents"
                 onChange={(e) => setQuery(e.target.value)}
               />
@@ -59,12 +60,16 @@ const Home = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {loading ? (
-              Array(4).fill(<DocumentSkeleton />)
+              Array(4)
+                .fill(null)
+                .map((_, index) => <DocumentSkeleton key={index} />)
             ) : documents?.length > 0 ? (
               documents
+                ?.filter((doc) => doc.uploadedAt)
+                .sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))
                 .slice(0, 5)
                 .map((document) => (
-                  <DocumentCard document={document} key={document._id} />
+                  <DocumentCard document={document} key={document?._id} />
                 ))
             ) : (
               <p className="text-gray-800">
@@ -85,9 +90,11 @@ const Home = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {loading ? (
-              Array(4).fill(<DocumentSkeleton />)
-            ) : documents?.filter((doc) => doc.category === "assignment").length >
-              0 ? (
+              Array(4)
+                .fill(null)
+                .map((_, index) => <DocumentSkeleton key={index} />)
+            ) : documents?.filter((doc) => doc.category === "assignment")
+                .length > 0 ? (
               documents
                 .filter((doc) => doc.category === "assignment")
                 .slice(0, 5)
@@ -109,7 +116,9 @@ const Home = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {loading ? (
-              Array(4).fill(<DocumentSkeleton />)
+              Array(4)
+                .fill(null)
+                .map((_, index) => <DocumentSkeleton key={index} />)
             ) : documents?.filter((doc) => doc.category === "notes").length >
               0 ? (
               documents
@@ -126,7 +135,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 };
 

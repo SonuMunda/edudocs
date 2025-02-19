@@ -3,7 +3,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../store/slices/authSlice";
 
@@ -11,20 +11,20 @@ const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { token } = useParams();
-  localStorage.setItem("token", token);
+  const query = new URLSearchParams(window.location.search);
+  const token = query.get("token");
+  localStorage.setItem("resetToken", token);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    console.log(token);
   }, [token]);
 
   const validationSchema = Yup.object({
     password: Yup.string()
-      .required("Password is required")
+      .required("New password is required")
       .min(8, "Password must be 8 characters long")
       .matches(/[0-9]/, "Password requires a number")
       .matches(/[a-z]/, "Password requires a lowercase letter")
@@ -34,7 +34,7 @@ const ResetPassword = () => {
     confirmPassword: Yup.string()
       .oneOf(
         [Yup.ref("password"), null],
-        'Must match "new password" field value'
+        'Must match "New password" field value'
       )
       .trim(),
   });
@@ -47,6 +47,7 @@ const ResetPassword = () => {
     } catch (error) {
       toast.error(error.message, {
         position: "top-center",
+        autoClose: 1000,
       });
     } finally {
       setSubmitting(false);
@@ -54,9 +55,9 @@ const ResetPassword = () => {
   };
 
   return (
-    <main className="min-h-screen py-10">
-      <section className="password-reset mt-12 p-4">
-        <div className="w-full max-w-xl m-auto bg-white p-8 rounded-3xl ring-2 ring-gray-200">
+    <main>
+      <section className="password-reset sm:p-4">
+        <div className="w-full max-w-xl m-auto bg-white p-8 rounded sm:border">
           <h2 className="text-2xl font-bold">Reset Password</h2>
           <p className="mb-6 text-gray-600">
             Enter your new password below to reset your password.
@@ -83,7 +84,7 @@ const ResetPassword = () => {
                       type={showPassword ? "text" : "password"}
                       name="password"
                       id="password"
-                      className="p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 w-full"
+                      className="w-full p-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
                     />
                     <div
                       className="icon absolute top-1/2 -translate-y-1/2 right-0 p-2 text-xl"
@@ -110,7 +111,7 @@ const ResetPassword = () => {
                       type={showConfirmPassword ? "text" : "password"}
                       name="confirmPassword"
                       id="confirmPassword"
-                      className="p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 w-full"
+                      className="w-full p-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
                     />
                     <div
                       className="icon absolute top-1/2 -translate-y-1/2 right-0 p-2 text-xl"
@@ -129,7 +130,7 @@ const ResetPassword = () => {
                 </div>
                 <button
                   type="submit"
-                  className={`w-full my-6 py-2 px-4 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 ${
+                  className={`w-full my-6 p-3 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 ${
                     isSubmitting && "cursor-not-allowed"
                   }`}
                   disabled={isSubmitting}

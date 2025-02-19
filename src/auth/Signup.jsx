@@ -7,6 +7,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
+import { MdEmail, MdPerson, MdLock } from "react-icons/md";
+import GoogleAuthLogin from "./GoogleAuthLogin";
+import Logo from "../components/Logo";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,57 +28,51 @@ const Signup = () => {
     }
   };
 
-  const usernameRegex = /^[a-z][a-z0-9._]*[a-z0-9]$/i;
   const nameRegex = /^[a-zA-Z]+$/;
   const validationSchema = Yup.object({
-    username: Yup.string()
-      .required("Username is required")
-      .matches(usernameRegex, "Invalid username format")
-      .min(5, "Username to short")
-      .max(20, "Username to long")
-      .lowercase("Username must be lowercase")
-      .trim(),
     firstName: Yup.string()
-      .required("First name is required")
-      .matches(nameRegex, "First name must be alphabets only")
-      .min(3, "First name to short")
-      .max(20, "First name to long")
+      .required("- is required")
+      .matches(nameRegex, "- must be alphabets only")
+      .min(3, "- is too short")
+      .max(20, "- is too long")
+      .trim(),
+    lastName: Yup.string()
+      .required("- is required")
+      .matches(nameRegex, "- must be alphabets only")
+      .min(3, "- is too short")
+      .max(20, "- is too long")
       .trim(),
     email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required")
-      .trim(),
-
-    lastName: Yup.string()
-      .required("Last name is required")
-      .matches(nameRegex, "Last name must be alphabets only")
-      .min(3, "First name to short")
-      .max(20, "First name to long")
+      .email("- invalid  format")
+      .required("- is required")
       .trim(),
     password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be 8 characters long")
-      .matches(/[0-9]/, "Password requires a number")
-      .matches(/[a-z]/, "Password requires a lowercase letter")
-      .matches(/[A-Z]/, "Password requires an uppercase letter")
-      .matches(/[^\w]/, "Password requires a symbol")
+      .required("- is required")
+      .min(8, "- must be 8 characters long")
+      .matches(/[0-9]/, "- requires a number")
+      .matches(/[a-z]/, "- requires a lowercase letter")
+      .matches(/[A-Z]/, "- requires an uppercase letter")
+      .matches(/[^\w]/, "- requires a symbol")
       .trim(),
   });
 
   return (
-    <main className="min-h-screen center">
+    <>
       <ToastContainer />
-      <section className="signup w-full p-4">
-        <div className="h-full sm:max-w-md bg-white p-8 rounded-3xl ring ring-gray-200 shadow mt-12 mx-auto">
-          <h2 className="text-3xl font-semibold mb-6 text-blue-500 text-center">
-            Signup
+      <section className="signup min-h-screen flex sm:items-center">
+        <div className="h-full sm:max-w-md bg-white p-4 sm:p-8 rounded border shadow mx-auto">
+          <Logo />
+          <h2 className="text-3xl font-bold text-center text-gray-900">
+            Signup Now
           </h2>
+          <p className="mt-3 text-lg text-gray-600 text-center sm:mt-5">
+            Share and explore high-quality study resources with students.
+          </p>
           <Formik
             initialValues={{
               firstName: "",
               lastName: "",
               email: "",
-              username: "",
               password: "",
             }}
             validationSchema={validationSchema}
@@ -84,91 +81,123 @@ const Signup = () => {
               await handleSubmit(values, { setSubmitting });
             }}
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, errors, touched }) => (
               <Form className="signup-form rounded" autoComplete="off">
-                <div className="form-group flex flex-col relative pb-4 pt-1 my-2">
-                  <label htmlFor="username" className="text-gray-600">
-                    Username
+                {/* First Name */}
+                <div className="form-group flex flex-col relative mb-4">
+                  <label
+                    htmlFor="firstName"
+                    className={`text-gray-800 ${
+                      errors.firstName && touched.firstName
+                        ? "text-red-500"
+                        : ""
+                    }`}
+                  >
+                    <span className="font-semibold">First Name</span>
+                    <ErrorMessage
+                      name="firstName"
+                      component="span"
+                      className="ms-1 text-red-500 text-sm italic"
+                    />
                   </label>
-                  <Field
-                    type="text"
-                    name="username"
-                    id="username"
-                    className="p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 "
-                    placeholder="Enter your username"
-                  />
-                  <ErrorMessage
-                    name="username"
-                    component="div"
-                    className="text-red-500 text-xs  absolute bottom-0"
-                  />
-                </div>
-                <div className="form-group flex flex-col relative pb-4 pt-1 my-2">
-                  <label htmlFor="firstName" className="text-gray-600">
-                    First Name
-                  </label>
-                  <Field
-                    type="text"
-                    name="firstName"
-                    id="firstName"
-                    className=" p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    placeholder="Enter your first name"
-                  />
-                  <ErrorMessage
-                    name="firstName"
-                    component="div"
-                    className="text-red-500 text-xs absolute bottom-0"
-                  />
-                </div>
-                <div className="form-group flex flex-col relative pb-4 pt-1 my-2">
-                  <label htmlFor="lastName" className="text-gray-600">
-                    Last Name
-                  </label>
-                  <Field
-                    type="text"
-                    name="lastName"
-                    id="lastName"
-                    className=" p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    placeholder="Enter your last name"
-                  />
-                  <ErrorMessage
-                    name="lastName"
-                    component="div"
-                    className="text-red-500 text-xs  absolute bottom-0"
-                  />
-                </div>
-
-                <div className="form-group flex flex-col relative pb-4 pt-1 my-2">
-                  <label htmlFor="email" className="text-gray-600">
-                    Email
-                  </label>
-                  <Field
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    placeholder="Enter your email"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="text-red-500 text-xs  absolute bottom-0"
-                  />
-                </div>
-                <div className="form-group flex flex-col relative pb-4 pt-1 my-2">
-                  <label htmlFor="password" className="text-gray-600">
-                    Password
-                  </label>
-
                   <div className="relative">
+                    <div className="icon absolute top-1/2 -translate-y-1/2 left-0 text-xl p-2 text-gray-600">
+                      <MdPerson />
+                    </div>
+                    <Field
+                      type="text"
+                      name="firstName"
+                      id="firstName"
+                      className="w-full pl-10 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
+                      placeholder="First Name"
+                    />
+                  </div>
+                </div>
+
+                {/* Last Name */}
+                <div className="form-group flex flex-col relative  mb-4">
+                  <label
+                    htmlFor="lastName"
+                    className={`text-gray-800 ${
+                      errors.lastName && touched.lastName ? "text-red-500" : ""
+                    }`}
+                  >
+                    <span className="font-semibold">Last Name</span>
+                    <ErrorMessage
+                      name="lastName"
+                      component="span"
+                      className="ms-1 text-red-500 text-sm italic"
+                    />
+                  </label>
+                  <div className="relative">
+                    <div className="icon absolute top-1/2 -translate-y-1/2 left-0 text-xl p-2 text-gray-600">
+                      <MdPerson />
+                    </div>
+                    <Field
+                      type="text"
+                      name="lastName"
+                      id="lastName"
+                      className="w-full pl-10 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
+                      placeholder="Last Name"
+                    />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="form-group flex flex-col relative  mb-4">
+                  <label
+                    htmlFor="email"
+                    className={`text-gray-800 ${
+                      errors.email && touched.email ? "text-red-500" : ""
+                    }`}
+                  >
+                    <span className="font-semibold">Email</span>
+                    <ErrorMessage
+                      name="email"
+                      component="span"
+                      className="ms-1 text-red-500 text-sm italic"
+                    />
+                  </label>
+                  <div className="relative">
+                    <div className="icon absolute top-1/2 -translate-y-1/2 left-0 text-xl p-2 text-gray-600">
+                      <MdEmail />
+                    </div>
+                    <Field
+                      type="email"
+                      name="email"
+                      id="email"
+                      className="w-full pl-10 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
+                      placeholder="Email"
+                    />
+                  </div>
+                </div>
+
+                {/* Password */}
+                <div className="form-group flex flex-col relative mb-4">
+                  <label
+                    htmlFor="password"
+                    className={`text-gray-800 ${
+                      errors.password && touched.password ? "text-red-500" : ""
+                    }`}
+                  >
+                    <span className="font-semibold">Password</span>
+                    <ErrorMessage
+                      name="password"
+                      component="span"
+                      className="ms-1 text-red-500 text-sm italic"
+                    />
+                  </label>
+                  <div className="relative">
+                    <div className="icon absolute top-1/2 -translate-y-1/2 left-0 text-xl p-2 text-gray-600">
+                      <MdLock />
+                    </div>
                     <Field
                       type={showPassword ? "text" : "password"}
                       name="password"
                       id="password"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                      placeholder="Enter your password"
+                      className="w-full pl-10 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
+                      placeholder="Password"
                     />
-
                     <div
                       className="icon absolute top-1/2 -translate-y-1/2 right-0 text-xl p-2"
                       onClick={() => setShowPassword(!showPassword)}
@@ -176,36 +205,38 @@ const Signup = () => {
                       {showPassword ? <FaEye /> : <FaEyeSlash />}
                     </div>
                   </div>
-
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="text-red-500 text-xs  absolute bottom-0"
-                  />
                 </div>
 
+                {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full my-2 py-2 px-4 bg-blue-600 rounded hover:bg-blue-700 text-white  shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+                  className="w-full mt-3 p-3 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Signing You Up..." : "Signup"}
                 </button>
 
-                <p className="text-center my-2">
-                  Already have an account?
-                  <Link to="/signin" className="text-blue-800 ms-1">
-                    Login
-                  </Link>
-                </p>
-
-                {/* <p className="text-center">Or continue with</p> */}
+                {/* Login Link */}
               </Form>
             )}
           </Formik>
+          <p className="text-center mt-4">
+            <span className="text-gray-600">Already have an account?</span>
+            <Link to="/signin" className="text-blue-800 ms-1">
+              Login
+            </Link>
+          </p>
+
+          <p className="mb-2 text-center text-gray-600 font-semibold flex items-center justify-center">
+            <span className="flex-grow border-t-2 border-gray-400 mr-2"></span>
+            Or
+            <span className="flex-grow border-t-2 border-gray-400 ml-2"></span>
+          </p>
+
+          <GoogleAuthLogin />
         </div>
       </section>
-    </main>
+    </>
   );
 };
 

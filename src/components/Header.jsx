@@ -23,14 +23,31 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 
 const Header = () => {
-  const { user, isLoading, isLoggedIn } = useSelector((state) => state?.auth);
+  const { user, isLoading } = useSelector((state) => state?.auth);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [hasShadow, setHasShadow] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isLoggedIn) {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setHasShadow(true);
+      } else {
+        setHasShadow(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
       dispatch(fetchUserDetails());
     }
 
@@ -38,7 +55,7 @@ const Header = () => {
       if (e.target.closest(".user")) return;
       setIsMenuOpen(false);
     });
-  }, [isLoggedIn, dispatch]);
+  }, [token, dispatch]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -49,7 +66,11 @@ const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center shadow p-2 sm:px-10 fixed w-full bg-gray-100 z-10">
+    <header
+      className={`flex justify-between items-center p-2 fixed w-full bg-gray-100 z-10 transition-shadow duration-300 ${
+        hasShadow ? "border-b" : ""
+      }`}
+    >
       <div className="center gap-3">
         <div className="flex items-center cursor-pointer sm:hidden">
           <HiMiniBars3BottomLeft size={24} onClick={handleToggleNav} />
@@ -58,7 +79,7 @@ const Header = () => {
         <div className="logo">
           <NavLink to="/" className="center">
             <img src={logo} alt="logo" className="h-8 block" />
-            <h1 className="text-xl font-semibold text-gray-700">edudocs</h1>
+            <h2 className="text-2xl font-bold text-blue-500"><span className="text-black">Edu</span>Docs</h2>
           </NavLink>
         </div>
       </div>
@@ -128,7 +149,7 @@ const Header = () => {
 
             <li className="list-items hover:bg-gray-200 rounded sm:hidden">
               <NavLink
-                to={`${isLoggedIn ? `/profile/${user?.username}` : "/signin"}`}
+                to={`${token ? `/profile/${user?.username}` : "/signin"}`}
                 className="flex items-center p-2 text-gray-700"
                 onClick={() => {
                   setIsNavOpen(false);
@@ -143,7 +164,7 @@ const Header = () => {
 
             <li className="list-items  hover:bg-gray-200 rounded sm:hidden">
               <NavLink
-                to={`${isLoggedIn ? "uploads" : "/signin"}`}
+                to={`${token ? "uploads" : "/signin"}`}
                 className="flex items-center p-2 text-gray-700"
                 onClick={() => {
                   setIsNavOpen(false);
@@ -158,7 +179,7 @@ const Header = () => {
 
             <li className="list-items hover:bg-gray-200 rounded sm:hidden">
               <NavLink
-                to={`${isLoggedIn ? "/settings" : "/signin"}`}
+                to={`${token ? "/settings" : "/signin"}`}
                 className="flex items-center p-2 text-gray-700"
                 onClick={() => {
                   setIsNavOpen(false);
@@ -191,30 +212,26 @@ const Header = () => {
           </ul>
         </nav>
 
-        {isLoggedIn && (
+        {token && (
           <div className="user relative">
             <div
               className="user-name flex items-center cursor-pointer"
               onClick={toggleMenu}
             >
               {!isLoading ? (
-                <div className="mx-1 h-10 w-10 text-white font-semibold bg-blue-500 rounded-full center hover:bg-blue-600 hover:ring-2">
+                <div className="mx-1 h-10 w-10 text-white font-semibold bg-blue-500 rounded center hover:bg-blue-600 hover:ring-2">
                   <span>{user?.firstName.charAt(0)}</span>
                   <span>{user?.lastName.charAt(0)}</span>
                 </div>
               ) : (
-                <Skeleton
-                  height={40}
-                  width={40}
-                  className="mx-1 rounded-full"
-                />
+                <Skeleton className="mx-1 h-10 w-10 rounded" />
               )}
             </div>
 
             {isMenuOpen && (
-              <div className="user-menu absolute top-11 right-0 bg-gray-100 rounded-3xl  ring-2  ring-gray-200 w-64 z-10">
+              <div className="user-menu absolute top-11 right-0 bg-gray-100 rounded ring-2  ring-gray-200 w-64 z-10">
                 <ul className="menu-list p-4">
-                  <li className="text-gray-600 rounded-xl px-2 hover:bg-blue-600 hover:text-white transition-colors">
+                  <li className="text-gray-600 rounded px-2 hover:bg-blue-600 hover:text-white transition-colors">
                     <NavLink
                       to="/"
                       className="block py-1 flex items-center "
@@ -226,7 +243,7 @@ const Header = () => {
                       Home
                     </NavLink>
                   </li>
-                  <li className="text-gray-600 rounded-xl px-2  hover:bg-blue-600 hover:text-white transition-colors">
+                  <li className="text-gray-600 rounded px-2  hover:bg-blue-600 hover:text-white transition-colors">
                     <NavLink
                       to={`/profile/${user.username}`}
                       className="block py-1 flex items-center"
@@ -238,7 +255,7 @@ const Header = () => {
                       Profile
                     </NavLink>
                   </li>
-                  <li className="text-gray-600 rounded-xl px-2  hover:bg-blue-600 hover:text-white transition-colors">
+                  <li className="text-gray-600 rounded px-2  hover:bg-blue-600 hover:text-white transition-colors">
                     <NavLink
                       to="/uploads"
                       className="block py-1 flex items-center "
@@ -250,7 +267,7 @@ const Header = () => {
                       Uploads
                     </NavLink>
                   </li>
-                  <li className="text-gray-600 rounded-xl px-2  hover:bg-blue-600 hover:text-white transition-colors">
+                  <li className="text-gray-600 rounded px-2  hover:bg-blue-600 hover:text-white transition-colors">
                     <NavLink
                       to="/settings"
                       className="block py-1 flex items-center "
@@ -262,7 +279,7 @@ const Header = () => {
                       Settings
                     </NavLink>
                   </li>
-                  <li className="text-gray-600 rounded-xl mt-1 px-2 hover:bg-red-600 hover:text-white transition-colors border-t border-gray-200">
+                  <li className="text-gray-600 rounded mt-1 px-2 hover:bg-red-600 hover:text-white transition-colors border-t border-gray-200">
                     <button
                       className="block py-1 flex items-center"
                       onClick={() => {
@@ -280,7 +297,7 @@ const Header = () => {
           </div>
         )}
 
-        {!isLoggedIn && (
+        {!token && (
           <div className="header-btns flex gap-2">
             <NavLink
               to="/signin"

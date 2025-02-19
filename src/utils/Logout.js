@@ -1,7 +1,7 @@
 import { logout } from "../store/slices/authSlice";
 
-const Logout = ({ dispatch, navigate }) => {
-  dispatch(logout());
+const Logout = async ({ dispatch, navigate }) => {
+  await dispatch(logout());
   navigate("/signin");
 };
 
