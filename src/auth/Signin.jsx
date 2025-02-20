@@ -150,7 +150,7 @@ const Signin = () => {
               Sign up
             </Link>
           </p>
-          <p className="mb-2 text-center text-gray-600 font-semibold flex items-center justify-center">
+          <p className="my-3 text-center text-gray-600 font-semibold flex items-center justify-center">
             <span className="flex-grow border-t-2 border-gray-400 mr-2"></span>
             Or
             <span className="flex-grow border-t-2 border-gray-400 ml-2"></span>
