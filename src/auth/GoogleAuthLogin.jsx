@@ -21,7 +21,7 @@ const GoogleAuthLogin = () => {
 
 
   return (
-    <div className="google-login-btn w-full">
+    <div className="google-login-btn w-full mx-auto">
       <GoogleLogin
         onSuccess={(credentialResponse) => {
           handleLogin(credentialResponse);
@@ -29,6 +29,8 @@ const GoogleAuthLogin = () => {
         onError={() => {
           toast.error("Login failed");
         }}
+        size="large"
+        text="Continue with Google"
         width={"100%"}
       />
     </div>
