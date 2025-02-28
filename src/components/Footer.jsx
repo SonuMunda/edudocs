@@ -4,7 +4,7 @@ import logo from "../assets/images/logo.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-white p-8 border-t">
+    <footer className="bg-gray-200 p-8 border-t">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-start gap-8">
         <div className="md:w-1/3">
           <Link to="/" className="flex items-center">

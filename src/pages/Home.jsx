@@ -25,14 +25,14 @@ const Home = () => {
     <>
       <section
         id="hero"
-        className="center flex-col bg-white"
+        className="center flex-col bg-gradient-to-b from-blue-400 to-sky-950"
         style={{ height: "75vh" }}
       >
         <div className="container center flex-col p-4 max-w-6xl">
-          <h2 className="text-4xl font-semibold  text-center">
-            Welcome to Edu<span className="text-blue-500">Docs</span>
+          <h2 className="text-4xl font-semibold  text-white text-center">
+            Welcome to EduDocs
           </h2>
-          <p className="mt-4 mb-2 text-gray-600 text-md text-center">
+          <p className="mt-4 mb-2 text-gray-200 text-md text-center">
             Empowering students and educators with a seamless platform to share
             notes, documents, and assignments.
           </p>

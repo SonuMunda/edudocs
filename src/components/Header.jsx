@@ -67,7 +67,7 @@ const Header = () => {
 
   return (
     <header
-      className={`flex justify-between items-center p-2 fixed w-full bg-white z-10 transition-shadow duration-300 ${
+      className={`flex justify-between items-center p-2 fixed w-full bg-gray-100 z-10 transition-shadow duration-300 ${
         hasShadow ? "border-b" : ""
       }`}
     >
@@ -89,9 +89,9 @@ const Header = () => {
         <nav
           className={`navbar absolute top-0 left-0 h-screen w-80 ${
             isNavOpen ? "-translate-x-0" : "-translate-x-full"
-          } overflow-hidden bg-white sm:relative sm:w-fit sm:top-0 sm:h-fit z-10 transitions duration-100 ease-in-out transition-transform-full sm:translate-x-0`}
+          } overflow-hidden bg-white sm:bg-gray-100 sm:relative sm:w-fit sm:top-0 sm:h-fit z-10 transitions duration-100 ease-in-out transition-transform-full sm:translate-x-0`}
         >
-          <div className="flex gap-4 p-2 items-center cursor-pointer sm:hidden border-b">
+          <div className="flex p-2 items-center cursor-pointer sm:hidden border-b">
             <div className="close-btn bg-gray-100 hover:bg-gray-200 p-2 rounded">
               <MdClose size={24} onClick={() => setIsNavOpen(false)} />
             </div>

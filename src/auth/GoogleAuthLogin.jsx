@@ -28,6 +28,7 @@ const GoogleAuthLogin = () => {
         onError={() => {
           toast.error("Login failed");
         }}
+        width={300}
       />
     </div>
   );

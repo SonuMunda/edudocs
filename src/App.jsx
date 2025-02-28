@@ -21,10 +21,27 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import HeaderWrapper from "./components/HeaderWrapper";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import FetchUserId from "./utils/FetchUserId";
+import { io } from "socket.io-client";
+import { useEffect } from "react";
 
 const App = () => {
+  const userId = FetchUserId();
+
+  useEffect(() => {
+    if (userId) {
+      const socket = io("http://localhost:3000", {
+        query: { userId: userId },
+      });
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, []);
+
   return (
-    <div className="bg-neutral-100">
+    <div className="bg-gray-100">
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         <SkeletonTheme enableAnimation>
           <Router>

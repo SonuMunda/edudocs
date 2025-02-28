@@ -59,8 +59,8 @@ const Signup = () => {
   return (
     <>
       <ToastContainer />
-      <section className="signup min-h-screen flex sm:items-center">
-        <div className="h-full sm:max-w-md bg-white p-4 sm:p-8 rounded border shadow mx-auto">
+      <section className="signup flex sm:items-center">
+        <div className="h-full sm:max-w-md bg-white pb-10 px-4 sm:p-8 sm:my-10 rounded sm:border shadow mx-auto">
           <Logo />
           <h2 className="text-3xl font-bold text-center text-gray-900">
             Signup Now
