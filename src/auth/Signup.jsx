@@ -8,8 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import { MdEmail, MdPerson, MdLock } from "react-icons/md";
-import GoogleAuthLogin from "./GoogleAuthLogin";
 import Logo from "../components/Logo";
+import GoogleAuthSignin from "./GoogleAuthSignin";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -59,7 +59,7 @@ const Signup = () => {
   return (
     <>
       <ToastContainer />
-      <section className="signup flex sm:items-center">
+      <section className="signup flex sm:items-center bg-gradient-to-b from-gray-800 to-blue-700">
         <div className="h-full sm:max-w-md bg-white pb-10 px-4 sm:p-8 sm:my-10 rounded sm:border shadow mx-auto">
           <Logo />
           <h2 className="text-3xl font-bold text-center text-gray-900">
@@ -68,6 +68,9 @@ const Signup = () => {
           <p className="mt-3 text-lg text-gray-600 text-center sm:mt-5">
             Share and explore high-quality study resources with students.
           </p>
+
+          <GoogleAuthSignin />
+
           <Formik
             initialValues={{
               firstName: "",
@@ -87,7 +90,7 @@ const Signup = () => {
                 <div className="form-group flex flex-col relative mb-4">
                   <label
                     htmlFor="firstName"
-                    className={`text-gray-800 ${
+                    className={`text-gray-800 text-sm ${
                       errors.firstName && touched.firstName
                         ? "text-red-500"
                         : ""
@@ -108,7 +111,7 @@ const Signup = () => {
                       type="text"
                       name="firstName"
                       id="firstName"
-                      className="w-full pl-10 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
+                      className="w-full pl-10 py-2 rounded ring-1 ring-gray-300 focus:outline-none  focus:ring-blue-500 transition-all ease-in-out"
                       placeholder="First Name"
                     />
                   </div>
@@ -118,7 +121,7 @@ const Signup = () => {
                 <div className="form-group flex flex-col relative  mb-4">
                   <label
                     htmlFor="lastName"
-                    className={`text-gray-800 ${
+                    className={`text-gray-800 text-sm ${
                       errors.lastName && touched.lastName ? "text-red-500" : ""
                     }`}
                   >
@@ -137,7 +140,7 @@ const Signup = () => {
                       type="text"
                       name="lastName"
                       id="lastName"
-                      className="w-full pl-10 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
+                      className="w-full pl-10 py-2 rounded ring-1 ring-gray-300 focus:outline-none  focus:ring-blue-500 transition-all ease-in-out"
                       placeholder="Last Name"
                     />
                   </div>
@@ -147,7 +150,7 @@ const Signup = () => {
                 <div className="form-group flex flex-col relative  mb-4">
                   <label
                     htmlFor="email"
-                    className={`text-gray-800 ${
+                    className={`text-gray-800 text-sm ${
                       errors.email && touched.email ? "text-red-500" : ""
                     }`}
                   >
@@ -166,7 +169,7 @@ const Signup = () => {
                       type="email"
                       name="email"
                       id="email"
-                      className="w-full pl-10 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
+                      className="w-full pl-10 py-2 rounded ring-1 ring-gray-300 focus:outline-none  focus:ring-blue-500 transition-all ease-in-out"
                       placeholder="Email"
                     />
                   </div>
@@ -176,7 +179,7 @@ const Signup = () => {
                 <div className="form-group flex flex-col relative mb-4">
                   <label
                     htmlFor="password"
-                    className={`text-gray-800 ${
+                    className={`text-gray-800 text-sm ${
                       errors.password && touched.password ? "text-red-500" : ""
                     }`}
                   >
@@ -195,7 +198,7 @@ const Signup = () => {
                       type={showPassword ? "text" : "password"}
                       name="password"
                       id="password"
-                      className="w-full pl-10 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
+                      className="w-full pl-10 py-2 rounded ring-1 ring-gray-300 focus:outline-none  focus:ring-blue-500 transition-all ease-in-out"
                       placeholder="Password"
                     />
                     <div
@@ -210,7 +213,7 @@ const Signup = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full mt-3 p-3 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+                  className="w-full mt-3 p-2 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Signing You Up..." : "Signup"}
@@ -226,14 +229,6 @@ const Signup = () => {
               Login
             </Link>
           </p>
-
-          <p className="my-3 text-center text-gray-600 font-semibold flex items-center justify-center">
-            <span className="flex-grow border-t-2 border-gray-400 mr-2"></span>
-            Or
-            <span className="flex-grow border-t-2 border-gray-400 ml-2"></span>
-          </p>
-
-          <GoogleAuthLogin />
         </div>
       </section>
     </>

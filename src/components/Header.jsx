@@ -14,6 +14,7 @@ import {
   MdClose,
   MdHome,
   MdHomeFilled,
+  MdLeaderboard,
   MdLogout,
   MdPerson2,
   MdSettings,
@@ -111,7 +112,10 @@ const Header = () => {
                 setIsNavOpen(false);
               }}
             >
-              <NavLink to="/" className="flex items-center text- p-2 text-gray-700">
+              <NavLink
+                to="/"
+                className="flex items-center p-2 text-gray-700"
+              >
                 <span className="block sm:hidden">
                   <MdHome size={24} className="me-2" />
                 </span>
@@ -126,7 +130,7 @@ const Header = () => {
             >
               <NavLink
                 to="/books"
-                className="flex items-center text- p-2 text-gray-700 "
+                className="flex items-center p-2 text-gray-700 "
               >
                 <span className="block  sm:hidden">
                   <MdBook size={24} className="me-2" />
@@ -142,7 +146,7 @@ const Header = () => {
             >
               <NavLink
                 to="/solve-doubt"
-                className="flex items-center text- p-2 text-gray-700"
+                className="flex items-center  p-2 text-gray-700"
               >
                 <span className="block sm:hidden">
                   <FaRobot size={24} className="me-2" />
@@ -151,10 +155,27 @@ const Header = () => {
               </NavLink>
             </li>
 
+            <li
+              className="list-items hover:bg-gray-200 rounded"
+              onClick={() => {
+                setIsNavOpen(false);
+              }}
+            >
+              <NavLink
+                to="/leaderboard"
+                className="flex items-center p-2 text-gray-700"
+              >
+                <span className="block sm:hidden">
+                  <MdLeaderboard size={24} className="me-2" />
+                </span>
+                Leaderboard
+              </NavLink>
+            </li>
+
             <li className="list-items hover:bg-gray-200 rounded sm:hidden">
               <NavLink
                 to={`${token ? `/profile/${user?.username}` : "/signin"}`}
-                className="flex items-center text- p-2 text-gray-700"
+                className="flex items-center p-2 text-gray-700"
                 onClick={() => {
                   setIsNavOpen(false);
                 }}
@@ -169,7 +190,7 @@ const Header = () => {
             <li className="list-items  hover:bg-gray-200 rounded sm:hidden">
               <NavLink
                 to={`${token ? "uploads" : "/signin"}`}
-                className="flex items-center text- p-2 text-gray-700"
+                className="flex items-center p-2 text-gray-700"
                 onClick={() => {
                   setIsNavOpen(false);
                 }}
@@ -184,7 +205,7 @@ const Header = () => {
             <li className="list-items hover:bg-gray-200 rounded sm:hidden">
               <NavLink
                 to={`${token ? "/settings" : "/signin"}`}
-                className="flex items-center text- p-2 text-gray-700"
+                className="flex items-center p-2 text-gray-700"
                 onClick={() => {
                   setIsNavOpen(false);
                 }}
@@ -317,7 +338,7 @@ const Header = () => {
         className={`navbar-overlay absolute left-0 top-0 h-screen w-full ${
           isNavOpen ? "block" : "hidden"
         }`}
-        style={{backgroundColor:"rgba(0,0,0,0.4)"}}
+        style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
         onClick={() => setIsNavOpen(false)}
       ></div>
     </header>

@@ -4,7 +4,7 @@ import { googleSignin } from "../store/slices/authSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const GoogleAuthLogin = () => {
+const GoogleAuthSignin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ const GoogleAuthLogin = () => {
   };
 
   return (
-    <div className="google-login-btn w-full flex justify-center">
+    <div className="google-login-btn w-full flex justify-center my-4">
       <GoogleLogin
         onSuccess={(credentialResponse) => {
           handleLogin(credentialResponse);
@@ -34,4 +34,4 @@ const GoogleAuthLogin = () => {
   );
 };
 
-export default GoogleAuthLogin;
+export default GoogleAuthSignin;

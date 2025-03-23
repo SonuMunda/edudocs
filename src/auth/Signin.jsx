@@ -7,8 +7,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdEmail, MdLock } from "react-icons/md";
-import GoogleAuthLogin from "./GoogleAuthLogin";
 import Logo from "../components/Logo";
+import GoogleAuthSignin from "./GoogleAuthSignin";
 
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -42,7 +42,7 @@ const Signin = () => {
   return (
     <>
       <ToastContainer />
-      <section className="login min-h-screen flex sm:items-center">
+      <section className="login min-h-screen flex sm:items-center bg-gradient-to-b from-gray-800 to-blue-700 ">
         <div className="h-screen sm:h-full sm:max-w-md bg-white p-4 sm:p-8 rounded sm:border mx-auto">
           <div className="center">
             <Logo />
@@ -53,6 +53,8 @@ const Signin = () => {
           <p className="mt-3 text-lg text-gray-600 text-center sm:mt-5">
             Share and explore high-quality study resources with students.
           </p>
+
+          <GoogleAuthSignin/>
 
           <Formik
             initialValues={{ email: "", password: "" }}
@@ -150,12 +152,6 @@ const Signin = () => {
               Sign up
             </Link>
           </p>
-          <p className="my-3 text-center text-gray-600 font-semibold flex items-center justify-center">
-            <span className="flex-grow border-t-2 border-gray-400 mr-2"></span>
-            Or
-            <span className="flex-grow border-t-2 border-gray-400 ml-2"></span>
-          </p>
-          <GoogleAuthLogin />
         </div>
       </section>
     </>
