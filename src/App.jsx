@@ -25,6 +25,8 @@ import FetchUserId from "./utils/FetchUserId";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
 import Leaderboard from "./pages/Leaderboard";
+import Tools from "./pages/Tools";
+import DocxToPdf from "./pages/DocxToPdf";
 
 const App = () => {
   const userId = FetchUserId();
@@ -84,7 +86,9 @@ const App = () => {
                   path="/solve-doubt"
                   element={<AuthGuard component={<ChatBot />} />}
                 />
-                <Route path = "/leaderboard" element = {<Leaderboard />} />
+                <Route path="/tools" element={<Tools />} />
+                <Route path="/docx-to-pdf" element={<DocxToPdf />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/email-verified/" element={<EmailVerified />} />
                 <Route path="/forget-password" element={<ForgetPassword />} />
                 <Route path="/reset-password/" element={<ResetPassword />} />

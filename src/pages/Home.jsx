@@ -25,7 +25,7 @@ const Home = () => {
     <>
       <section
         id="hero"
-        className="center flex-col bg-gradient-to-b from-blue-400 to-sky-950"
+        className="center flex-col bg-gradient-to-b from-blue-900 to-gray-950"
         style={{ height: "75vh" }}
       >
         <div className="container center flex-col p-4 max-w-6xl">

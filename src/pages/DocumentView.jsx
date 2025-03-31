@@ -12,12 +12,12 @@ import { FaShare } from "react-icons/fa";
 import { FaThumbsUp } from "react-icons/fa6";
 import { BiSolidUpvote } from "react-icons/bi";
 import FetchUserId from "../utils/FetchUserId";
-import { Worker } from "@react-pdf-viewer/core";
-import { Viewer } from "@react-pdf-viewer/core";
-import "@react-pdf-viewer/core/lib/styles/index.css";
+// import { Worker } from "@react-pdf-viewer/core";
+// import { Viewer } from "@react-pdf-viewer/core";
+// import "@react-pdf-viewer/core/lib/styles/index.css";
 import Skeleton from "react-loading-skeleton";
-import { toolbarPlugin } from "@react-pdf-viewer/toolbar";
-import "@react-pdf-viewer/toolbar/lib/styles/index.css";
+// import { toolbarPlugin } from "@react-pdf-viewer/toolbar";
+// import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 
 const DocumentView = () => {
   const { fileId, username, userId } = useParams();
@@ -29,8 +29,8 @@ const DocumentView = () => {
 
   const currentUserId = FetchUserId();
 
-  const toolbarPluginInstance = toolbarPlugin();
-  const { Toolbar } = toolbarPluginInstance;
+  // const toolbarPluginInstance = toolbarPlugin();
+  // const { Toolbar } = toolbarPluginInstance;
 
   window.scrollTo(0, 0);
 
@@ -190,8 +190,11 @@ const DocumentView = () => {
         </div>
 
         {/* Document Viewer */}
-        <div className="relative w-full h-screen rounded overflow-hidden shadow-md bg-gray-200">
-          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+        <div
+          className="relative w-full rounded overflow-hidden shadow-md bg-gray-200"
+          style={{ height: "85vh" }}
+        >
+          {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
             {fileDetails?.url ? (
               <div className="w-full h-full">
                 <div className="pdf-toolbar p-2">
@@ -205,7 +208,17 @@ const DocumentView = () => {
             ) : (
               <Skeleton height={"100%"} />
             )}
-          </Worker>
+          </Worker> */}
+
+          {fileDetails?.url ? (
+            <iframe
+              src={`https://docs.google.com/gview?url=${fileDetails?.url}&embedded=true`}
+              className="w-full h-full"
+              loading="lazy"
+            ></iframe>
+          ) : (
+            <Skeleton height={"100%"} />
+          )}
         </div>
       </div>
 

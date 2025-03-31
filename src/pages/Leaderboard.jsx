@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { fetchLeaderboard } from "../store/slices/leaderboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 
 const Leaderboard = () => {
   const { users, status, error } = useSelector((state) => state.leaderboard);
@@ -22,6 +23,22 @@ const Leaderboard = () => {
       index + 1
     );
   };
+
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ThreeDots color="#2563eb"/>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <section className="leader-board flex justify-center">
@@ -57,10 +74,15 @@ const Leaderboard = () => {
                     <span>{user?.firstName}</span>
                   </td>
                   <td className="p-2 text-gray-600">
-                    <Link to={`/profile/${user?.username}`} className="hover:text-blue-600">{user?.username}</Link>
+                    <Link
+                      to={`/profile/${user?.username}`}
+                      className="hover:text-blue-600"
+                    >
+                      {user?.username}
+                    </Link>
                   </td>
                   <td className="p-2 text-gray-600">
-                   {user?.university || "Not mentioned"}
+                    {user?.university || "Not mentioned"}
                   </td>
                   <td className="p-2 text-gray-600 text-center">
                     {user?.uploads.length}

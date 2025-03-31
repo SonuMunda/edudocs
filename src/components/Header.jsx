@@ -11,6 +11,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 import {
   MdBook,
+  MdBuild,
   MdClose,
   MdHome,
   MdHomeFilled,
@@ -27,23 +28,8 @@ const Header = () => {
   const { user, isLoading } = useSelector((state) => state?.auth);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [hasShadow, setHasShadow] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setHasShadow(true);
-      } else {
-        setHasShadow(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const token = localStorage.getItem("token");
 
@@ -67,11 +53,7 @@ const Header = () => {
   };
 
   return (
-    <header
-      className={`flex justify-between items-center p-2 fixed w-full bg-gray-100 z-10 transition-shadow duration-300 ${
-        hasShadow ? "border-b" : ""
-      }`}
-    >
+    <header className="flex justify-between items-center p-2 fixed w-full bg-gray-100 shadow z-10">
       <div className="center gap-3">
         <div className="flex items-center cursor-pointer sm:hidden">
           <HiMiniBars3BottomLeft size={24} onClick={handleToggleNav} />
@@ -112,10 +94,7 @@ const Header = () => {
                 setIsNavOpen(false);
               }}
             >
-              <NavLink
-                to="/"
-                className="flex items-center p-2 text-gray-700"
-              >
+              <NavLink to="/" className="flex items-center p-2 text-gray-700">
                 <span className="block sm:hidden">
                   <MdHome size={24} className="me-2" />
                 </span>
@@ -152,6 +131,23 @@ const Header = () => {
                   <FaRobot size={24} className="me-2" />
                 </span>
                 Ask AI
+              </NavLink>
+            </li>
+
+            <li
+              className="list-items hover:bg-gray-200 rounded"
+              onClick={() => {
+                setIsNavOpen(false);
+              }}
+            >
+              <NavLink
+                to="/tools"
+                className="flex items-center p-2 text-gray-700"
+              >
+                <span className="block sm:hidden">
+                  <MdBuild size={24} className="me-2" />
+                </span>
+                Tools
               </NavLink>
             </li>
 
@@ -223,16 +219,28 @@ const Header = () => {
                 setIsNavOpen(false);
               }}
             >
-              <button
-                className="flex items-center w-full py-2 text-red-600"
-                onClick={() => {
-                  Logout({ dispatch, navigate });
-                  setIsMenuOpen(false);
-                }}
-              >
-                <MdLogout size={20} className="m-2 sm:hidden" />
-                Logout
-              </button>
+              {token ? (
+                <button
+                  className="flex items-center w-full py-2 border text-red-600"
+                  onClick={() => {
+                    Logout({ dispatch, navigate });
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <MdLogout size={20} className="m-2 sm:hidden" />
+                  Logout
+                </button>
+              ) : (
+                <button>
+                  <NavLink
+                    to="/signin"
+                    className="flex items-center w-full py-2 border text-red-600"
+                  >
+                    <MdLogout size={20} className="m-2 sm:hidden" />
+                    Signin
+                  </NavLink>
+                </button>
+              )}
             </li>
           </ul>
         </nav>
@@ -254,12 +262,12 @@ const Header = () => {
             </div>
 
             {isMenuOpen && (
-              <div className="user-menu absolute top-11 right-0 bg-white rounded ring-2  ring-gray-200 w-64 z-10">
+              <div className="user-menu absolute top-12 right-0 bg-white rounded ring-2 ring-gray-200 w-48 z-10">
                 <ul className="menu-list p-4">
-                  <li className="text-gray-600 rounded px-2 hover:bg-blue-600 hover:text-white transition-colors">
+                  <li className="text-gray-600  rounded px-2 hover:bg-blue-600 hover:text-white transition-colors">
                     <NavLink
                       to="/"
-                      className="block py-1 flex items-center "
+                      className="text-center flex items-center "
                       onClick={() => {
                         setIsMenuOpen(false);
                       }}
@@ -271,7 +279,7 @@ const Header = () => {
                   <li className="text-gray-600 rounded px-2  hover:bg-blue-600 hover:text-white transition-colors">
                     <NavLink
                       to={`/profile/${user.username}`}
-                      className="block py-1 flex items-center"
+                      className="text-center flex items-center"
                       onClick={() => {
                         setIsMenuOpen(false);
                       }}
@@ -283,7 +291,7 @@ const Header = () => {
                   <li className="text-gray-600 rounded px-2  hover:bg-blue-600 hover:text-white transition-colors">
                     <NavLink
                       to="/uploads"
-                      className="block py-1 flex items-center "
+                      className="text-center flex items-center "
                       onClick={() => {
                         setIsMenuOpen(false);
                       }}
@@ -295,7 +303,7 @@ const Header = () => {
                   <li className="text-gray-600 rounded px-2  hover:bg-blue-600 hover:text-white transition-colors">
                     <NavLink
                       to="/settings"
-                      className="block py-1 flex items-center "
+                      className="text-center flex items-center "
                       onClick={() => {
                         setIsMenuOpen(false);
                       }}
@@ -304,16 +312,16 @@ const Header = () => {
                       Settings
                     </NavLink>
                   </li>
-                  <li className="text-gray-600 rounded mt-1 px-2 hover:bg-red-600 hover:text-white transition-colors border-t border-gray-200">
+                  <li className="text-gray-600 rounded px-2 hover:bg-red-600 hover:text-white transition-colors">
                     <button
-                      className="block py-1 flex items-center"
+                      className="text-center flex items-center"
                       onClick={() => {
                         Logout({ dispatch, navigate });
                         setIsMenuOpen(false);
                       }}
                     >
                       <MdLogout size={20} className="m-2" />
-                      Logout
+                      Sign out
                     </button>
                   </li>
                 </ul>

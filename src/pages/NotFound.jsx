@@ -1,37 +1,39 @@
-import { FaSpider } from "react-icons/fa";
+
 import { Link } from "react-router-dom";
 
 const NotFound = () => {
   return (
-    <section className="not-found center min-h-screen p-2">
-      <div className="center flex-col">
-        <div className="text-center">
-          <div className=" center text-9xl font-extrabold text-red-800 mb-4">
-            4<FaSpider className="text-red-800" />4
-          </div>
-          <p className="text-2xl text-gray-500 mb-6">
-            Oops! The page you&apos;re looking for doesn&apos;t exist.
+    <div className="center h-screen">
+      <div className="container max-w-lg md:max-w-6xl flex flex-col-reverse items-center justify-around md:flex-row gap-10 mt-14">
+        <div className="content p-4">
+          <h1 className="text-4xl font-bold text-gray-800">So Sorry</h1>
+          <p className="text-gray-700 text-3xl font-bold my-4">
+            The page you are looking for cannot be found
           </p>
 
-          <div className="mt-4">
-            <Link
-              to="/"
-              className="px-6 py-3 bg-gray-300 text-gray-600 rounded shadow-lg transition-all duration-300 hover:bg-blue-500 hover:text-white"
-            >
-              Go Back Home
-            </Link>
-          </div>
-        </div>
+          <p className="text-gray-700 font-semibold mb-2">Possible reasons</p>
 
-        <div className="mt-12">
-          <img
-            src="https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif"
-            alt="Explosion Animation"
-            className="w-64 h-64 rounded"
-          />
+          <ul className="list-disc px-6">
+            <li className="text-gray-600">
+              The address may have been typed incorrectly.
+            </li>
+            <li className="text-gray-600">
+              The page may have been moved or deleted.
+            </li>
+            <li className="text-gray-600">Go back to the previous page.</li>
+          </ul>
+
+          <button className="btn py-2 px-4 rounded mt-4 bg-gray-700 text-gray-200 hover:bg-gray-500 ">
+            <Link to="/">EduDocs Home</Link>
+          </button>
         </div>
+        <img
+          src="https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif"
+          alt="404"
+          className="rounded-lg  md:w-2/4 mx-auto"
+        />
       </div>
-    </section>
+    </div>
   );
 };
 
