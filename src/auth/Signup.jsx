@@ -59,7 +59,7 @@ const Signup = () => {
   return (
     <>
       <ToastContainer />
-      <section className="signup flex sm:items-center bg-gradient-to-b from-gray-800 to-blue-700">
+      <section className="signup min-h-screen flex sm:items-center bg-gradient-to-b from-gray-800 to-blue-700">
         <div className="h-full sm:max-w-md bg-white pb-10 px-4 sm:p-8 sm:my-10 rounded sm:border shadow mx-auto">
           <Logo />
           <h2 className="text-3xl font-bold text-center text-gray-900">

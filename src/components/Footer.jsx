@@ -1,6 +1,6 @@
 import { FiMail, FiPhone, FiCheckCircle } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo.svg";
 
 const Footer = () => {
   return (
@@ -48,10 +48,10 @@ const Footer = () => {
             Get in Touch
           </h2>
           <p className="flex items-center gap-2 text-gray-900 text-sm mb-2">
-            <FiMail className="text-blue-600" /> support@edudocs.com [example]
+            <FiMail className="text-blue-600" /> sonumunda1312@gmail.com
           </p>
           <p className="flex items-center gap-2 text-gray-900 text-sm">
-            <FiPhone className="text-blue-600" /> +91 1234567890 [example]
+            <FiPhone className="text-blue-600" /> +91 8437076442
           </p>
         </div>
       </div>
@@ -60,7 +60,7 @@ const Footer = () => {
 
       <div className="flex flex-wrap gap-4 justify-around text-center text-gray-700 text-sm">
         <p>
-          &copy; 2024 - {new Date().getFullYear()} EduDocs | Designed by Sonu
+          &copy;  {new Date().getFullYear()} EduDocs | Designed by Sonu
           Munda. All rights reserved.
         </p>
 

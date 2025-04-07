@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaRobot } from "react-icons/fa6";
 import { HiMiniBars3BottomLeft } from "react-icons/hi2";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Logout from "../utils/Logout";
 import { fetchUserDetails } from "../store/slices/authSlice";
 import Skeleton from "react-loading-skeleton";
@@ -28,6 +28,8 @@ const Header = () => {
   const { user, isLoading } = useSelector((state) => state?.auth);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+const prevScrollPos = useRef(window.scrollY);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -44,6 +46,17 @@ const Header = () => {
     });
   }, [token, dispatch]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.scrollY;
+      setShowNavbar(prevScrollPos.current > currentScrollPos || currentScrollPos < 10);
+      prevScrollPos.current = currentScrollPos;
+    };
+  
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -53,7 +66,9 @@ const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center p-2 fixed w-full bg-gray-100 shadow z-10">
+    <header className={`flex justify-between items-center p-2 sticky w-full bg-gray-100 shadow z-10 transition-all duration-300 ${
+      showNavbar ? "top-0" : "-top-16"
+    }`}>
       <div className="center gap-3">
         <div className="flex items-center cursor-pointer sm:hidden">
           <HiMiniBars3BottomLeft size={24} onClick={handleToggleNav} />
@@ -94,7 +109,7 @@ const Header = () => {
                 setIsNavOpen(false);
               }}
             >
-              <NavLink to="/" className="flex items-center p-2 text-gray-700">
+              <NavLink to="/" className="flex items-center p-2 text-gray-800">
                 <span className="block sm:hidden">
                   <MdHome size={24} className="me-2" />
                 </span>
@@ -109,7 +124,7 @@ const Header = () => {
             >
               <NavLink
                 to="/books"
-                className="flex items-center p-2 text-gray-700 "
+                className="flex items-center p-2 text-gray-800 "
               >
                 <span className="block  sm:hidden">
                   <MdBook size={24} className="me-2" />
@@ -125,7 +140,7 @@ const Header = () => {
             >
               <NavLink
                 to="/solve-doubt"
-                className="flex items-center  p-2 text-gray-700"
+                className="flex items-center  p-2 text-gray-800"
               >
                 <span className="block sm:hidden">
                   <FaRobot size={24} className="me-2" />
@@ -142,7 +157,7 @@ const Header = () => {
             >
               <NavLink
                 to="/tools"
-                className="flex items-center p-2 text-gray-700"
+                className="flex items-center p-2 text-gray-800"
               >
                 <span className="block sm:hidden">
                   <MdBuild size={24} className="me-2" />
@@ -159,7 +174,7 @@ const Header = () => {
             >
               <NavLink
                 to="/leaderboard"
-                className="flex items-center p-2 text-gray-700"
+                className="flex items-center p-2 text-gray-800"
               >
                 <span className="block sm:hidden">
                   <MdLeaderboard size={24} className="me-2" />
@@ -171,7 +186,7 @@ const Header = () => {
             <li className="list-items hover:bg-gray-200 rounded sm:hidden">
               <NavLink
                 to={`${token ? `/profile/${user?.username}` : "/signin"}`}
-                className="flex items-center p-2 text-gray-700"
+                className="flex items-center p-2 text-gray-800"
                 onClick={() => {
                   setIsNavOpen(false);
                 }}
@@ -186,7 +201,7 @@ const Header = () => {
             <li className="list-items  hover:bg-gray-200 rounded sm:hidden">
               <NavLink
                 to={`${token ? "uploads" : "/signin"}`}
-                className="flex items-center p-2 text-gray-700"
+                className="flex items-center p-2 text-gray-800"
                 onClick={() => {
                   setIsNavOpen(false);
                 }}
@@ -201,7 +216,7 @@ const Header = () => {
             <li className="list-items hover:bg-gray-200 rounded sm:hidden">
               <NavLink
                 to={`${token ? "/settings" : "/signin"}`}
-                className="flex items-center p-2 text-gray-700"
+                className="flex items-center p-2 text-gray-800"
                 onClick={() => {
                   setIsNavOpen(false);
                 }}

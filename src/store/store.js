@@ -4,6 +4,7 @@ import userSlice from "./slices/userSlice";
 import chatbotReducer from "./slices/chatbotSlice";
 import documentSlice from "./slices/documentSlice";
 import leaderboardSlice from "./slices/leaderboardSlice";
+import booksSlice from "./slices/booksSlice";
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     user: userSlice,
     chatbot: chatbotReducer,
     documents: documentSlice,
+    books: booksSlice,
     leaderboard: leaderboardSlice,
   },
 });

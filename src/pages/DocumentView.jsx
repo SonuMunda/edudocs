@@ -172,7 +172,7 @@ const DocumentView = () => {
                   <div className="icon me-2">
                     <FaThumbsUp />
                   </div>
-                  <span className="btn-text">Like</span>
+                  <span className="btn-text">{fileDetails?.likes?.length}</span>
                 </button>
 
                 <button

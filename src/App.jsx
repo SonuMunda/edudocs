@@ -27,6 +27,8 @@ import { useEffect } from "react";
 import Leaderboard from "./pages/Leaderboard";
 import Tools from "./pages/Tools";
 import DocxToPdf from "./pages/DocxToPdf";
+import PdfToDocx from "./pages/PdfToDocx";
+import BookView from "./pages/BookView";
 
 const App = () => {
   const userId = FetchUserId();
@@ -82,12 +84,14 @@ const App = () => {
                 />
                 <Route path="/document-search" element={<DocumentSearch />} />
                 <Route path="/books" element={<Books />} />
+                <Route path="/book/view" element={<BookView />} />
                 <Route
                   path="/solve-doubt"
                   element={<AuthGuard component={<ChatBot />} />}
                 />
                 <Route path="/tools" element={<Tools />} />
                 <Route path="/docx-to-pdf" element={<DocxToPdf />} />
+                <Route path="/pdf-to-docx" element={<PdfToDocx />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/email-verified/" element={<EmailVerified />} />
                 <Route path="/forget-password" element={<ForgetPassword />} />

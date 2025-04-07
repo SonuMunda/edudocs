@@ -36,7 +36,6 @@ export const fetchUserDetailsByUsername = createAsyncThunk(
       );
 
       if (!response.ok) {
-        console.log("error");
         throw new Error(`Failed to fetch: ${response.message}`);
       }
 
@@ -48,7 +47,6 @@ export const fetchUserDetailsByUsername = createAsyncThunk(
     }
   }
 );
-
 
 export const fetchUserUploads = createAsyncThunk(
   "fetchUserUploads",
@@ -137,7 +135,6 @@ export const fetchFileDetails = createAsyncThunk(
   "fetchFileDetails",
   async (fileId) => {
     try {
-      console.log(fileId);
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/documents/document/${fileId}`,
         {
