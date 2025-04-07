@@ -6,6 +6,9 @@
 [functions]
   node_bundler = "esbuild"
 
+[build.environment]
+  NODE_VERSION = "v22.14.0"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
