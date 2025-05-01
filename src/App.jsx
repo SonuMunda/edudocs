@@ -14,7 +14,7 @@ import DocumentSearch from "./pages/DocumentSearch";
 import Books from "./pages/Books";
 import { ToastContainer } from "react-toastify";
 import EmailVerified from "./pages/EmailVerified";
-import AuthGuard from "../guards/AuthGuard";
+import AuthGuard from "./guards/AuthGuard";
 import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./auth/ResetPassword";
 import { SkeletonTheme } from "react-loading-skeleton";
@@ -54,6 +54,7 @@ const App = () => {
               noRenderPaths={[
                 "/signin",
                 "/signup",
+                "/solve-doubt",
                 "/forget-password",
                 "/reset-password",
                 "/email-verified",
@@ -84,7 +85,7 @@ const App = () => {
                 />
                 <Route path="/document-search" element={<DocumentSearch />} />
                 <Route path="/books" element={<Books />} />
-                <Route path="/book/view" element={<BookView />} />
+                <Route path="/book/view/:bookId" element={<BookView />} />
                 <Route
                   path="/solve-doubt"
                   element={<AuthGuard component={<ChatBot />} />}

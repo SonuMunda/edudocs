@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const NotFound = () => {
   return (
     <div className="center min-h-screen">
-      <div className="container max-w-lg md:max-w-6xl flex flex-col-reverse items-center justify-around md:flex-row gap-10 mt-14 py-10 px-4">
+      <div className="container max-w-lg md:max-w-6xl flex flex-col-reverse items-center justify-around md:flex-row gap-10 p-4">
         <div className="content p-4">
           <h1 className="text-4xl font-bold text-gray-800">So Sorry</h1>
           <p className="text-gray-700 text-3xl font-bold my-4">

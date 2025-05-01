@@ -13,13 +13,13 @@ const tools = [
     path: "/pdf-to-docx",
     color: "bg-red-100",
   },
-  {
-    name: "PDF to JPG",
-    description: "Extract images from PDF files",
-    icon: "FaFileImage",
-    path: "/pdf-to-jpg",
-    color: "bg-green-100",
-  },
+  // {
+  //   name: "PDF to JPG",
+  //   description: "Extract images from PDF files",
+  //   icon: "FaFileImage",
+  //   path: "/pdf-to-jpg",
+  //   color: "bg-green-100",
+  // },
 ];
 
 export default tools;

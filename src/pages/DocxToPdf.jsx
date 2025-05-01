@@ -89,20 +89,18 @@ const DocxToPdf = () => {
   };
 
   return (
-    <section className="min-h-screen flex justify-center">
+    <section
+      className={`converter ${isDragging ? "bg-blue-100" : ""}`}
+      id="dropzone"
+      onDragOver={(e) => {
+        e.preventDefault();
+        setIsDragging(true);
+      }}
+      onDragLeave={() => setIsDragging(false)}
+      onDrop={handleDrop}
+    >
       <ToastContainer />
-      <div
-        className={`container p-4 mt-14 relative ${
-          isDragging ? "bg-blue-100" : ""
-        }`}
-        id="dropzone"
-        onDragOver={(e) => {
-          e.preventDefault();
-          setIsDragging(true);
-        }}
-        onDragLeave={() => setIsDragging(false)}
-        onDrop={handleDrop}
-      >
+      <div className={`container min-h-screen min-w-full p-4 relative`}>
         <h1 className="text-3xl font-bold text-center mt-10">
           Convert DOCX to PDF
         </h1>
@@ -154,7 +152,7 @@ const DocxToPdf = () => {
 
               <button
                 type="submit"
-                className={`absolute bottom-10 right-10 px-6 py-3 rounded bg-blue-500 text-white font-bold text-xl hover:bg-blue-600 focus:ring-2 ${
+                className={`absolute bottom-20 right-10 px-6 py-3 rounded bg-blue-500 text-white font-bold text-xl hover:bg-blue-600 focus:ring-2 ${
                   !file || loading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 disabled={!file || loading}

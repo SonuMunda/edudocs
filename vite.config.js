@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
+    headers: { "Cross-Origin-Embedder-Policy": "unsafe-none" },
   },
 });

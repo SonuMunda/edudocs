@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { sendMessageToChatbot } from "../store/slices/chatbotSlice";
-import { Hourglass } from "react-loader-spinner";
-import { LuBot, LuUser } from "react-icons/lu";
+import {
+  chatbotConversation,
+  addUserMessage,
+} from "../store/slices/chatbotSlice";
+import { LuArrowLeft, LuBot, LuUser } from "react-icons/lu";
 import { PiPaperPlaneRightBold } from "react-icons/pi";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { xcode } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Link } from "react-router-dom";
+import { MdHomeFilled } from "react-icons/md";
 
 const Chatbot = () => {
   const dispatch = useDispatch();
@@ -11,106 +18,145 @@ const Chatbot = () => {
     (state) => state.chatbot || {}
   );
   const [message, setMessage] = useState("");
+  const messagesEndRef = useRef(null);
+
+  // // Auto-scroll to bottom when messages change
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [conversation]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      dispatch(sendMessageToChatbot(message));
-      dispatch({ type: "chatbot/addUserMessage", payload: message });
+      dispatch(addUserMessage(message));
+      dispatch(chatbotConversation(message));
       setMessage("");
     }
   };
 
   return (
-    <section
-      className="chat-bot max-h-screen bg-gray-100 flex flex-col"
-      style={{ overflow: "hidden" }}
-    >
-      {conversation == [] || conversation == "" ? (
-        <div className="h-full min-w-xl center flex-col p-2">
-          <div className="bot-icon text-gray-700">
-            <LuBot size={64} />
-          </div>
-          <h2 className="text-3xl text-center font-extrabold text-gray-700 mb-4">
-            Chatbot
-          </h2>
-          <p className="text-lg text-gray-700 text-center">
-            Got questions or doubts? Ask away! Your learning companion is here
-            to assist you.
-          </p>
+    <section className="chatbot flex flex-col h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bot-header center relative gap-20 p-4 bg-white border-b">
+        <div className="back-btn absolute left-2 p-2 bg-gray-100 rounded hover:ring-1">
+          <Link to="/" className="flex items-center gap-1">
+            <LuArrowLeft size={24} /> <span className="hidden sm:block">Back to Home</span>
+          </Link>
         </div>
-      ) : (
-        <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4 bg-gray-100">
-          <div className="message-list space-y-4">
-            {conversation?.map((msg, index) => (
+        <div className="center">
+          <LuBot className="mr-2" size={32} />
+          <h1 className="sm:text-xl font-semibold">Your Learning Companion</h1>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4">
+        {conversation.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center text-center">
+            <LuBot size={48} className="text-gray-400 mb-4" />
+            <p className="text-gray-600 max-w-md">
+              Ask me anything about programming, concepts, or your course
+              material.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {conversation.map((msg, index) => (
               <div
                 key={index}
-                className={`flex items-center space-x-3 ${
-                  msg.role === "user" ? "flex-row-reverse" : "flex-row"
+                className={`flex ${
+                  msg.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                {msg.role === "user" && (
-                  <div className="bg-blue-600 p-2 rounded-full ms-4">
-                    <LuUser size={24} className="text-white" />
-                  </div>
-                )}
-                {msg.role === "bot" && (
-                  <div className="bg-green-600 p-2 rounded-full">
-                    <LuBot size={24} className="text-white" />
-                  </div>
-                )}
                 <div
-                  className={`p-4 rounded-lg break-words max-w-xl ${
+                  className={`rounded-lg p-3 ${
                     msg.role === "bot"
-                      ? "bg-green-200 text-gray-800"
-                      : "bg-blue-100 text-gray-800"
+                      ? "bg-white border max-w-4xl"
+                      : "max-w-sm bg-blue-100"
                   }`}
                 >
-                  {msg.content.startsWith("```") ? (
-                    <pre className="bg-gray-900 text-white p-3 rounded-lg overflow-x-auto">
-                      <code>{msg.content.replace(/```/g, "")}</code>
-                    </pre>
-                  ) : (
-                    <p>{msg.content}</p>
-                  )}
+                  <div
+                    className={`flex items-center mb-1 ${
+                      msg.role === "bot" ? "justify-start" : "justify-end"
+                    }`}
+                  >
+                    {msg.role === "bot" ? (
+                      <>
+                        <LuBot className="text-green-500 mr-2" />
+                        <span className="font-medium">Assistant</span>
+                      </>
+                    ) : (
+                      <>
+                        <LuUser className="text-blue-500 mr-2" />
+                        <span className="font-medium">You</span>
+                      </>
+                    )}
+                  </div>
+                  <ReactMarkdown
+                    components={{
+                      code({ inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || "");
+                        return !inline && match ? (
+                          <SyntaxHighlighter
+                            style={xcode}
+                            language={match[1]}
+                            PreTag="div"
+                            {...props}
+                          >
+                            {String(children).replace(/\n$/, "")}
+                          </SyntaxHighlighter>
+                        ) : (
+                          <code className="bg-gray-200 px-1 rounded" {...props}>
+                            {children}
+                          </code>
+                        );
+                      },
+                    }}
+                  >
+                    {msg.content}
+                  </ReactMarkdown>
                 </div>
               </div>
             ))}
             {isLoading && (
-              <div className="loader text-left mt-2 flex items-center gap-4">
-                <div className="bg-green-600 p-2 rounded-full">
-                  <LuBot size={24} className="text-white" />
-                </div>
-                <div className="flex items-center justify-center gap-2 p-4 rounded bg-gray-200">
-                  <p>One moment, I'm working on it...</p>
-                  <Hourglass height={20} width={20} />
+              <div className="flex justify-start">
+                <div className="bg-white border rounded-lg p-3 max-w-xs md:max-w-md">
+                  <div className="flex items-center">
+                    <LuBot className="text-green-500 mr-2" />
+                    <span className="font-medium">Assistant</span>
+                  </div>
+                  <p>Thinking...</p>
                 </div>
               </div>
             )}
             {error && (
-              <p className="text-center text-red-500">Error: {error}</p>
+              <div className="text-red-500 text-center p-2 bg-red-50 rounded">
+                Error: {error}
+              </div>
             )}
+            <div ref={messagesEndRef} />
           </div>
-        </div>
-      )}
-      <div className="bg-gray-100 py-2 px-6 border-t border-gray-300 relative w-full bottom-14">
-        <div className="flex items-center space-x-3">
-          <textarea
+        )}
+      </div>
+
+      {/* Input */}
+      <div className="bg-white border-t p-4">
+        <form className="flex gap-2">
+          <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type a message"
-            className="flex-1 p-3 ring-2 ring-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+            placeholder="Type your message..."
+            className="flex-1 border rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            disabled={isLoading}
           />
           <button
             onClick={handleSendMessage}
-            className={`bg-blue-600 text-white h-12 w-12 center m-auto rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isLoading ? "cursor-not-allowed" : ""
-            }`}
-            disabled={isLoading}
+            disabled={isLoading || !message.trim()}
+            className="bg-blue-500 text-white p-4 rounded-lg disabled:opacity-50"
           >
-            <PiPaperPlaneRightBold size={24} />
+            <PiPaperPlaneRightBold size={20} />
           </button>
-        </div>
+        </form>
       </div>
     </section>
   );

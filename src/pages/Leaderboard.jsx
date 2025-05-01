@@ -42,8 +42,8 @@ const Leaderboard = () => {
 
   return (
     <section className="leader-board flex justify-center">
-      <div className="container max-w-full sm:max-w-6xl min-h-screen bg-white rounded p-4 mt-16">
-        <h1 className="text-3xl font-bold text-center text-gray-800 my-6">
+      <div className="container max-w-full sm:max-w-6xl min-h-screen bg-white rounded p-4 sm:my-4">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mt-6 mb-10">
           🏆 Leaderboard
         </h1>
         <div className="w-full relative overflow-x-auto">

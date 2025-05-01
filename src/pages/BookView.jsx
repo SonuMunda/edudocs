@@ -3,15 +3,33 @@ import HTMLFlipBook from "react-pageflip";
 import * as pdfjsLib from "pdfjs-dist";
 import "pdfjs-dist/build/pdf.worker.mjs";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
+import { fetchBookDetails } from "../store/slices/booksSlice";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const BookView = () => {
+  const [bookDetails, setBookDetails] = useState({});
   const [pageImages, setPageImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [jumpPage, setJumpPage] = useState("");
   const flipBook = useRef();
 
-  const pdfUrl =
-    "https://raw.githubusercontent.com/Rafiquzzaman420/Free-Programming-Books/4c4222930e89e7d39b4f4f913a73491d18ff7ad1/Java/Basic%20to%20advance%20concepts/Java%20Quick%20Syntax%20Reference.pdf";
+  const dispatch = useDispatch();
+
+  const { bookId } = useParams();
+
+  useEffect(() => {
+    dispatch(fetchBookDetails(bookId)).then((response) => {
+      if (response.meta.requestStatus === "fulfilled") {
+        setBookDetails(response.payload.bookInfo);
+        console.log(response.payload.bookInfo);
+      } else {
+        console.error("Failed to fetch book details");
+      }
+    });
+  }, [bookId, dispatch]);
+
+  const pdfUrl = bookDetails?.url;
 
   useEffect(() => {
     const loadPdf = async () => {
@@ -76,13 +94,20 @@ const BookView = () => {
         {/* Book Details */}
 
         <div className="book-info mb-6 max-w-[1200px] mx-auto">
-          <h1 className="text-3xl font-bold text-gray-800">Book Title</h1>
-          <p className="text-gray-600 mt-2">Author Name</p>
-          <p className="text-gray-600 mt-2">Published Year</p>
-          <p className="text-gray-600 mt-2">Category</p>
+          <h1 className="text-3xl font-bold text-gray-800">
+            Book Title: Computer Organization Architecture
+          </h1>
+          <p className="text-gray-600 mt-2">Author Name : William Stallings</p>
+          <p className="text-gray-600 mt-2">Category: Computer-Science</p>
           <p className="text-gray-600 mt-2">
-            Description of the book goes here. This is a brief overview of what
-            the book is about.
+            "Computer Organization and Architecture" by William Stallings is a
+            comprehensive textbook that explores the internal structure and
+            operational principles of computer systems. It covers topics like
+            processor architecture, instruction sets, memory hierarchy,
+            input/output systems, and parallel organization. Widely used in
+            academia, the book balances theory with real-world examples, making
+            it ideal for students and professionals seeking a deep understanding
+            of how computers work at a hardware level.
           </p>
         </div>
 
@@ -93,9 +118,9 @@ const BookView = () => {
             onClick={goPrevPage}
             className="hidden md:flex absolute h-full left-0 z-10 px-4 py-2"
           >
-           <span className="my-auto ">
-            <MdArrowBackIos className="text-2xl" />
-           </span>
+            <span className="my-auto ">
+              <MdArrowBackIos className="text-2xl" />
+            </span>
           </button>
 
           {/* Flip Book */}
@@ -129,9 +154,9 @@ const BookView = () => {
             onClick={goNextPage}
             className="hidden md:flex absolute h-full right-0 z-10 px-4 py-2"
           >
-           <span className="my-auto">
-            <MdArrowForwardIos className="text-2xl" />
-           </span>
+            <span className="my-auto">
+              <MdArrowForwardIos className="text-2xl" />
+            </span>
           </button>
         </div>
         {/* Jump to Page */}

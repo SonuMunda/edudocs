@@ -48,29 +48,6 @@ export const fetchUserDetailsByUsername = createAsyncThunk(
   }
 );
 
-export const fetchUserUploads = createAsyncThunk(
-  "fetchUserUploads",
-  async ({ userId }) => {
-    try {
-      if (userId) {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/api/user/uploads/${userId}`
-        );
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch user uploads: ${response.status}`);
-        }
-
-        const responseData = await response.json();
-        return responseData;
-      }
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-);
-
 export const addDocumentLike = createAsyncThunk(
   "addDocumentLike",
   async ({ documentId, currentUserId }, { rejectWithValue }) => {
@@ -179,7 +156,6 @@ export const fetchAllDocuments = createAsyncThunk(
     }
   }
 );
-
 const initialState = {
   user: null,
   documents: [],
@@ -191,7 +167,24 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    clearUserDetails: (state) => {
+      state.user = null;
+      state.isLoading = true;
+      state.isError = false;
+    },
+    clearUserUploads: (state) => {
+      state.documents = [];
+      state.isLoading = true;
+      state.isError = false;
+    },
+    clearAllUserData: (state) => {
+      state.user = null;
+      state.documents = [];
+      state.isLoading = true;
+      state.isError = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchUserDetailsByUsername.fulfilled, (state, action) => {
       state.isLoading = false;
@@ -205,21 +198,10 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     });
-    builder.addCase(fetchUserUploads.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.documents = action.payload;
-    });
-    builder.addCase(fetchUserUploads.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(fetchUserUploads.rejected, (state) => {
-      state.isLoading = false;
-      state.isError = true;
-    });
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { clearUserDetails, clearUserUploads, clearAllUserData } =
+  userSlice.actions;
 
 export default userSlice.reducer;

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchBooks = createAsyncThunk(
   "fetchBooks",
-  async (_, { rejectWithValue, dispatch }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/books`,
@@ -20,6 +20,7 @@ export const fetchBooks = createAsyncThunk(
       const data = await response.json();
 
       if (data) {
+        console.log(data);
         return data?.books;
       } else {
         throw new Error("Books data is not in the expected format.");
@@ -36,7 +37,7 @@ export const fetchBookDetails = createAsyncThunk(
   async (bookId, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/books/${bookId}`,
+        `${import.meta.env.VITE_SERVER_URL}/api/books/book/${bookId}`,
         {
           method: "GET",
         }

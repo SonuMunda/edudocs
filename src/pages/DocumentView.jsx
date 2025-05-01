@@ -27,6 +27,8 @@ const DocumentView = () => {
   const [shareTitle, setShareTitle] = useState("");
   const dispatch = useDispatch();
 
+  let fileUrl = `https://docs.google.com/gview?url=${fileDetails?.url}&embedded=true`;
+
   const currentUserId = FetchUserId();
 
   // const toolbarPluginInstance = toolbarPlugin();
@@ -80,9 +82,9 @@ const DocumentView = () => {
   };
 
   return (
-    <main className="min-h-screen p-4 flex justify-center items-center">
+    <main className="document-view">
       <ToastContainer />
-      <div className="container document-viewer flex flex-col gap-4 lg:flex-row my-12">
+      <div className="container document-viewer p-4 flex flex-col gap-4 lg:flex-row mx-auto">
         {/* Document Description */}
         <div className="document-description bg-white w-full md:w-4/12 p-4 rounded">
           <div className="flex flex-col gap-2 my-4">
@@ -182,7 +184,7 @@ const DocumentView = () => {
                   <div className="icon me-2">
                     <BiSolidUpvote />
                   </div>
-                  <span className="btn-text">Vote</span>
+                  <span className="btn-text">{fileDetails?.votes?.length}</span>
                 </button>
               </>
             )}
@@ -212,10 +214,16 @@ const DocumentView = () => {
 
           {fileDetails?.url ? (
             <iframe
-              src={`https://docs.google.com/gview?url=${fileDetails?.url}&embedded=true`}
+              src={fileUrl}
               className="w-full h-full"
               loading="lazy"
             ></iframe>
+
+            // <iframe
+            //   src={`https://view.officeapps.live.com/op/embed.aspx?src=${fileDetails?.url}`}
+            //   width="100%"
+            //   height="500px"
+            // ></iframe>
           ) : (
             <Skeleton height={"100%"} />
           )}

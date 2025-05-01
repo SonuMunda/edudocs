@@ -1,21 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
 import { FiFileText } from "react-icons/fi";
 import { useEffect, useState } from "react";
-import {
-  fetchUserDetailsByUsername,
-  fetchUserUploads,
-} from "../store/slices/userSlice";
+import { fetchUserDetailsByUsername } from "../store/slices/userSlice";
 import { Link, useParams } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import FetchUserId from "../utils/FetchUserId";
 import { MdThumbUp } from "react-icons/md";
 import ShareMenu from "../components/ShareMenu";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { fetchUserUploads } from "../store/slices/userDocumentsSlice";
 
 const Profile = () => {
-  const { user, documents, isLoading } = useSelector(
-    (state) => state?.user
+  const { user, isLoading } = useSelector((state) => state?.user);
+  const { documents, isDocumentsLoading } = useSelector(
+    (state) => state?.userDocuments
   );
 
   const [shareLink, setShareLink] = useState("");
@@ -29,9 +28,13 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(fetchUserDetailsByUsername(username));
-    window.scrollTo(0, 0);
-    dispatch(fetchUserUploads({ userId: user?._id }));
-  }, [username, dispatch, user?._id]);
+  }, []);
+
+  useEffect(() => {
+    if (user?._id) {
+      dispatch(fetchUserUploads({ userId: user?._id }));
+    }
+  }, [user?._id]);
 
   const totalLikes = documents?.reduce((total, document) => {
     return total + document.likes.length;
@@ -47,7 +50,6 @@ const Profile = () => {
     setShareLink(encodedUrl);
     setShareTitle(title);
   };
-
 
   return (
     <section className="profile min-h-screen center p-4">
@@ -131,7 +133,7 @@ const Profile = () => {
             </div>
             <div className="documents-lists my-4 max-h-96 overflow-y-auto">
               <ul className="document-list">
-                {isLoading ? (
+                {isDocumentsLoading ? (
                   <Skeleton height={80} count={4} />
                 ) : documents ? (
                   documents.map((document) => (

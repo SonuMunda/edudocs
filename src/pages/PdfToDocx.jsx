@@ -84,7 +84,7 @@ const PdfToDocx = () => {
 
   return (
     <section
-      className={`min-h-screen flex justify-center  ${
+      className={`min-h-screen w-full${
         isDragging ? "bg-red-100" : ""
       }`}
       onDragOver={(e) => {
@@ -93,9 +93,10 @@ const PdfToDocx = () => {
       }}
       onDragLeave={() => setIsDragging(false)}
       onDrop={handleDrop}
+      id="dropzone"
     >
       <ToastContainer />
-      <div className={`container p-4 mt-14 relative`} id="dropzone">
+      <div className={`container min-h-screen min-w-full p-4 relative`}>
         <h1 className="text-3xl font-bold text-center mt-10">
           Convert PDF to DOCX
         </h1>
@@ -147,7 +148,7 @@ const PdfToDocx = () => {
 
               <button
                 type="submit"
-                className={`absolute bottom-10 right-10 px-6 py-3 rounded bg-red-500 text-white font-bold text-xl hover:bg-red-600 focus:ring-2 focus: ring-red-400 ${
+                className={`absolute bottom-20 right-10 px-6 py-3 rounded bg-red-500 text-white font-bold text-xl hover:bg-red-600 focus:ring-2 focus: ring-red-400 ${
                   !file || loading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 disabled={!file || loading}

@@ -9,7 +9,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import { MdEmail, MdPerson, MdLock } from "react-icons/md";
 import Logo from "../components/Logo";
-import GoogleAuthSignin from "./GoogleAuthSignin";
+// import GoogleAuthSignin from "./GoogleAuthSignin";
+import GoogleSigninButton from "../components/GoogleSigninButton";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -59,17 +60,17 @@ const Signup = () => {
   return (
     <>
       <ToastContainer />
-      <section className="signup min-h-screen flex sm:items-center bg-gradient-to-b from-gray-800 to-blue-700">
-        <div className="h-full sm:max-w-md bg-white pb-10 px-4 sm:p-8 sm:my-10 rounded sm:border shadow mx-auto">
+      <section className="signup  min-h-screen bg-white flex sm:items-center">
+        <div className="h-full sm:max-w-md bg-white pb-10 px-4 sm:p-8 sm:my-10 rounded sm:border sm:shadow mx-auto">
           <Logo />
-          <h2 className="text-3xl font-bold text-center text-gray-900">
+          <h2 className="text-2xl font-bold text-gray-900">
             Signup Now
           </h2>
-          <p className="mt-3 text-lg text-gray-600 text-center sm:mt-5">
+          <p className="text-gray-600">
             Share and explore high-quality study resources with students.
           </p>
 
-          <GoogleAuthSignin />
+          <GoogleSigninButton />
 
           <Formik
             initialValues={{
@@ -96,7 +97,7 @@ const Signup = () => {
                         : ""
                     }`}
                   >
-                    <span className="font-semibold">First Name</span>
+                    First Name
                     <ErrorMessage
                       name="firstName"
                       component="span"
@@ -111,7 +112,7 @@ const Signup = () => {
                       type="text"
                       name="firstName"
                       id="firstName"
-                      className="w-full pl-10 py-2 rounded ring-1 ring-gray-300 focus:outline-none  focus:ring-blue-500 transition-all ease-in-out"
+                      className="w-full pl-10 py-3 rounded border border-gray-400 transition-all ease-in-out"
                       placeholder="First Name"
                     />
                   </div>
@@ -125,7 +126,7 @@ const Signup = () => {
                       errors.lastName && touched.lastName ? "text-red-500" : ""
                     }`}
                   >
-                    <span className="font-semibold">Last Name</span>
+                    Last Name
                     <ErrorMessage
                       name="lastName"
                       component="span"
@@ -140,7 +141,7 @@ const Signup = () => {
                       type="text"
                       name="lastName"
                       id="lastName"
-                      className="w-full pl-10 py-2 rounded ring-1 ring-gray-300 focus:outline-none  focus:ring-blue-500 transition-all ease-in-out"
+                      className="w-full pl-10 py-3 rounded border border-gray-400 transition-all ease-in-out"
                       placeholder="Last Name"
                     />
                   </div>
@@ -154,7 +155,7 @@ const Signup = () => {
                       errors.email && touched.email ? "text-red-500" : ""
                     }`}
                   >
-                    <span className="font-semibold">Email</span>
+                    Email
                     <ErrorMessage
                       name="email"
                       component="span"
@@ -169,7 +170,7 @@ const Signup = () => {
                       type="email"
                       name="email"
                       id="email"
-                      className="w-full pl-10 py-2 rounded ring-1 ring-gray-300 focus:outline-none  focus:ring-blue-500 transition-all ease-in-out"
+                      className="w-full pl-10 py-3 rounded border border-gray-400 transition-all ease-in-out"
                       placeholder="Email"
                     />
                   </div>
@@ -183,7 +184,7 @@ const Signup = () => {
                       errors.password && touched.password ? "text-red-500" : ""
                     }`}
                   >
-                    <span className="font-semibold">Password</span>
+                    Password
                     <ErrorMessage
                       name="password"
                       component="span"
@@ -198,7 +199,7 @@ const Signup = () => {
                       type={showPassword ? "text" : "password"}
                       name="password"
                       id="password"
-                      className="w-full pl-10 py-2 rounded ring-1 ring-gray-300 focus:outline-none  focus:ring-blue-500 transition-all ease-in-out"
+                      className="w-full pl-10 py-3 rounded border border-gray-400 transition-all ease-in-out"
                       placeholder="Password"
                     />
                     <div
@@ -213,7 +214,7 @@ const Signup = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full mt-3 p-2 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+                  className="w-full mt-3 p-3 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-75"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Signing You Up..." : "Signup"}
@@ -223,7 +224,7 @@ const Signup = () => {
               </Form>
             )}
           </Formik>
-          <p className="text-center mt-4">
+          <p className="text-left mt-4">
             <span className="text-gray-600">Already have an account?</span>
             <Link to="/signin" className="text-blue-800 ms-1">
               Login

@@ -5,11 +5,13 @@ import chatbotReducer from "./slices/chatbotSlice";
 import documentSlice from "./slices/documentSlice";
 import leaderboardSlice from "./slices/leaderboardSlice";
 import booksSlice from "./slices/booksSlice";
+import userDocumentsSlice from "./slices/userDocumentsSlice";
 
 const store = configureStore({
   reducer: {
     auth: authSlice,
     user: userSlice,
+    userDocuments: userDocumentsSlice,
     chatbot: chatbotReducer,
     documents: documentSlice,
     books: booksSlice,

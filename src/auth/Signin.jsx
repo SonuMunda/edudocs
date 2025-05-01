@@ -8,7 +8,8 @@ import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdEmail, MdLock } from "react-icons/md";
 import Logo from "../components/Logo";
-import GoogleAuthSignin from "./GoogleAuthSignin";
+// import GoogleAuthSignin from "./GoogleAuthSignin";
+import GoogleSigninButton from "../components/GoogleSigninButton";
 
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -42,19 +43,20 @@ const Signin = () => {
   return (
     <>
       <ToastContainer />
-      <section className="login min-h-screen flex sm:items-center bg-gradient-to-b from-gray-800 to-blue-700 ">
-        <div className="h-screen sm:h-full sm:max-w-md bg-white p-4 sm:p-8 rounded sm:border mx-auto">
+      <section className="login min-h-screen bg-white flex sm:items-center">
+        <div className="h-screen sm:h-full sm:max-w-md bg-white p-4 sm:p-8 rounded sm:border sm:shadow mx-auto">
           <div className="center">
             <Logo />
           </div>
-          <h2 className="text-3xl font-bold text-center text-gray-900">
-            Sign In Now
+          <h2 className="text-2xl font-bold text-gray-900">
+            Welcome Back!
           </h2>
-          <p className="mt-3 text-lg text-gray-600 text-center sm:mt-5">
+          <p className="text-gray-600">
             Share and explore high-quality study resources with students.
           </p>
 
-          <GoogleAuthSignin/>
+          {/* <GoogleAuthSignin/> */}
+          <GoogleSigninButton />
 
           <Formik
             initialValues={{ email: "", password: "" }}
@@ -67,7 +69,7 @@ const Signin = () => {
                 <div className="form-group flex flex-col relative py-4">
                   <label
                     htmlFor="email"
-                    className={`text-gray-800 font-semibold ${
+                    className={`text-gray-800 text-sm  ${
                       touched.email && errors.email ? "text-red-500" : ""
                     }`}
                   >
@@ -86,7 +88,7 @@ const Signin = () => {
                       type="email"
                       name="email"
                       id="email"
-                      className="w-full pl-10 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
+                      className="w-full pl-10 py-3 rounded border border-gray-400 transition-all ease-in-out"
                       placeholder="Email"
                     />
                   </div>
@@ -94,9 +96,9 @@ const Signin = () => {
 
                 {/* Password Field */}
                 <div className="form-group flex flex-col relative py-4">
-                  <label
-                    htmlFor="password"
-                    className={`text-gray-800 font-semibold ${
+                <label
+                    htmlFor="email"
+                    className={`text-gray-800 text-sm  ${
                       touched.password && errors.password ? "text-red-500" : ""
                     }`}
                   >
@@ -115,7 +117,7 @@ const Signin = () => {
                       type={showPassword ? "text" : "password"}
                       name="password"
                       id="password"
-                      className="w-full pl-10 py-3 rounded ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ease-in-out"
+                      className="w-full pl-10 py-3 rounded border border-gray-400 transition-all ease-in-out"
                       placeholder="Password"
                     />
                     <div
@@ -127,7 +129,7 @@ const Signin = () => {
                   </div>
                   <Link
                     to="/forget-password"
-                    className="text-blue-800 mt-1 hover:underline"
+                    className="text-blue-800 text-sm mt-1 hover:underline"
                   >
                     Forget Password?
                   </Link>
@@ -135,7 +137,7 @@ const Signin = () => {
 
                 <button
                   type="submit"
-                  className={`w-full my-6 p-3 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 ${
+                  className={`w-full my-6 p-3 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-75 ${
                     isSubmitting && "cursor-not-allowed"
                   }`}
                   disabled={isSubmitting}
@@ -146,7 +148,7 @@ const Signin = () => {
             )}
           </Formik>
 
-          <p className="text-center">
+          <p className="text-left">
             <span className="text-gray-600">Don&apos;t have an account?</span>
             <Link to="/signup" className="text-blue-800 ms-1">
               Sign up

@@ -128,6 +128,49 @@ export const googleSignin = createAsyncThunk(
   }
 );
 
+export const newGoogleSignin = createAsyncThunk(
+  "/auth/new/googleSignin",
+  async ({ accessToken, toast, navigate}, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/new/google/signin`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ accessToken }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.message, {
+          position: "top-center",
+        });
+        return rejectWithValue(data.message || "Google Sign-In failed");
+      }
+
+      const { token } = data;
+      localStorage.setItem("token", token);
+      toast.success(data.message, {
+        position: "top-center",
+        className: "text-4xl",
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-center",
+        className: "text-4xl",
+      });
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const fetchUserDetails = createAsyncThunk(
   "fetchUserDetails",
   async (_, { rejectWithValue, dispatch }) => {
@@ -346,7 +389,6 @@ export const resetPassword = createAsyncThunk(
     }
   }
 );
-
 
 const initialState = {
   user: null,
