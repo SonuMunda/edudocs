@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchBooks } from "../store/slices/booksSlice";
+import { ThreeDots } from "react-loader-spinner";
 
 const Books = () => {
   const dispatch = useDispatch();
@@ -72,8 +73,8 @@ const Books = () => {
 
         {/* Content */}
         {loading ? (
-          <div className="text-center text-blue-600 text-lg font-medium">
-            Loading books...
+          <div className="center">
+            <ThreeDots color="#3b82f6" height={50} width={50} />
           </div>
         ) : error ? (
           <div className="max-w-lg mx-auto bg-red-100 border border-red-300 p-6 rounded text-center shadow">
@@ -84,13 +85,13 @@ const Books = () => {
             {filteredBooks.map((book) => (
               <div
                 key={book._id}
-                className="bg-gray-100 p-2 rounded border shadow cursor-pointer hover:shadow-lg transition duration-200"
+                className="bg-white p-2 rounded border shadow cursor-pointer hover:shadow-lg transition duration-200"
                 onClick={() => navigate(`/book/view/${book._id}`)}
               >
                 <img
                   src={book.cover}
                   alt={book.title || "Book cover"}
-                  className="w-full h-36 object-cover rounded-3xl"
+                  className="w-full h-36 object-cover rounded"
                 />
                 <h3 className="text-sm font-semibold text-gray-800 mt-2">
                   {book.title}

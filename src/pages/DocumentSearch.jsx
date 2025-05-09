@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { fetchDocuments } from "../store/slices/documentSlice";
+import { fetchDocuments } from "../store/slices/documentsSlice";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const DocumentSearch = () => {

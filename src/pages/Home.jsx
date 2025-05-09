@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import DocumentCard from "../components/DocumentCard";
-import { fetchDocuments } from "../store/slices/documentSlice";
+import { fetchDocuments } from "../store/slices/documentsSlice";
 import DocumentSkeleton from "../components/DocumentSkeleton";
 
 const Home = () => {

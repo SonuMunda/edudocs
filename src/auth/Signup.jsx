@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdEmail, MdPerson, MdLock } from "react-icons/md";
 import Logo from "../components/Logo";
 // import GoogleAuthSignin from "./GoogleAuthSignin";
@@ -16,6 +16,11 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -61,16 +66,20 @@ const Signup = () => {
     <>
       <ToastContainer />
       <section className="signup  min-h-screen bg-white flex sm:items-center">
-        <div className="h-full sm:max-w-md bg-white pb-10 px-4 sm:p-8 sm:my-10 rounded sm:border sm:shadow mx-auto">
-          <Logo />
-          <h2 className="text-2xl font-bold text-gray-900">
-            Signup Now
-          </h2>
+        <div className="h-full sm:max-w-md bg-white pb-10 px-4 sm:p-8 sm:my-10  mx-auto">
+          <div className="logo center">
+            <Link to="/">
+              <Logo />
+            </Link>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900">Signup Now</h2>
           <p className="text-gray-600">
             Share and explore high-quality study resources with students.
           </p>
 
           <GoogleSigninButton />
+
+          <p className="text-center uppercase text-gray-600">Or continue with</p>
 
           <Formik
             initialValues={{

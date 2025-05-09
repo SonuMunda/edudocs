@@ -1,236 +1,350 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import {
-  addDocumentLike,
-  addDocumentVote,
-  fetchFileDetails,
-} from "../store/slices/userSlice";
+import { fetchFileDetails } from "../store/slices/documentSlice";
 import ShareMenu from "../components/ShareMenu";
 import { toast, ToastContainer } from "react-toastify";
-import { FaShare } from "react-icons/fa";
-import { FaThumbsUp } from "react-icons/fa6";
+import { FaShare, FaThumbsUp } from "react-icons/fa";
 import { BiSolidUpvote } from "react-icons/bi";
 import FetchUserId from "../utils/FetchUserId";
-// import { Worker } from "@react-pdf-viewer/core";
-// import { Viewer } from "@react-pdf-viewer/core";
-// import "@react-pdf-viewer/core/lib/styles/index.css";
 import Skeleton from "react-loading-skeleton";
-// import { toolbarPlugin } from "@react-pdf-viewer/toolbar";
-// import "@react-pdf-viewer/toolbar/lib/styles/index.css";
+import {
+  toggleLike,
+  toggleVote,
+  updateLikes,
+  updateVotes,
+} from "../store/slices/documentActionsSlice";
+import { io } from "socket.io-client";
+import { ColorRing } from "react-loader-spinner";
+import { pdfjs, Document, Page } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+import {
+  MdCloudDownload,
+  MdRefresh,
+  MdZoomIn,
+  MdZoomOut,
+} from "react-icons/md";
+import downloadFile from "../utils/DownloadFile";
+import { ErrorBoundary } from "react-error-boundary";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.min.js`;
 
 const DocumentView = () => {
+  const { likes, votes, likesLoading, votesLoading, error } = useSelector(
+    (state) => state?.documentActions
+  );
+  const { document, loading } = useSelector((state) => state?.document);
   const { fileId, username, userId } = useParams();
-  const [fileDetails, setFileDetails] = useState(null);
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [shareLink, setShareLink] = useState("");
   const [shareTitle, setShareTitle] = useState("");
+  const [socket, setSocket] = useState(null);
+  const [numPages, setNumPages] = useState(null);
+  const [scale, setScale] = useState(1.0);
+
+  const pageRefs = useRef({});
   const dispatch = useDispatch();
-
-  let fileUrl = `https://docs.google.com/gview?url=${fileDetails?.url}&embedded=true`;
-
   const currentUserId = FetchUserId();
 
-  // const toolbarPluginInstance = toolbarPlugin();
-  // const { Toolbar } = toolbarPluginInstance;
+  const [currentLikes, setCurrentLikes] = useState({ users: [], counts: 0 });
+  const [currentVotes, setCurrentVotes] = useState({ users: [], counts: 0 });
 
-  window.scrollTo(0, 0);
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+
+  const zoomIn = () => setScale((prev) => Math.min(prev + 0.2, 3));
+  const zoomOut = () => setScale((prev) => Math.max(prev - 0.2, 0.5));
 
   useEffect(() => {
-    dispatch(fetchFileDetails(fileId)).then((data) => {
-      setFileDetails(data.payload);
+    if (Array.isArray(document?.likes)) {
+      setCurrentLikes({ users: document.likes, counts: document.likes.length });
+    }
+    if (Array.isArray(document?.votes)) {
+      setCurrentVotes({ users: document.votes, counts: document.votes.length });
+    }
+  }, [document]);
+
+  useEffect(() => {
+    if (Array.isArray(likes)) {
+      setCurrentLikes({ users: likes, counts: likes.length });
+    }
+    if (Array.isArray(votes)) {
+      setCurrentVotes({ users: votes, counts: votes.length });
+    }
+  }, [likes, votes]);
+
+  useEffect(() => {
+    const newSocket = io(import.meta.env.VITE_SERVER_URL);
+    setSocket(newSocket);
+
+    newSocket.emit("joinDocument", fileId);
+    newSocket.on("likeUpdate", (data) => {
+      dispatch(updateLikes({ likes: data?.likes }));
     });
+    newSocket.on("voteUpdate", (data) => {
+      dispatch(updateVotes({ votes: data?.votes }));
+    });
+
+    return () => {
+      newSocket.emit("leaveDocument", fileId);
+      newSocket.disconnect();
+    };
+  }, [fileId, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchFileDetails(fileId));
+    window.scrollTo(0, 0);
   }, [dispatch, fileId]);
 
   const toggleShareMenu = (url, title) => {
     setMenuOpen(true);
-    const encodedUrl = encodeURI(url);
-    setShareLink(encodedUrl);
+    setShareLink(encodeURI(url));
     setShareTitle(title);
   };
 
-  const handleLike = async () => {
-    dispatch(addDocumentLike({ documentId: fileId, currentUserId })).then(
-      (data) => {
-        if (data.payload) {
-          toast.success(data.payload, {
-            position: "top-right",
-          });
-        } else if (data.error) {
-          toast.error(data.error.message || "Failed to like document", {
-            position: "top-right",
-          });
-        }
-      }
-    );
+  const handleLike = () => {
+    if (!currentUserId) return;
+    dispatch(toggleLike({ documentId: fileId, currentUserId }));
   };
 
-  const handleVote = async () => {
-    dispatch(
-      addDocumentVote({ documentId: fileId, userId: currentUserId })
-    ).then((data) => {
-      if (data.payload) {
-        toast.success(data.payload, {
-          position: "top-right",
-        });
-      } else if (data.error) {
-        toast.error(data.error.message || "Failed to vote document", {
-          position: "top-right",
-        });
-      }
-    });
+  const handleVote = () => {
+    if (!currentUserId) return;
+    dispatch(toggleVote({ documentId: fileId, userId: currentUserId }));
   };
+
+  error?.likes && toast.error(error?.likes);
+  error?.votes && toast.error(error?.votes);
 
   return (
     <main className="document-view">
       <ToastContainer />
-      <div className="container document-viewer p-4 flex flex-col gap-4 lg:flex-row mx-auto">
-        {/* Document Description */}
+      <div className="document-viewer p-4 flex flex-col gap-4 lg:flex-row mx-auto">
+        {/* Document description sidebar */}
         <div className="document-description bg-white w-full md:w-4/12 p-4 rounded">
           <div className="flex flex-col gap-2 my-4">
-            {!fileDetails?.title ? (
+            {!document?.title ? (
               <Skeleton height={40} />
             ) : (
               <h2 className="text-2xl font-semibold text-gray-800">
-                {fileDetails?.title}
+                {document.title}
               </h2>
             )}
-            {!fileDetails?.description ? (
+            {!document?.description ? (
               <Skeleton height={20} />
             ) : (
-              <p className="text-gray-700 text-xl">
-                {fileDetails?.description}
-              </p>
+              <p className="text-gray-700 text-xl">{document.description}</p>
             )}
           </div>
 
-          <div className="course mb-2">
-            <h4 className="text-lg font-semibold">Course</h4>
-            {!fileDetails?.course ? (
-              <Skeleton height={20} />
-            ) : (
-              <p className="text-gray-800">{fileDetails?.course}</p>
-            )}
-          </div>
+          {/* Metadata */}
+          {["course", "university", "session"].map((key) => (
+            <div key={key} className="mb-2">
+              {!document?.[key] ? (
+                <>
+                  <Skeleton height={24} />
+                  <Skeleton height={20} />
+                </>
+              ) : (
+                <>
+                  <h4 className="text-lg font-semibold capitalize">
+                    {key.replace("-", " ")}
+                  </h4>
+                  <p className="text-gray-800">{document[key]}</p>
+                </>
+              )}
+            </div>
+          ))}
 
-          <div className="university mb-2">
-            <h4 className="text-lg font-semibold">University</h4>
-            {!fileDetails?.university ? (
-              <Skeleton height={20} />
-            ) : (
-              <p className="text-gray-800">{fileDetails?.university}</p>
-            )}
-          </div>
-
-          <div className="academic-year mb-2">
-            <h4 className="text-lg font-semibold">Academic Year</h4>
-            {!fileDetails?.session ? (
-              <Skeleton height={20} />
-            ) : (
-              <p className="text-gray-800">{fileDetails?.session}</p>
-            )}
-          </div>
-
+          {/* Uploader */}
           <div className="owner mb-2">
-            <h4 className="text-lg font-semibold">Uploaded by</h4>
-            {!fileDetails?.username ? (
-              <Skeleton height={20} />
-            ) : (
-              <Link
-                to={`/profile/${fileDetails?.username}`}
-                className="text-blue-800"
-              >
-                {fileDetails?.username}
-              </Link>
-            )}
-          </div>
-
-          {/* Share button */}
-          <div className="document-btns flex gap-4">
-            <button
-              className="share-btn center bg-blue-600 text-white px-4 py-2 rounded"
-              onClick={() =>
-                toggleShareMenu(
-                  `${
-                    import.meta.env.VITE_CLIENT_URL
-                  }/${username}/${userId}/document/${
-                    fileDetails?.title
-                  }/${fileId}/view`,
-                  fileDetails?.title
-                )
-              }
-            >
-              <div className="icon me-2">
-                <FaShare />
-              </div>
-              <span className="btn-text">Share</span>
-            </button>
-            {currentUserId && currentUserId !== fileDetails?.uploadedBy && (
+            {!document?.username ? (
               <>
-                <button
-                  className="like-btn center bg-green-600 text-white px-4 py-2 rounded"
-                  onClick={handleLike}
+                <Skeleton height={24} />
+                <Skeleton height={20} />
+              </>
+            ) : (
+              <>
+                <h4 className="text-lg font-semibold">Uploaded by</h4>
+                <Link
+                  to={`/profile/${document?.username}`}
+                  className="text-blue-800"
                 >
-                  <div className="icon me-2">
-                    <FaThumbsUp />
-                  </div>
-                  <span className="btn-text">{fileDetails?.likes?.length}</span>
-                </button>
-
-                <button
-                  className="vote center bg-red-600 text-white px-4 py-2 rounded"
-                  onClick={handleVote}
-                >
-                  <div className="icon me-2">
-                    <BiSolidUpvote />
-                  </div>
-                  <span className="btn-text">{fileDetails?.votes?.length}</span>
-                </button>
+                  {document?.username}
+                </Link>
               </>
             )}
           </div>
+
+          {/* Action buttons */}
+          {loading ? (
+            <div className="relative flex">
+              <Skeleton count={3} height={20} width={200} />
+            </div>
+          ) : (
+            <>
+              <div className="document-btns flex flex-wrap gap-4 mt-4">
+                <button
+                  className="share-btn center ring ring-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 px-4 py-2 rounded transition"
+                  onClick={() =>
+                    toggleShareMenu(
+                      `${
+                        import.meta.env.VITE_CLIENT_URL
+                      }/${username}/${userId}/document/${
+                        document?.title
+                      }/${fileId}/view`,
+                      document?.title
+                    )
+                  }
+                >
+                  <div className="icon me-2">
+                    <FaShare />
+                  </div>
+                  <span className="btn-text">Share</span>
+                </button>
+
+                {currentUserId && currentUserId !== document?.uploadedBy && (
+                  <>
+                    <button
+                      className={`like-btn center gap-2 ring ring-green-600 ${
+                        currentLikes?.users?.includes(currentUserId)
+                          ? "bg-green-600 text-white"
+                          : "text-green-600"
+                      } hover:bg-green-600 hover:text-white px-4 py-2 rounded`}
+                      onClick={handleLike}
+                    >
+                      {likesLoading ? (
+                        <ColorRing
+                          visible={true}
+                          height={24}
+                          width={24}
+                          ariaLabel="color-ring-loading"
+                          wrapperStyle={{}}
+                          wrapperClass="color-ring-wrapper"
+                          colors={[
+                            "#ffffff",
+                            "#ffffff",
+                            "#ffffff",
+                            "#ffffff",
+                            "#ffffff",
+                          ]}
+                        />
+                      ) : (
+                        <FaThumbsUp />
+                      )}
+                      {Array.isArray(currentVotes?.users) &&
+                      currentLikes.users.includes(currentUserId)
+                        ? "Liked"
+                        : "Like"}
+                    </button>
+
+                    <button
+                      className={`vote center gap-2 ring ring-red-600 ${
+                        currentVotes?.users?.includes(currentUserId)
+                          ? "bg-red-600 text-white"
+                          : "text-red-600"
+                      } hover:bg-red-600 hover:text-white px-4 py-2 rounded`}
+                      onClick={handleVote}
+                    >
+                      {votesLoading ? (
+                        <ColorRing
+                          visible={true}
+                          height={24}
+                          width={24}
+                          ariaLabel="color-ring-loading"
+                          wrapperStyle={{}}
+                          wrapperClass="color-ring-wrapper"
+                          colors={[
+                            "#ffffff",
+                            "#ffffff",
+                            "#ffffff",
+                            "#ffffff",
+                            "#ffffff",
+                          ]}
+                        />
+                      ) : (
+                        <BiSolidUpvote />
+                      )}
+                      {Array.isArray(currentVotes?.users) &&
+                      currentVotes.users.includes(currentUserId)
+                        ? "Voted"
+                        : "Vote"}
+                    </button>
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </div>
 
-        {/* Document Viewer */}
-        <div
-          className="relative w-full rounded overflow-hidden shadow-md bg-gray-200"
-          style={{ height: "85vh" }}
-        >
-          {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-            {fileDetails?.url ? (
-              <div className="w-full h-full">
-                <div className="pdf-toolbar p-2">
-                  <Toolbar />
+        {/* PDF Viewer */}
+        <div className="flex flex-col h-screen max-w-5xl w-full bg-gray-100 rounded shadow">
+          <div className="flex items-center justify-between bg-white px-4 py-2 border-b">
+            <div className="flex space-x-2 items-center">
+              <button onClick={zoomOut} className="p-2">
+                <MdZoomOut size={24} />
+              </button>
+              <button onClick={zoomIn} className="p-2">
+                <MdZoomIn size={24} />
+              </button>
+              <span>Zoom: {(scale * 100).toFixed(0)}%</span>
+            </div>
+
+            <button
+              onClick={() => downloadFile(document?.url, document?.title)}
+              className="download-btn center gap-2 text-green-800"
+              title="Download PDF"
+              disabled={!document?.url}
+            >
+              Download <MdCloudDownload size={24} />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-auto px-4 py-2 bg-gray-200 z-1">
+            <ErrorBoundary
+              fallback={
+                <div className="text-red-500">
+                  Error loading document
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="reload-btn center gap-2 bg-gray-800 text-white p-2 m-2 rounded-full cursor-pointer"
+                  >
+                    <MdRefresh size={16} /> Refresh
+                  </button>
                 </div>
-                <Viewer
-                  fileUrl={fileDetails?.url}
-                  plugins={[toolbarPluginInstance]}
-                />
-              </div>
-            ) : (
-              <Skeleton height={"100%"} />
-            )}
-          </Worker> */}
-
-          {fileDetails?.url ? (
-            <iframe
-              src={fileUrl}
-              className="w-full h-full"
-              loading="lazy"
-            ></iframe>
-
-            // <iframe
-            //   src={`https://view.officeapps.live.com/op/embed.aspx?src=${fileDetails?.url}`}
-            //   width="100%"
-            //   height="500px"
-            // ></iframe>
-          ) : (
-            <Skeleton height={"100%"} />
-          )}
+              }
+            >
+              {document?.url ? (
+                <Document
+                  file={document.url}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                  onLoadError={(error) => {
+                    window.location.reload();
+                    console.error("Error loading PDF:", error);
+                  }}
+                >
+                  {Array.from(new Array(numPages), (_, index) => (
+                    <div
+                      key={`page_${index + 1}`}
+                      ref={(el) => (pageRefs.current[index + 1] = el)}
+                      className="mb-8 flex justify-center"
+                    >
+                      <Page pageNumber={index + 1} scale={scale} />
+                    </div>
+                  ))}
+                </Document>
+              ) : (
+                <div className="text-center text-red-500 mt-4">
+                  No PDF file URL provided.
+                </div>
+              )}
+            </ErrorBoundary>
+          </div>
         </div>
       </div>
 
-      {/* Share Menu */}
       <ShareMenu
         shareLink={shareLink}
         shareTitle={shareTitle}

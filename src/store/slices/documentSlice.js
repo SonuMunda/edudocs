@@ -1,104 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-
-export const fetchDocuments = createAsyncThunk(
-  "fetchDocuments",
-  async (_, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/documents`,
-        {
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch: ${response.statusText || "Unknown error"}`
-        );
-      }
-
-      const data = await response.json();
-
-      if (data) {
-        dispatch(setDocuments(data.documents));
-      } else {
-        throw new Error("Documents data is not in the expected format.");
-      }
-
-      return data.documents;
-    } catch (error) {
-      console.error("Fetch error:", error);
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const addDocumentLike = createAsyncThunk(
-  "addDocumentLike",
-  async ({ documentId, currentUserId }, { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_SERVER_URL
-        }/api/documents/document/like/${documentId}/${currentUserId}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        return rejectWithValue(errorData.message);
-      }
-
-      const responseData = await response.json();
-      return responseData.message;
-    } catch (error) {
-      console.error("Error adding like", error);
-      return rejectWithValue("An error occurred while adding like");
-    }
-  }
-);
-
-export const addDocumentVote = createAsyncThunk(
-  "addDocumentVote",
-  async ({ documentId, userId }, { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_SERVER_URL
-        }/api/documents/document/vote/${documentId}/${userId}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        return rejectWithValue(errorData.message);
-      }
-
-      const responseData = await response.json();
-      return responseData.message;
-    } catch (error) {
-      console.log(error);
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
 export const fetchFileDetails = createAsyncThunk(
   "fetchFileDetails",
-  async (fileId) => {
+  async (fileId, { dispatch }) => {
     try {
-      console.log(fileId);
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/documents/document/${fileId}`,
         {
@@ -110,9 +15,10 @@ export const fetchFileDetails = createAsyncThunk(
         throw new Error(`Failed to fetch: ${response.message}`);
       }
 
-      const responseData = await response.json();
+      const data = await response.json();
+      dispatch(setDocument(data.data));
 
-      return responseData.data;
+      return data;
     } catch (error) {
       console.log(error.message);
       throw error;
@@ -121,33 +27,32 @@ export const fetchFileDetails = createAsyncThunk(
 );
 
 const intialState = {
-  documents: null,
+  document: null,
   loading: true,
   error: null,
 };
 
 const documentSlice = createSlice({
-  name: "documents",
+  name: "document",
   initialState: intialState,
   reducers: {
-    setDocuments(state, action) {
-      state.documents = action.payload;
+    setDocument(state, action) {
+      state.document = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchDocuments.pending, (state) => {
+    builder.addCase(fetchFileDetails.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchDocuments.fulfilled, (state) => {
+    builder.addCase(fetchFileDetails.fulfilled, (state) => {
       state.loading = false;
     });
-    builder.addCase(fetchDocuments.rejected, (state, action) => {
+    builder.addCase(fetchFileDetails.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
   },
 });
 
-export const { setDocuments } = documentSlice.actions;
-
+export const { setDocument } = documentSlice.actions;
 export default documentSlice.reducer;

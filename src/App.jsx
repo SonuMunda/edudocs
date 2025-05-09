@@ -35,7 +35,7 @@ const App = () => {
 
   useEffect(() => {
     if (userId) {
-      const socket = io("http://localhost:3000", {
+      const socket = io(`${import.meta.env.VITE_SERVER_URL}`, {
         query: { userId: userId },
       });
 
@@ -43,13 +43,19 @@ const App = () => {
         socket.disconnect();
       };
     }
-  }, []);
+  }, [userId]);
 
   return (
     <div className="bg-gray-100">
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         <SkeletonTheme enableAnimation>
-          <Router>
+          <Router
+            basename="/"
+            future={{
+              v7_relativeSplatPath: true,
+              v7_startTransition: true,
+            }}
+          >
             <HeaderWrapper
               noRenderPaths={[
                 "/signin",
@@ -86,10 +92,7 @@ const App = () => {
                 <Route path="/document-search" element={<DocumentSearch />} />
                 <Route path="/books" element={<Books />} />
                 <Route path="/book/view/:bookId" element={<BookView />} />
-                <Route
-                  path="/solve-doubt"
-                  element={<AuthGuard component={<ChatBot />} />}
-                />
+                <Route path="/solve-doubt" element={<ChatBot />} />
                 <Route path="/tools" element={<Tools />} />
                 <Route path="/docx-to-pdf" element={<DocxToPdf />} />
                 <Route path="/pdf-to-docx" element={<PdfToDocx />} />

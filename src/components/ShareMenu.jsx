@@ -16,7 +16,7 @@ const ShareMenu = ({ shareLink, shareTitle, menuOpen, setMenuOpen }) => {
 
   return (
     <div
-      className="h-full w-full fixed top-0 left-0 center p-4"
+      className="h-full w-full fixed top-0 left-0 center p-4 z-10"
       style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
       onClick={() => setMenuOpen(false)}
     >

@@ -44,19 +44,21 @@ const Signin = () => {
     <>
       <ToastContainer />
       <section className="login min-h-screen bg-white flex sm:items-center">
-        <div className="h-screen sm:h-full sm:max-w-md bg-white p-4 sm:p-8 rounded sm:border sm:shadow mx-auto">
-          <div className="center">
-            <Logo />
+        <div className="h-screen sm:h-full sm:max-w-md bg-white p-4 sm:p-8 mx-auto">
+          <div className="logo center">
+            <Link to="/">
+              <Logo />
+            </Link>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900">
-            Welcome Back!
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900">Welcome Back!</h2>
           <p className="text-gray-600">
             Share and explore high-quality study resources with students.
           </p>
 
           {/* <GoogleAuthSignin/> */}
           <GoogleSigninButton />
+
+          <p className="text-center uppercase text-gray-600">Or continue with</p>
 
           <Formik
             initialValues={{ email: "", password: "" }}
@@ -96,7 +98,7 @@ const Signin = () => {
 
                 {/* Password Field */}
                 <div className="form-group flex flex-col relative py-4">
-                <label
+                  <label
                     htmlFor="email"
                     className={`text-gray-800 text-sm  ${
                       touched.password && errors.password ? "text-red-500" : ""

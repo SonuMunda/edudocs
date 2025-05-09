@@ -10,7 +10,6 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { xcode } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Link } from "react-router-dom";
-import { MdHomeFilled } from "react-icons/md";
 
 const Chatbot = () => {
   const dispatch = useDispatch();
@@ -34,7 +33,7 @@ const Chatbot = () => {
   };
 
   return (
-    <section className="chatbot flex flex-col h-screen bg-gray-50">
+    <section className="chatbot flex flex-col h-dvh bg-gray-50">
       {/* Header */}
       <div className="bot-header center relative gap-20 p-4 bg-white border-b">
         <div className="back-btn absolute left-2 p-2 bg-gray-100 rounded hover:ring-1">
@@ -139,14 +138,14 @@ const Chatbot = () => {
       </div>
 
       {/* Input */}
-      <div className="bg-white border-t p-4">
+      <div className="bg-white border-t border-gray-400 p-4">
         <form className="flex gap-2">
           <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 border rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full border border-gray-400 rounded-lg p-2"
             disabled={isLoading}
           />
           <button
