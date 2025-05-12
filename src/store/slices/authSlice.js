@@ -130,7 +130,7 @@ export const googleSignin = createAsyncThunk(
 
 export const newGoogleSignin = createAsyncThunk(
   "/auth/new/googleSignin",
-  async ({ accessToken, toast, navigate}, { rejectWithValue }) => {
+  async ({ accessToken, toast, navigate }, { rejectWithValue }) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/auth/new/google/signin`,
@@ -199,10 +199,10 @@ export const fetchUserDetails = createAsyncThunk(
 
 export const userDocumentUpload = createAsyncThunk(
   "userDocumentUpload",
-  async ({ id, formData, toast }, { rejectWithValue }) => {
+  async ({ formData, toast }, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/auth/upload/${id}`,
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/upload`,
         {
           method: "POST",
           headers: {

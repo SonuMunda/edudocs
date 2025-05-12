@@ -4,7 +4,6 @@ import * as Yup from "yup";
 import { CiTrash } from "react-icons/ci";
 import { useDispatch } from "react-redux";
 import { userDocumentUpload } from "../store/slices/authSlice";
-import fetchUserId from "../utils/FetchUserId";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DatalistInput } from "react-datalist-input";
@@ -31,7 +30,6 @@ const FileUpload = () => {
   const dispatch = useDispatch();
   const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const id = fetchUserId();
   window.scrollTo(0, 0);
 
   const handleFileChange = (event, setFieldValue) => {
@@ -71,7 +69,7 @@ const FileUpload = () => {
         formData.append("session", values.session);
         formData.append("description", values.description);
 
-        await dispatch(userDocumentUpload({ id, formData, toast }));
+        await dispatch(userDocumentUpload({ formData, toast }));
       }
     } catch (error) {
       toast.error("Failed to upload");
@@ -82,10 +80,10 @@ const FileUpload = () => {
   };
 
   return (
-    <section className="file-upload center min-h-screen sm:p-4">
+    <section className="file-upload center min-h-screen">
       <ToastContainer />
-      <div className="container xs:max-w-4xl mt-12 mb-8 bg-white p-10 rounded border">
-        <div className="file-upload-form">
+      <div className="container xs:max-w-4xl md:m-10  bg-white rounded border">
+        <div className="file-upload-form p-4">
           <Formik
             initialValues={{
               file: null,
@@ -108,7 +106,7 @@ const FileUpload = () => {
             {({ setFieldValue, errors, touched, values, isSubmitting }) => (
               <Form
                 encType="multipart/form-data"
-                className="form flex-col  flex gap-10"
+                className="form flex-col flex gap-10"
               >
                 <div
                   className={`form-group center flex-col upload-box border-4 border-blue-200 ${

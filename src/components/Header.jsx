@@ -27,7 +27,7 @@ import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 
 const Header = () => {
   const { user, isLoading } = useSelector((state) => state?.auth);
-  const [imdenuOpen, setImdenuOpen] = useState(false);
+  const [ismenuOpen, setIsMenuOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const prevScrollPos = useRef(window.scrollY);
@@ -43,7 +43,7 @@ const Header = () => {
 
     document.addEventListener("click", (e) => {
       if (e.target.closest(".user")) return;
-      setImdenuOpen(false);
+      setIsMenuOpen(false);
     });
   }, [token, dispatch]);
 
@@ -61,7 +61,7 @@ const Header = () => {
   }, []);
 
   const toggleMenu = () => {
-    setImdenuOpen(!imdenuOpen);
+    setIsMenuOpen(!ismenuOpen);
   };
 
   const handleToggleNav = () => {
@@ -301,16 +301,16 @@ const Header = () => {
               onClick={toggleMenu}
             >
               {!isLoading ? (
-                <div className="mx-1 h-10 w-10 text-white font-semibold bg-blue-500 rounded center hover:bg-blue-600 hover:ring-2">
+                <div className="mx-1 h-10 w-10 text-white font-semibold bg-blue-500 rounded-xl center hover:bg-blue-600 hover:ring-2">
                   <span>{user?.firstName.charAt(0)}</span>
                   <span>{user?.lastName.charAt(0)}</span>
                 </div>
               ) : (
-                <Skeleton className="mx-1 h-10 w-10 rounded" />
+                <Skeleton className="mx-1 h-10 w-10 rounded-xl" />
               )}
             </div>
 
-            {imdenuOpen && (
+            {ismenuOpen && (
               <div className="user-menu absolute top-12 right-0 bg-white rounded ring-2 ring-gray-200 w-48 z-10">
                 <ul className="menu-list p-4">
                   <li className="menu-list">
@@ -318,7 +318,7 @@ const Header = () => {
                       to="/"
                       className="menu-link rounded mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
                       onClick={() => {
-                        setImdenuOpen(false);
+                        setIsMenuOpen(false);
                       }}
                     >
                       <MdHomeFilled size={20} className="m-2" />
@@ -330,7 +330,7 @@ const Header = () => {
                       to={`/profile/${user.username}`}
                       className="menu-link rounded mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
                       onClick={() => {
-                        setImdenuOpen(false);
+                        setIsMenuOpen(false);
                       }}
                     >
                       <MdPerson2 size={20} className="m-2" />
@@ -342,7 +342,7 @@ const Header = () => {
                       to="/uploads"
                       className="menu-link rounded mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
                       onClick={() => {
-                        setImdenuOpen(false);
+                        setIsMenuOpen(false);
                       }}
                     >
                       <MdUploadFile size={20} className="m-2" />
@@ -354,7 +354,7 @@ const Header = () => {
                       to="/settings"
                       className="menu-link rounded mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
                       onClick={() => {
-                        setImdenuOpen(false);
+                        setIsMenuOpen(false);
                       }}
                     >
                       <MdSettings size={20} className="m-2" />
@@ -366,7 +366,7 @@ const Header = () => {
                       className="w-full text-center flex items-center menu-link rounded mb-1 text-center flex items-center hover:bg-red-600 hover:text-white transition-colors"
                       onClick={() => {
                         Logout({ dispatch, navigate });
-                        setImdenuOpen(false);
+                        setIsMenuOpen(false);
                       }}
                     >
                       <MdLogout size={20} className="m-2" />

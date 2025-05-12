@@ -320,10 +320,6 @@ const DocumentView = () => {
                 <Document
                   file={document.url}
                   onLoadSuccess={onDocumentLoadSuccess}
-                  onLoadError={(error) => {
-                    window.location.reload();
-                    console.error("Error loading PDF:", error);
-                  }}
                 >
                   {Array.from(new Array(numPages), (_, index) => (
                     <div
