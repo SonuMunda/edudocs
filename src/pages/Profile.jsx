@@ -3,7 +3,7 @@ import { FiFileText } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { fetchUserDetailsByUsername } from "../store/slices/userSlice";
 import { Link, useParams } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import {  ToastContainer } from "react-toastify";
 import FetchUserId from "../utils/FetchUserId";
 import { MdThumbUp } from "react-icons/md";
 import ShareMenu from "../components/ShareMenu";
@@ -128,14 +128,14 @@ const Profile = () => {
             )}
           </div>
           <div className="documents-uploaded shadow my-2 p-4 rounded bg-white">
-            <div className="header border-b p-4 font-semibold">
+            <div className="header border-b py-4 font-semibold">
               <h1>Uploaded Documents</h1>
             </div>
             <div className="documents-lists my-4 max-h-96 overflow-y-auto">
               <ul className="document-list">
                 {isDocumentsLoading ? (
                   <Skeleton height={80} count={4} />
-                ) : documents ? (
+                ) : documents.length > 0 ? (
                   documents.map((document) => (
                     <li
                       className="flex flex-col sm:flex-row justify-between gap-4 border-b p-4 my-2 bg-gray-100 rounded "

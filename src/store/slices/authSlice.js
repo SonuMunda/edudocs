@@ -156,7 +156,6 @@ export const newGoogleSignin = createAsyncThunk(
       localStorage.setItem("token", token);
       toast.success(data.message, {
         position: "top-center",
-        className: "text-4xl",
       });
       setTimeout(() => {
         navigate("/");
@@ -164,7 +163,6 @@ export const newGoogleSignin = createAsyncThunk(
     } catch (error) {
       toast.error(error.message, {
         position: "top-center",
-        className: "text-4xl",
       });
       return rejectWithValue(error.message);
     }
@@ -233,7 +231,7 @@ export const updateUserProfile = createAsyncThunk(
   async ({ data, toast }, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/auth/update/`,
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/update-profile`,
         {
           method: "PATCH",
           headers: {
@@ -336,7 +334,6 @@ export const forgetPassword = createAsyncThunk(
         error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage, {
         position: "top-center",
-        className: "text-4xl",
       });
       return rejectWithValue({ message: errorMessage });
     }
@@ -393,6 +390,7 @@ export const resetPassword = createAsyncThunk(
 const initialState = {
   user: null,
   isLoading: true,
+  error: null,
 };
 
 // Slice
@@ -417,7 +415,7 @@ const authSlice = createSlice({
     });
     builder.addCase(fetchUserDetails.rejected, (state) => {
       state.isLoading = false;
-      state.isError = true;
+      state.error = "Failed to fetch user details";
     });
   },
 });

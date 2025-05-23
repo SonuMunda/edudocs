@@ -20,7 +20,7 @@ export const fetchBooks = createAsyncThunk(
       const data = await response.json();
 
       if (data) {
-        console.log(data);
+       
         return data?.books;
       } else {
         throw new Error("Books data is not in the expected format.");

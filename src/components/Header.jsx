@@ -24,9 +24,10 @@ import {
 
 import "react-toastify/dist/ReactToastify.css";
 import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
+import { toast } from "react-toastify";
 
 const Header = () => {
-  const { user, isLoading } = useSelector((state) => state?.auth);
+  const { user, isLoading, error } = useSelector((state) => state?.auth);
   const [ismenuOpen, setIsMenuOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
@@ -67,6 +68,14 @@ const Header = () => {
   const handleToggleNav = () => {
     setIsNavOpen(!isNavOpen);
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong", {
+        position: "top-right",
+      });
+    }
+  }, [error]);
 
   return (
     <header
@@ -118,7 +127,7 @@ const Header = () => {
               }}
             >
               <div className="user-avatar">
-                {!isLoading ? (
+                {!isLoading && !error ? (
                   <div className="mx-1 h-10 w-10 text-white font-semibold bg-blue-500 rounded center">
                     <span>{user?.firstName.charAt(0)}</span>
                     <span>{user?.lastName.charAt(0)}</span>
@@ -128,7 +137,7 @@ const Header = () => {
                 )}
               </div>
               <div className="username">
-                {!isLoading ? (
+                {!isLoading && !error ? (
                   <p className="text-gray-600 font-semibold">
                     {user?.firstName} {user?.lastName}
                   </p>
@@ -296,19 +305,19 @@ const Header = () => {
 
         {token && (
           <div className="user relative">
-            <div
-              className="user-name flex items-center cursor-pointer"
-              onClick={toggleMenu}
-            >
-              {!isLoading ? (
+            {!isLoading && !error ? (
+              <div
+                className="user-name flex items-center cursor-pointer"
+                onClick={toggleMenu}
+              >
                 <div className="mx-1 h-10 w-10 text-white font-semibold bg-blue-500 rounded-xl center hover:bg-blue-600 hover:ring-2">
                   <span>{user?.firstName.charAt(0)}</span>
                   <span>{user?.lastName.charAt(0)}</span>
                 </div>
-              ) : (
-                <Skeleton className="mx-1 h-10 w-10 rounded-xl" />
-              )}
-            </div>
+              </div>
+            ) : (
+              <Skeleton className="mx-1 h-10 w-10 rounded-xl" />
+            )}
 
             {ismenuOpen && (
               <div className="user-menu absolute top-12 right-0 bg-white rounded ring-2 ring-gray-200 w-48 z-10">
