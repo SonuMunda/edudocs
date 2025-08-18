@@ -123,7 +123,7 @@ const DocumentView = () => {
       <ToastContainer />
       <div className="document-viewer p-4 flex flex-col gap-4 lg:flex-row mx-auto">
         {/* Document description sidebar */}
-        <div className="document-description bg-white w-full md:w-4/12 p-4 rounded">
+        <div className="document-description bg-white w-full md:w-4/12 p-10 rounded-xl">
           <div className="flex flex-col gap-2 my-4">
             {!document?.title ? (
               <Skeleton height={40} />
@@ -187,7 +187,7 @@ const DocumentView = () => {
             <>
               <div className="document-btns flex flex-wrap gap-4 mt-4">
                 <button
-                  className="share-btn center ring ring-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 px-4 py-2 rounded transition"
+                  className="share-btn center bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 py-2 px-4 text-white rounded-xl"
                   onClick={() =>
                     toggleShareMenu(
                       `${
@@ -212,7 +212,7 @@ const DocumentView = () => {
                         currentLikes?.users?.includes(currentUserId)
                           ? "bg-green-600 text-white"
                           : "text-green-600"
-                      } hover:bg-green-600 hover:text-white px-4 py-2 rounded`}
+                      } hover:bg-green-600 hover:text-white px-4 py-2 rounded-xl`}
                       onClick={handleLike}
                     >
                       {likesLoading ? (
@@ -245,7 +245,7 @@ const DocumentView = () => {
                         currentVotes?.users?.includes(currentUserId)
                           ? "bg-red-600 text-white"
                           : "text-red-600"
-                      } hover:bg-red-600 hover:text-white px-4 py-2 rounded`}
+                      } hover:bg-red-600 hover:text-white px-4 py-2 rounded-xl`}
                       onClick={handleVote}
                     >
                       {votesLoading ? (
@@ -280,7 +280,7 @@ const DocumentView = () => {
         </div>
 
         {/* PDF Viewer */}
-        <div className="flex flex-col h-screen max-w-5xl w-full bg-gray-100 rounded shadow">
+        <div className="flex flex-col h-screen max-w-5xl w-full bg-gray-100 rounded-xl shadow">
           <div className="flex items-center justify-between bg-white px-4 py-2 border-b">
             <div className="flex space-x-2 items-center">
               <button onClick={zoomOut} className="p-2">

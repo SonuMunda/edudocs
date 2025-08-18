@@ -17,6 +17,10 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
+.edu-text {
+  font-family: "Poppins", sans-serif;
+}
+
 .center {
   display: flex;
   align-items: center;
@@ -26,13 +30,9 @@ body {
 .menu-link.active {
   background-color: #2563eb;
   color: white;
+  border-radius: 2rem;
 }
 
-.nav-link.active {
-  /* border-left: 4px solid #3b82f6; */
-  border-radius: 4px;
-  background-color: #e5e7eb;
-}
 ::-webkit-scrollbar {
   width: 12px;
 }
@@ -61,6 +61,8 @@ body {
 
   .nav-link.active {
     border-left: 4px solid #3b82f6;
+    border-radius: 0.5rem;
+    background-color: #e5e7eb;
     /* background-color: #e5e7eb; */
   }
 }

@@ -1,18 +1,16 @@
-import { Formik, Form } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
-import { CiTrash } from "react-icons/ci";
 import { useDispatch } from "react-redux";
 import { userDocumentUpload } from "../store/slices/authSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DatalistInput } from "react-datalist-input";
 import "react-datalist-input/dist/styles.css";
-import universitiesList from "../api/universitiesList";
 import coursesList from "../api/coursesList";
 import sessionsList from "../api/sessionsList";
 import styled from "styled-components";
-import { MdOutlineFileUpload, MdUpload } from "react-icons/md";
+import { LuCloudUpload, LuTrash2 } from "react-icons/lu";
 
 const StyledDataListInput = styled(DatalistInput)`
   &.datalist input {
@@ -80,10 +78,11 @@ const FileUpload = () => {
   };
 
   return (
-    <section className="file-upload center min-h-screen">
+    <section className="file-upload center">
       <ToastContainer />
-      <div className="container xs:max-w-4xl md:m-10  bg-white rounded border">
-        <div className="file-upload-form p-4">
+      <div className="container max-w-7xl mx-auto sm:px-4 sm:py-10">
+        <div className="file-upload-form max-w-3xl mx-auto bg-white p-4 sm:p-10 rounded space-y-10">
+          <h2 className="text-2xl font-semibold text-center text-gray-900">Upload</h2>
           <Formik
             initialValues={{
               file: null,
@@ -106,13 +105,12 @@ const FileUpload = () => {
             {({ setFieldValue, errors, touched, values, isSubmitting }) => (
               <Form
                 encType="multipart/form-data"
-                className="form flex-col flex gap-10"
+                className="form space-y-10"
               >
+
                 <div
-                  className={`form-group center flex-col upload-box border-4 border-blue-200 ${
-                    isDragging ? "border-blue-500 bg-blue-200" : "border-dashed"
-                  } rounded
-                  xl p-10 bg-gray-50 my-2 w-full`}
+                  className={`form-group flex flex-col items-center justify-center gap-4 upload-box border-4 border-blue-200 ${isDragging ? "border-blue-500 bg-blue-200" : "border-dashed"
+                    } rounded p-10 bg-neutral-50 my-2 w-full`}
                   onDragOver={(e) => {
                     e.preventDefault();
                     setIsDragging(true);
@@ -135,27 +133,24 @@ const FileUpload = () => {
                     className="hidden"
                     onChange={(event) => handleFileChange(event, setFieldValue)}
                   />
-                  <MdOutlineFileUpload
+                  <LuCloudUpload
                     size={64}
-                    className="center text-blue-500"
+                    className="mx-auto text-blue-500"
                   />
-                  <h1 className="center text-xl font-semibold text-gray-600 m-1">
-                    Drag & Drop Your File
-                  </h1>
-                  <h1 className="center text-xl font-semibold text-gray-600 m-1">
-                    Or Upload
-                  </h1>
-                  <p className="text-center text-gray-500 my-2">
-                    Supported files: pdf, doc, docx
-                  </p>
-                  <button type="button" className="btn block mx-auto">
+                  <div className="center flex-wrap text-xl gap-1 font-semibold">
+                    <h1 className="text-neutral-900">
+                      Drag & Drop file or
+                    </h1>
                     <label
                       htmlFor="file"
-                      className="center my-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white cursor-pointer font-normal"
+                      className="text-blue-600 underline"
                     >
-                      Browse my files
+                      Browse
                     </label>
-                  </button>
+                  </div>
+                  <p className="text-center text-neutral-600">
+                    Supported files: pdf, doc, docx
+                  </p>
                   {errors.file && touched.file ? (
                     <div className="text-red-500 text-center mt-2">
                       {errors.file}
@@ -163,31 +158,38 @@ const FileUpload = () => {
                   ) : null}
                 </div>
 
-                <div className="form-right w-full sm:p-10">
+                <div className="form-right h-full w-full m-auto bg-white">
                   {file != null && (
-                    <div className="my-5">
-                      <h4 className="text-lg font-semibold mb-1">
-                        Selected File:
+                    <div className="file mb-4">
+                      <h4 className="text-lg font-semibold mb-2 text-neutral-800 flex items-center gap-2">
+                        Selected File
                       </h4>
-                      <div className="flex items-center justify-between p-3 bg-white rounded">
-                        <span className="text-gray-900">{file.name}</span>
-                        <div className="flex gap-6">
-                          <span className="text-gray-800 text-sm">
+                      <div className="flex items-center justify-between p-4 bg-white rounded shadow-md border hover:shadow-lg transition">
+                        {/* File Name */}
+                        <span className="text-neutral-900 font-medium truncate max-w-xs">
+                          {file.name}
+                        </span>
+
+                        {/* File Details + Delete */}
+                        <div className="flex items-center gap-6">
+                          <span className="text-neutral-600 text-sm bg-neutral-100 px-2 py-1 rounded">
                             {(file.size / 1024).toFixed(2)} KB
                           </span>
                           <button
                             type="button"
-                            className="text-red-600 text-xl"
+                            className="text-red-600 hover:text-red-700 text-2xl transition"
                             onClick={() => {
                               setFile(null);
                               setFieldValue("file", null);
                             }}
+                            title="Remove File"
                           >
-                            <CiTrash />
+                            <LuTrash2 size={24} />
                           </button>
                         </div>
                       </div>
                     </div>
+
                   )}
 
                   <div className="form-group pb-1">
@@ -204,11 +206,10 @@ const FileUpload = () => {
                       onChange={(e) =>
                         setFieldValue("category", e.target.value)
                       }
-                      className={`font-normal p-2 ring-1 ring-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
-                        errors.category && touched.category
-                          ? "ring-red-500"
-                          : ""
-                      }`}
+                      className={`font-normal p-2 ring-1 ring-neutral-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${errors.category && touched.category
+                        ? "ring-red-500"
+                        : ""
+                        }`}
                     >
                       <option value="">Choose File Category</option>
                       <option value="assignment">Assignment</option>
@@ -226,36 +227,28 @@ const FileUpload = () => {
                     ) : null}
                   </div>
 
-                  <div className="form-group ">
+                  <div className="form-group">
                     <label
                       htmlFor="university"
                       className="block my-2 font-normal"
-                      id="university"
                     >
                       University
                     </label>
-                    <StyledDataListInput
-                      value={values.university}
-                      label="Select your university"
-                      showLabel={false}
-                      items={universitiesList.map((university) => ({
-                        id: university.id,
-                        value: university.value,
-                      }))}
-                      onSelect={(item) =>
-                        setFieldValue("university", item.value)
-                      }
-                      className={`datalist font-normal ${
-                        errors.university && touched.university
-                          ? "border border-red-500"
-                          : ""
-                      }`}
+
+                    <Field
+                      id="university"
+                      name="university"
+                      as="input"
+                      placeholder="Enter your university"
+                      className={`font-normal p-2 ring-1 ring-neutral-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded
+      ${errors.university && touched.university ? "border-red-500" : "border-gray-300"}`}
                     />
-                    {errors.university && touched.university && (
-                      <div className="text-red-500 text-xs">
-                        {errors.university}
-                      </div>
-                    )}
+
+                    <ErrorMessage
+                      name="university"
+                      component="div"
+                      className="text-red-500 text-xs mt-1"
+                    />
                   </div>
 
                   <div className="form-group my-2">
@@ -276,11 +269,10 @@ const FileUpload = () => {
                         value: course.value,
                       }))}
                       onSelect={(item) => setFieldValue("course", item.value)}
-                      className={`datalist font-normal ${
-                        errors.course && touched.course
-                          ? "border border-red-500"
-                          : ""
-                      }`}
+                      className={`datalist font-normal ${errors.course && touched.course
+                        ? "border border-red-500"
+                        : ""
+                        }`}
                     />
                     {errors.course && touched.course ? (
                       <div className="text-red-500 text-xs">
@@ -303,11 +295,10 @@ const FileUpload = () => {
                         value: session.value,
                       }))}
                       onSelect={(item) => setFieldValue("session", item.value)}
-                      className={`datalist font-normal ${
-                        errors.session && touched.session
-                          ? "border border-red-500"
-                          : ""
-                      }`}
+                      className={`datalist font-normal ${errors.session && touched.session
+                        ? "border border-red-500"
+                        : ""
+                        }`}
                     />
                     {errors.session && touched.session ? (
                       <div className="text-red-500 text-xs">
@@ -325,11 +316,10 @@ const FileUpload = () => {
                       id="description"
                       placeholder="Write something about document."
                       rows="3"
-                      className={`font-normal p-3 ring-1 ring-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded ${
-                        errors.description && touched.description
-                          ? "ring-red-500"
-                          : ""
-                      }`}
+                      className={`font-normal p-3 ring-1 ring-neutral-300 focus:outline-none focus:ring-1 focus:ring-blue-700 w-full rounded-md ${errors.description && touched.description
+                        ? "ring-red-500"
+                        : ""
+                        }`}
                       value={values.description}
                       onChange={(e) =>
                         setFieldValue("description", e.target.value)
@@ -342,19 +332,18 @@ const FileUpload = () => {
                     ) : null}
                   </div>
 
-                  <div className="center py-4">
+                  <div className="center my-4">
                     <button
                       type="submit"
-                      className={`w-full my-6 py-2 px-4 bg-blue-600 rounded hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 ${
-                        isSubmitting && "cursor-not-allowed"
-                      }`}
+                      className={`w-full p-3 font-semibold bg-blue-600 rounded-md hover:bg-blue-700 text-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 ${isSubmitting && "cursor-not-allowed"
+                        }`}
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
                         <span>Uploading...</span>
                       ) : (
                         <span className="center gap-2">
-                          Upload <MdUpload size={24} />
+                          Upload <LuCloudUpload size={24} />
                         </span>
                       )}
                     </button>

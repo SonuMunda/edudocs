@@ -1,29 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
-import logo from "../assets/images/logo.svg";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaRobot } from "react-icons/fa6";
-import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 import { useEffect, useRef, useState } from "react";
 import Logout from "../utils/Logout";
 import { fetchUserDetails } from "../store/slices/authSlice";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-
-import {
-  MdBook,
-  MdBuild,
-  MdClose,
-  MdHome,
-  MdHomeFilled,
-  MdLeaderboard,
-  MdLogout,
-  MdPerson2,
-  MdSettings,
-  MdUploadFile,
-} from "react-icons/md";
-
+import { LuBook, LuBot, LuFileUp, LuHouse, LuLogIn, LuLogOut, LuMenu, LuSettings, LuTrophy, LuUser, LuWrench, LuX } from "react-icons/lu";
 import "react-toastify/dist/ReactToastify.css";
-import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { toast } from "react-toastify";
 
 const Header = () => {
@@ -79,77 +62,47 @@ const Header = () => {
 
   return (
     <header
-      className={`flex justify-between items-center p-2 sticky w-full bg-white shadow z-10 transition-all duration-300 ${
-        showNavbar ? "top-0" : "-top-16"
-      }`}
+      className={`flex justify-between items-center sticky w-full bg-white shadow z-10 transition-all duration-300 ${showNavbar ? "top-0" : "-top-16"
+        }`}
     >
-      <div className="center gap-3">
-        <div className="flex items-center cursor-pointer md:hidden">
-          <HiMiniBars3BottomLeft size={24} onClick={handleToggleNav} />
+      <div className="container max-w-7xl mx-auto flex items-center justify-between py-1 px-4">
+        <div className="center gap-3">
+          <div className="flex items-center cursor-pointer md:hidden">
+            <LuMenu size={24} onClick={handleToggleNav} />
+          </div>
+
+          <div
+            className="logo edu-text flex  items-center gap-1 cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            <img src="/images/logo.png" alt="logo" className="h-8" />
+            <h2 className="text-2xl font-extrabold text-blue-600">
+              <span className="text-black">Edu</span>Docs
+            </h2>
+          </div>
         </div>
 
-        <div
-          className="logo center cursor-pointer"
-          onClick={() => navigate("/")}
-        >
-          <img src={logo} alt="logo" className="h-8 block" />
-          <h2 className="text-2xl font-bold text-blue-500">
-            <span className="text-black">Edu</span>Docs
-          </h2>
-        </div>
-      </div>
-      <div className="center gap-4">
         <nav
-          className={`navbar fixed top-0 left-0 h-dvh w-80 ${
-            isNavOpen ? "-translate-x-0" : "-translate-x-full"
-          } overflow-hidden bg-white md:relative md:w-fit md:top-0 md:h-fit z-10 transitions duration-100 ease-in-out transition-transform-full md:translate-x-0`}
+          className={`navbar fixed top-0 left-0 h-dvh w-80 ${isNavOpen ? "-translate-x-0" : "-translate-x-full"
+            } overflow-hidden bg-white md:relative md:w-fit md:top-0 md:h-fit z-10 transitions duration-100 ease-in-out transition-transform-full md:translate-x-0`}
         >
-          <div className="flex p-2 items-center cursor-pointer md:hidden border-b">
-            <div className="close-btn bg-gray-100 hover:bg-gray-200 p-2 rounded">
-              <MdClose size={24} onClick={() => setIsNavOpen(false)} />
+          <div className="flex gap-3 py-1 px-3 items-center cursor-pointer md:hidden border-b">
+            <div className="close-btn p-2 rounded">
+              <LuX size={24} onClick={() => setIsNavOpen(false)} />
             </div>
             <div
-              className="logo center cursor-pointer"
+              className="logo edu-text flex  items-center gap-1 cursor-pointer"
               onClick={() => navigate("/")}
             >
-              <img src={logo} alt="logo" className="h-8 block" />
-              <h2 className="text-2xl font-bold text-blue-500">
+              <img src="/images/logo.png" alt="logo" className="h-8" />
+              <h2 className="text-2xl font-extrabold text-blue-600">
                 <span className="text-black">Edu</span>Docs
               </h2>
             </div>
           </div>
-          {token && (
-            <div
-              className="user block md:hidden cursor-default flex items-center gap-2 m-2 p-2 border hover:shadow rounded cursor-pointer"
-              onClick={() => {
-                navigate(`/profile/${user.username}`);
-                setIsNavOpen(false);
-              }}
-            >
-              <div className="user-avatar">
-                {!isLoading && !error ? (
-                  <div className="mx-1 h-10 w-10 text-white font-semibold bg-blue-500 rounded center">
-                    <span>{user?.firstName.charAt(0)}</span>
-                    <span>{user?.lastName.charAt(0)}</span>
-                  </div>
-                ) : (
-                  <Skeleton className="mx-1 h-10 w-10 rounded" />
-                )}
-              </div>
-              <div className="username">
-                {!isLoading && !error ? (
-                  <p className="text-gray-600 font-semibold">
-                    {user?.firstName} {user?.lastName}
-                  </p>
-                ) : (
-                  <Skeleton className="h-4 w-24" />
-                )}
-              </div>
-            </div>
-          )}
           <ul className="flex flex-col md:flex-row md:items-center md:gap-2 px-2 md:mt-0 mt-4 ">
             <li
-              className="list-items hover:bg-gray-200 rounded"
+              className="list-items hover:bg-gray-200 md:hover:bg-white rounded-xl"
               onClick={() => {
                 setIsNavOpen(false);
               }}
@@ -159,13 +112,13 @@ const Header = () => {
                 className="nav-link flex items-center p-3 md:p-2 text-gray-800"
               >
                 <span className="block md:hidden">
-                  <MdHome size={24} className="me-2" />
+                  <LuHouse size={24} className="me-2" />
                 </span>
                 Home
               </NavLink>
             </li>
             <li
-              className="list-items hover:bg-gray-200 rounded"
+              className="list-items hover:bg-gray-200 md:hover:bg-white rounded-xl"
               onClick={() => {
                 setIsNavOpen(false);
               }}
@@ -175,30 +128,31 @@ const Header = () => {
                 className="nav-link flex items-center p-3 md:p-2 text-gray-800 "
               >
                 <span className="block  md:hidden">
-                  <MdBook size={24} className="me-2" />
+                  <LuBook size={24} className="me-2" />
                 </span>
                 Books
               </NavLink>
             </li>
             <li
-              className="list-items hover:bg-gray-200 rounded"
+              className="list-items hover:bg-gray-200 md:hover:bg-white rounded-xl"
               onClick={() => {
                 setIsNavOpen(false);
               }}
             >
               <NavLink
                 to="/solve-doubt"
-                className="nav-link flex items-center  p-3 md:p-2 text-gray-800"
+                className="nav-link flex items-center p-3 md:p-2 text-gray-800"
+                target="_blank"
               >
                 <span className="block md:hidden">
-                  <FaRobot size={24} className="me-2" />
+                  <LuBot size={24} className="me-2" />
                 </span>
-                Ask AI
+                EduQueria
               </NavLink>
             </li>
 
             <li
-              className="list-items hover:bg-gray-200 rounded"
+              className="list-items hover:bg-gray-200 md:hover:bg-white rounded-xl"
               onClick={() => {
                 setIsNavOpen(false);
               }}
@@ -208,14 +162,14 @@ const Header = () => {
                 className="nav-link flex items-center p-3 md:p-2 text-gray-800"
               >
                 <span className="block md:hidden">
-                  <MdBuild size={24} className="me-2" />
+                  <LuWrench size={24} className="me-2" />
                 </span>
                 Tools
               </NavLink>
             </li>
 
             <li
-              className="list-items hover:bg-gray-200 rounded"
+              className="list-items hover:bg-gray-200 md:hover:bg-white rounded-xl"
               onClick={() => {
                 setIsNavOpen(false);
               }}
@@ -225,13 +179,13 @@ const Header = () => {
                 className="nav-link flex items-center p-3 md:p-2 text-gray-800"
               >
                 <span className="block md:hidden">
-                  <MdLeaderboard size={24} className="me-2" />
+                  <LuTrophy size={24} className="me-2" />
                 </span>
                 Leaderboard
               </NavLink>
             </li>
 
-            <li className="list-items hover:bg-gray-200 rounded md:hidden">
+            <li className="list-items hover:bg-gray-200 md:hover:bg-white rounded md:hidden">
               <NavLink
                 to={`${token ? `/profile/${user?.username}` : "/signin"}`}
                 className="nav-link flex items-center p-3 md:p-2 text-gray-800"
@@ -240,13 +194,13 @@ const Header = () => {
                 }}
               >
                 <span className="block md:hidden">
-                  <MdPerson2 size={24} className="me-2" />
+                  <LuUser size={24} className="me-2" />
                 </span>
                 Profile
               </NavLink>
             </li>
 
-            <li className="list-items  hover:bg-gray-200 rounded md:hidden">
+            <li className="list-items  hover:bg-gray-200 md:hover:bg-white rounded md:hidden">
               <NavLink
                 to={`${token ? "uploads" : "/signin"}`}
                 className="nav-link flex items-center p-3 md:p-2 text-gray-800"
@@ -255,13 +209,13 @@ const Header = () => {
                 }}
               >
                 <span className="block md:hidden">
-                  <MdUploadFile size={24} className="me-2" />
+                  <LuFileUp size={24} className="me-2" />
                 </span>
-                Uploads
+                Upload
               </NavLink>
             </li>
 
-            <li className="list-items hover:bg-gray-200 rounded md:hidden">
+            <li className="list-items hover:bg-gray-200 md:hover:bg-white rounded md:hidden">
               <NavLink
                 to={`${token ? "/settings" : "/signin"}`}
                 className="nav-link flex items-center p-3 md:p-2 text-gray-800"
@@ -270,7 +224,7 @@ const Header = () => {
                 }}
               >
                 <span className="block md:hidden">
-                  <MdSettings size={24} className="me-2" />
+                  <LuSettings size={24} className="me-2" />
                 </span>
                 Settings
               </NavLink>
@@ -278,25 +232,27 @@ const Header = () => {
           </ul>
           <div className="navbar-btns md:hidden absolute bottom-0 border-t border-gray-400 w-full">
             {token ? (
-              <button
-                className="text-center font-semibold flex items-center p-3 w-full"
-                onClick={() => {
-                  Logout({ dispatch, navigate });
-                  setIsNavOpen(false);
-                }}
-              >
-                <IoMdLogOut size={24} className="me-2" />
-                Sign out
-              </button>
+              <>
+                <button
+                  className="text-center font-semibold flex items-center p-3 w-full"
+                  onClick={() => {
+                    Logout({ dispatch, navigate });
+                    setIsNavOpen(false);
+                  }}
+                >
+                  <LuLogOut size={24} className="me-2" />
+                  Sign out
+                </button>
+              </>
             ) : (
               <NavLink
                 to="/signin"
-                className="text-center flex items-center p-3 md:p-2 text-gray-800"
+                className="text-center font-semibold flex items-center p-3 w-full"
                 onClick={() => {
                   setIsNavOpen(false);
                 }}
               >
-                <IoMdLogIn size={24} className="me-2" />
+                <LuLogIn size={24} className="me-2" />
                 Sign in
               </NavLink>
             )}
@@ -320,53 +276,53 @@ const Header = () => {
             )}
 
             {ismenuOpen && (
-              <div className="user-menu absolute top-12 right-0 bg-white rounded ring-2 ring-gray-200 w-48 z-10">
+              <div className="user-menu absolute top-12 right-0 bg-white rounded-xl ring-2 ring-gray-200 w-48 z-10">
                 <ul className="menu-list p-4">
                   <li className="menu-list">
                     <NavLink
                       to="/"
-                      className="menu-link rounded mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
+                      className="menu-link rounded full mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
                       onClick={() => {
                         setIsMenuOpen(false);
                       }}
                     >
-                      <MdHomeFilled size={20} className="m-2" />
+                      <LuHouse size={20} className="m-2" />
                       Home
                     </NavLink>
                   </li>
                   <li className="menu-list">
                     <NavLink
                       to={`/profile/${user.username}`}
-                      className="menu-link rounded mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
+                      className="menu-link rounded full mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
                       onClick={() => {
                         setIsMenuOpen(false);
                       }}
                     >
-                      <MdPerson2 size={20} className="m-2" />
+                      <LuUser size={20} className="m-2" />
                       Profile
                     </NavLink>
                   </li>
                   <li className="menu-list">
                     <NavLink
                       to="/uploads"
-                      className="menu-link rounded mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
+                      className="menu-link rounded full mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
                       onClick={() => {
                         setIsMenuOpen(false);
                       }}
                     >
-                      <MdUploadFile size={20} className="m-2" />
-                      Uploads
+                      <LuFileUp size={20} className="m-2" />
+                      Upload
                     </NavLink>
                   </li>
                   <li className="menu-list">
                     <NavLink
                       to="/settings"
-                      className="menu-link rounded mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
+                      className="menu-link rounded full mb-1 text-center flex items-center hover:bg-gray-200 hover:text-black transition-colors"
                       onClick={() => {
                         setIsMenuOpen(false);
                       }}
                     >
-                      <MdSettings size={20} className="m-2" />
+                      <LuSettings size={20} className="m-2" />
                       Settings
                     </NavLink>
                   </li>
@@ -378,7 +334,7 @@ const Header = () => {
                         setIsMenuOpen(false);
                       }}
                     >
-                      <MdLogout size={20} className="m-2" />
+                      <LuLogOut size={20} className="m-2" />
                       Sign out
                     </button>
                   </li>
@@ -392,18 +348,17 @@ const Header = () => {
           <div className="header-btns">
             <NavLink
               to="/signin"
-              className="flex items-center px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
             >
               Sign in
             </NavLink>
           </div>
         )}
-      </div>
 
+      </div>
       <div
-        className={`navbar-overlay fixed left-0 top-0 h-screen w-full ${
-          isNavOpen ? "block" : "hidden"
-        }`}
+        className={`navbar-overlay fixed left-0 top-0 h-screen w-full ${isNavOpen ? "block" : "hidden"
+          }`}
         style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
         onClick={() => setIsNavOpen(false)}
       ></div>

@@ -10,8 +10,8 @@ const iconsMap = {
 
 const Tools = () => {
   return (
-    <section className="tools flex justify-center min-h-screen bg-gray-50">
-      <div className="tools-container w-full max-w-6xl mt-16 p-4">
+    <section className="tools min-h-screen bg-gray-50">
+      <div className="container w-full max-w-7xl mx-auto px-4 py-24">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-3">Office File Converter</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -23,7 +23,7 @@ const Tools = () => {
           {tools.map((tool, index) => (
             <div 
               key={index}
-              className={`card p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-200 ${tool.color}`}
+              className={`card grid p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-200 ${tool.color}`}
             >
               <div className="flex items-center mb-4">
                 <div className="mr-4">
@@ -36,7 +36,7 @@ const Tools = () => {
               
               <Link 
                 to={tool.path} 
-                className="convert-btn flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg transition-colors duration-300"
+                className="convert-btn  mt-auto flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg transition-colors duration-300"
               >
                 <span>Convert Now</span>
                 <FaArrowRight className="text-sm" />

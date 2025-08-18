@@ -1,9 +1,9 @@
-import { ColorRing } from "react-loader-spinner";
+import { ThreeDots } from "react-loader-spinner";
 
 const Loader = () => {
   return (
-    <div className="fixed top-14 left-0 z-1 w-screen h-screen flex items-center justify-center backdrop-blur-3xl">
-      <ColorRing colors={[]} height={64} />
+    <div className="loader w-screen h-screen bg-white flex items-center justify-center ">
+      <ThreeDots width={48} color="#2563eb" />
     </div>
   );
 };

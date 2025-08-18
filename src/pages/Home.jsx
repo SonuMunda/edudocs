@@ -22,40 +22,52 @@ const Home = () => {
   };
 
   return (
-    <>
+    <main>
       <section
         id="hero"
-        className="center flex-col bg-gradient-to-b from-blue-900 to-gray-950"
-        style={{ height: "75vh" }}
+        className="flex flex-col justify-center items-center bg-gradient-to-b from-blue-800 to-gray-950 text-white md:min-h-screen"
       >
-        <div className="container center flex-col p-4 max-w-6xl">
-          <h2 className="text-4xl font-semibold  text-white text-center">
-            Welcome to EduDocs
-          </h2>
-          <p className="mt-4 mb-2 text-gray-200 text-md text-center">
-            Empowering students and educators with a seamless platform to share
-            notes, documents, and assignments.
-          </p>
-          <div className="search w-full relative">
-            <form onSubmit={handleSearch}>
+        <div className="container max-w-7xl px-4 py-24  mx-auto">
+          <div className="content">
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-center">Discover to EduDocs</h1>
+            <p className="text-md md:text-lg text-gray-200 mb-6 max-w-3xl text-center mx-auto">
+              Empowering students and educators with a seamless platform to share
+              notes, documents, and assignments.
+            </p>
+
+            <form
+              onSubmit={handleSearch}
+              className="relative w-full max-w-xl mx-auto"
+              role="search"
+            >
+              <label htmlFor="search" className="sr-only">
+                Search documents
+              </label>
               <input
+                id="search"
                 type="text"
-                className="w-full py-3 px-4 outline-none border bg-gray-100 rounded"
+                className="w-full py-4 px-5 pr-12 rounded-full border border-gray-300 bg-gray-100 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Type to search for documents"
                 onChange={(e) => setQuery(e.target.value)}
+                aria-label="Search for documents"
               />
-              <div className="icon absolute top-1/2 -translate-y-1/2 right-4 text-xl">
-                <FaMagnifyingGlass />
-              </div>
+              <button
+                type="submit"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700 hover:text-blue-600"
+                aria-label="Submit search"
+              >
+                <FaMagnifyingGlass size={20} />
+              </button>
             </form>
           </div>
         </div>
       </section>
+
       <hr />
-      <section id="recently-uploaded" className="py-10 px-4 sm:px-10 ">
-        <div className="recently-uploaded-container">
+      <section id="recently-uploaded" className="recent-items bg-white">
+        <div className="container max-w-7xl mx-auto px-4 py-24">
           <h3 className="text-2xl font-bold mb-8 text-gray-800 pb-3">
-            Recently Uploaded Documents
+            Recently Uploaded
           </h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -82,9 +94,9 @@ const Home = () => {
       <hr />
       <section
         id="assignments"
-        className="py-10 px-4 sm:px-10 bg-gradient-to-l "
+        className="assignments bg-neutral-100"
       >
-        <div className="assignments-container">
+        <div className="container max-w-7xl mx-auto px-4 py-24">
           <h3 className="text-2xl font-bold mb-8 text-gray-800  pb-3">
             Assignments
           </h3>
@@ -95,7 +107,7 @@ const Home = () => {
                 .fill(null)
                 .map((_, index) => <DocumentSkeleton key={index} />)
             ) : documents?.filter((doc) => doc.category === "assignment")
-                .length > 0 ? (
+              .length > 0 ? (
               documents
                 .filter((doc) => doc.category === "assignment")
                 .slice(0, 5)
@@ -111,8 +123,8 @@ const Home = () => {
         </div>
       </section>
       <hr />
-      <section id="notes" className="py-10 px-4 sm:px-10 bg-gradient-to-l ">
-        <div className="notes-container">
+      <section id="notes" className="notes bg-white">
+        <div className="container max-w-7xl mx-auto px-4 py-24">
           <h3 className="text-2xl font-bold mb-8 text-gray-800  pb-3">Notes</h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -136,7 +148,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 };
 
