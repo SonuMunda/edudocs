@@ -4,8 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import { fetchFileDetails } from "../store/slices/documentSlice";
 import ShareMenu from "../components/ShareMenu";
 import { toast, ToastContainer } from "react-toastify";
-import { FaShare, FaThumbsUp } from "react-icons/fa";
-import { BiSolidUpvote } from "react-icons/bi";
 import FetchUserId from "../utils/FetchUserId";
 import Skeleton from "react-loading-skeleton";
 import {
@@ -19,12 +17,7 @@ import { ColorRing } from "react-loader-spinner";
 import { pdfjs, Document, Page } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
-import {
-  MdCloudDownload,
-  MdRefresh,
-  MdZoomIn,
-  MdZoomOut,
-} from "react-icons/md";
+import { LuArrowUp, LuCloudDownload, LuRefreshCcw, LuShare2, LuThumbsUp, LuZoomIn, LuZoomOut } from "react-icons/lu"
 import downloadFile from "../utils/DownloadFile";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -80,19 +73,19 @@ const DocumentView = () => {
     const newSocket = io(import.meta.env.VITE_SERVER_URL);
     setSocket(newSocket);
 
-    newSocket.emit("joinDocument", fileId);
-    newSocket.on("likeUpdate", (data) => {
+    socket.emit("joinDocument", fileId);
+    socket.on("likeUpdate", (data) => {
       dispatch(updateLikes({ likes: data?.likes }));
     });
-    newSocket.on("voteUpdate", (data) => {
+    socket.on("voteUpdate", (data) => {
       dispatch(updateVotes({ votes: data?.votes }));
     });
 
     return () => {
-      newSocket.emit("leaveDocument", fileId);
-      newSocket.disconnect();
+      socket.emit("leaveDocument", fileId);
+      socket.disconnect();
     };
-  }, [fileId, dispatch]);
+  }, [fileId, dispatch, socket]);
 
   useEffect(() => {
     dispatch(fetchFileDetails(fileId));
@@ -121,222 +114,233 @@ const DocumentView = () => {
   return (
     <main className="document-view">
       <ToastContainer />
-      <div className="document-viewer p-4 flex flex-col gap-4 lg:flex-row mx-auto">
-        {/* Document description sidebar */}
-        <div className="document-description bg-white w-full md:w-4/12 p-10 rounded-xl">
-          <div className="flex flex-col gap-2 my-4">
-            {!document?.title ? (
-              <Skeleton height={40} />
-            ) : (
-              <h2 className="text-2xl font-semibold text-gray-800">
-                {document.title}
-              </h2>
-            )}
-            {!document?.description ? (
-              <Skeleton height={20} />
-            ) : (
-              <p className="text-gray-700 text-xl">{document.description}</p>
-            )}
-          </div>
+      <div className="document-viewer max-w-7xl p-4  mx-auto">
+        <div className="content grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Document description sidebar */}
+          <div className="document-description bg-white h-fit w-full space-y-3 p-10 rounded-3xl">
+            <div className="">
+              {!document?.title ? (
+                <Skeleton height={40} className="w-96 rounded-full" />
+              ) : (
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  {document.title}
+                </h2>
+              )}
+              {!document?.description ? (
+                <Skeleton count={3} height={20} className="w-full rounded-full" />
+              ) : (
+                <p className="text-gray-700">{document.description}</p>
+              )}
+            </div>
 
-          {/* Metadata */}
-          {["course", "university", "session"].map((key) => (
-            <div key={key} className="mb-2">
-              {!document?.[key] ? (
+            {/* Metadata */}
+            {["course", "university", "session"].map((key) => (
+              <div key={key} className="mb-2">
+                {!document?.[key] ? (
+                  <>
+                    <Skeleton height={24} className="w-96 rounded-full" />
+                    <Skeleton height={20} className="w-80 rounded-full" />
+                  </>
+                ) : (
+                  <>
+                    <h4 className="text-lg font-semibold capitalize">
+                      {key.replace("-", " ")}
+                    </h4>
+                    <p className="text-gray-800">{document[key]}</p>
+                  </>
+                )}
+              </div>
+            ))}
+
+            {/* Uploader */}
+            <div className="owner mb-2">
+              {!document?.username ? (
                 <>
                   <Skeleton height={24} />
                   <Skeleton height={20} />
                 </>
               ) : (
                 <>
-                  <h4 className="text-lg font-semibold capitalize">
-                    {key.replace("-", " ")}
-                  </h4>
-                  <p className="text-gray-800">{document[key]}</p>
+                  <h4 className="text-lg font-semibold">Uploaded by</h4>
+                  <Link
+                    to={`/profile/${document?.username}`}
+                    className="text-blue-800"
+                  >
+                    {document?.username}
+                  </Link>
                 </>
               )}
             </div>
-          ))}
 
-          {/* Uploader */}
-          <div className="owner mb-2">
-            {!document?.username ? (
-              <>
-                <Skeleton height={24} />
-                <Skeleton height={20} />
-              </>
+            {/* Action buttons */}
+            {loading ? (
+              <div className="relative grid grid-cols-3">
+                <Skeleton height={40} width={100} borderRadius={100} />
+                <Skeleton height={40} width={100} borderRadius={100} />
+                <Skeleton height={40} width={100} borderRadius={100} />
+              </div>
             ) : (
               <>
-                <h4 className="text-lg font-semibold">Uploaded by</h4>
-                <Link
-                  to={`/profile/${document?.username}`}
-                  className="text-blue-800"
-                >
-                  {document?.username}
-                </Link>
+                <div className="document-btns flex flex-wrap gap-4 mt-4">
+                  <button
+                    className="share-btn center bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 py-2 px-4 text-white rounded-3xl"
+                    onClick={() =>
+                      toggleShareMenu(
+                        `${import.meta.env.VITE_CLIENT_URL
+                        }/${username}/${userId}/document/${document?.title
+                        }/${fileId}/view`,
+                        document?.title
+                      )
+                    }
+                  >
+                    <div className="icon me-2">
+                      <LuShare2 />
+                    </div>
+                    <span className="btn-text">Share</span>
+                  </button>
+
+                  {currentUserId && currentUserId !== document?.uploadedBy && (
+                    <>
+                      <button
+                        className={`share-btn center gap-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 py-2 px-4 text-white rounded-3xl ${currentLikes?.users?.includes(currentUserId)
+                          ? "bg-green-600 text-white"
+                          : "text-green-600"
+                          }`}
+                        onClick={handleLike}
+                      >
+                        {likesLoading ? (
+                          <ColorRing
+                            visible={true}
+                            height={24}
+                            width={24}
+                            ariaLabel="color-ring-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="color-ring-wrapper"
+                            colors={[
+                              "#ffffff",
+                              "#ffffff",
+                              "#ffffff",
+                              "#ffffff",
+                              "#ffffff",
+                            ]}
+                          />
+                        ) : (
+                          <LuThumbsUp />
+                        )}
+                        {Array.isArray(currentVotes?.users) &&
+                          currentLikes.users.includes(currentUserId)
+                          ? "Liked"
+                          : "Like"}
+                      </button>
+
+                      <button
+                        className={`share-btn center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 py-2 px-4 text-white rounded-3xl ${currentVotes?.users?.includes(currentUserId)
+                          ? "bg-red-600 text-white"
+                          : "text-red-600"
+                          }`}
+                        onClick={handleVote}
+                      >
+                        {votesLoading ? (
+                          <ColorRing
+                            visible={true}
+                            height={24}
+                            width={24}
+                            ariaLabel="color-ring-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="color-ring-wrapper"
+                            colors={[
+                              "#ffffff",
+                              "#ffffff",
+                              "#ffffff",
+                              "#ffffff",
+                              "#ffffff",
+                            ]}
+                          />
+                        ) : (
+                          <LuArrowUp />
+                        )}
+                        {Array.isArray(currentVotes?.users) &&
+                          currentVotes.users.includes(currentUserId)
+                          ? "Voted"
+                          : "Vote"}
+                      </button>
+                    </>
+                  )}
+                </div>
               </>
             )}
           </div>
 
-          {/* Action buttons */}
-          {loading ? (
-            <div className="relative flex">
-              <Skeleton count={3} height={20} width={200} />
-            </div>
-          ) : (
-            <>
-              <div className="document-btns flex flex-wrap gap-4 mt-4">
-                <button
-                  className="share-btn center bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 py-2 px-4 text-white rounded-xl"
-                  onClick={() =>
-                    toggleShareMenu(
-                      `${
-                        import.meta.env.VITE_CLIENT_URL
-                      }/${username}/${userId}/document/${
-                        document?.title
-                      }/${fileId}/view`,
-                      document?.title
-                    )
-                  }
-                >
-                  <div className="icon me-2">
-                    <FaShare />
-                  </div>
-                  <span className="btn-text">Share</span>
+          {/* PDF Viewer */}
+          <div className="viewer lg:col-span-2 flex flex-col h-screen  w-full bg-gray-100 rounded-3xl overflow-hidden shadow">
+            <div className="flex items-center justify-between bg-white px-4 py-2 border-b">
+              <div className="flex space-x-2 items-center">
+                <button onClick={zoomOut} className="p-2">
+                  <LuZoomOut size={24} />
                 </button>
-
-                {currentUserId && currentUserId !== document?.uploadedBy && (
-                  <>
-                    <button
-                      className={`like-btn center gap-2 ring ring-green-600 ${
-                        currentLikes?.users?.includes(currentUserId)
-                          ? "bg-green-600 text-white"
-                          : "text-green-600"
-                      } hover:bg-green-600 hover:text-white px-4 py-2 rounded-xl`}
-                      onClick={handleLike}
-                    >
-                      {likesLoading ? (
-                        <ColorRing
-                          visible={true}
-                          height={24}
-                          width={24}
-                          ariaLabel="color-ring-loading"
-                          wrapperStyle={{}}
-                          wrapperClass="color-ring-wrapper"
-                          colors={[
-                            "#ffffff",
-                            "#ffffff",
-                            "#ffffff",
-                            "#ffffff",
-                            "#ffffff",
-                          ]}
-                        />
-                      ) : (
-                        <FaThumbsUp />
-                      )}
-                      {Array.isArray(currentVotes?.users) &&
-                      currentLikes.users.includes(currentUserId)
-                        ? "Liked"
-                        : "Like"}
-                    </button>
-
-                    <button
-                      className={`vote center gap-2 ring ring-red-600 ${
-                        currentVotes?.users?.includes(currentUserId)
-                          ? "bg-red-600 text-white"
-                          : "text-red-600"
-                      } hover:bg-red-600 hover:text-white px-4 py-2 rounded-xl`}
-                      onClick={handleVote}
-                    >
-                      {votesLoading ? (
-                        <ColorRing
-                          visible={true}
-                          height={24}
-                          width={24}
-                          ariaLabel="color-ring-loading"
-                          wrapperStyle={{}}
-                          wrapperClass="color-ring-wrapper"
-                          colors={[
-                            "#ffffff",
-                            "#ffffff",
-                            "#ffffff",
-                            "#ffffff",
-                            "#ffffff",
-                          ]}
-                        />
-                      ) : (
-                        <BiSolidUpvote />
-                      )}
-                      {Array.isArray(currentVotes?.users) &&
-                      currentVotes.users.includes(currentUserId)
-                        ? "Voted"
-                        : "Vote"}
-                    </button>
-                  </>
-                )}
+                <button onClick={zoomIn} className="p-2">
+                  <LuZoomIn size={24} />
+                </button>
+                <span>Zoom: {(scale * 100).toFixed(0)}%</span>
               </div>
-            </>
-          )}
-        </div>
 
-        {/* PDF Viewer */}
-        <div className="flex flex-col h-screen max-w-5xl w-full bg-gray-100 rounded-xl shadow">
-          <div className="flex items-center justify-between bg-white px-4 py-2 border-b">
-            <div className="flex space-x-2 items-center">
-              <button onClick={zoomOut} className="p-2">
-                <MdZoomOut size={24} />
+              <button
+                onClick={() => downloadFile(document?.url, document?.title)}
+                className="download-btn center gap-2 text-green-800"
+                title="Download PDF"
+                disabled={!document?.url}
+              >
+                Download <LuCloudDownload size={24} />
               </button>
-              <button onClick={zoomIn} className="p-2">
-                <MdZoomIn size={24} />
-              </button>
-              <span>Zoom: {(scale * 100).toFixed(0)}%</span>
             </div>
 
-            <button
-              onClick={() => downloadFile(document?.url, document?.title)}
-              className="download-btn center gap-2 text-green-800"
-              title="Download PDF"
-              disabled={!document?.url}
-            >
-              Download <MdCloudDownload size={24} />
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-auto px-4 py-2 bg-gray-200 z-1">
-            <ErrorBoundary
-              fallback={
-                <div className="text-red-500">
-                  Error loading document
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="reload-btn center gap-2 bg-gray-800 text-white p-2 m-2 rounded-full cursor-pointer"
-                  >
-                    <MdRefresh size={16} /> Refresh
-                  </button>
-                </div>
-              }
-            >
-              {document?.url ? (
-                <Document
-                  file={document.url}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                >
-                  {Array.from(new Array(numPages), (_, index) => (
-                    <div
-                      key={`page_${index + 1}`}
-                      ref={(el) => (pageRefs.current[index + 1] = el)}
-                      className="mb-8 flex justify-center"
+            <div className="flex-1 overflow-auto px-4 py-2 bg-gray-200 z-1">
+              <ErrorBoundary
+                fallback={
+                  <div className="text-red-500">
+                    Error loading document
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="reload-btn center gap-2 bg-gray-800 text-white p-2 m-2 rounded-full cursor-pointer"
                     >
-                      <Page pageNumber={index + 1} scale={scale} />
-                    </div>
-                  ))}
-                </Document>
-              ) : (
-                <div className="text-center text-red-500 mt-4">
-                  No PDF file URL provided.
-                </div>
-              )}
-            </ErrorBoundary>
+                      <LuRefreshCcw size={16} /> Refresh
+                    </button>
+                  </div>
+                }
+              >
+                {document?.url ? (
+                  <Document
+                    file={document.url}
+                    onLoadSuccess={onDocumentLoadSuccess}
+                    onLoadError={
+                      <div className="text-red-500">
+                        Error loading document
+                        <button
+                          onClick={() => window.location.reload()}
+                          className="reload-btn center gap-2 bg-gray-800 text-white p-2 m-2 rounded-full cursor-pointer"
+                        >
+                          <LuRefreshCcw size={16} /> Refresh
+                        </button>
+                      </div>
+                    }
+                  >
+                    {Array.from(new Array(numPages), (_, index) => (
+                      <div
+                        key={`page_${index + 1}`}
+                        ref={(el) => (pageRefs.current[index + 1] = el)}
+                        className="mb-8 flex justify-center"
+                      >
+                        <Page pageNumber={index + 1} scale={scale} />
+                      </div>
+                    ))}
+                  </Document>
+                ) : (
+                  <div className="text-center text-red-500 mt-4">
+                    No PDF file URL provided.
+                  </div>
+                )}
+              </ErrorBoundary>
+            </div>
           </div>
         </div>
       </div>
