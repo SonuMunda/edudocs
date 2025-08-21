@@ -29,6 +29,7 @@ import Tools from "./pages/Tools";
 import DocxToPdf from "./pages/DocxToPdf";
 import PdfToDocx from "./pages/PdfToDocx";
 import BookView from "./pages/BookView";
+import { HelmetProvider } from "react-helmet-async"
 
 const App = () => {
   const userId = FetchUserId();
@@ -46,69 +47,71 @@ const App = () => {
   }, [userId]);
 
   return (
-    <div className="bg-gray-100">
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <SkeletonTheme enableAnimation>
-          <Router
-            basename="/"
-            future={{
-              v7_relativeSplatPath: true,
-              v7_startTransition: true,
-            }}
-          >
-            <HeaderWrapper
-              noRenderPaths={[
-                "/signin",
-                "/signup",
-                "/solve-doubt",
-                "/forget-password",
-                "/reset-password",
-                "/email-verified",
-                "/privacy-policies",
-              ]}
+    <HelmetProvider>
+      <div className="bg-gray-100">
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <SkeletonTheme enableAnimation>
+            <Router
+              basename="/"
+              future={{
+                v7_relativeSplatPath: true,
+                v7_startTransition: true,
+              }}
             >
-              <Header />
-            </HeaderWrapper>
+              <HeaderWrapper
+                noRenderPaths={[
+                  "/signin",
+                  "/signup",
+                  "/solve-doubt",
+                  "/forget-password",
+                  "/reset-password",
+                  "/email-verified",
+                  "/privacy-policies",
+                ]}
+              >
+                <Header />
+              </HeaderWrapper>
 
-            <ToastContainer />
-            <main className="app-body">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/signin" element={<Signin />} />
-                <Route path="/profile/:username" element={<Profile />} />
-                <Route
-                  path="/uploads"
-                  element={<AuthGuard component={<Uploads />} />}
-                />
-                <Route
-                  path="/settings"
-                  element={<AuthGuard component={<Settings />} />}
-                />
-                <Route
-                  path="/:username/:userId/document/:filename/:fileId/view"
-                  element={<DocumentView />}
-                />
-                <Route path="/document-search" element={<DocumentSearch />} />
-                <Route path="/books" element={<Books />} />
-                <Route path="/book/view/:bookId" element={<BookView />} />
-                <Route path="/solve-doubt" element={<ChatBot />} />
-                <Route path="/tools" element={<Tools />} />
-                <Route path="/docx-to-pdf" element={<DocxToPdf />} />
-                <Route path="/pdf-to-docx" element={<PdfToDocx />} />
-                <Route path="/leaderboard" element={<Leaderboard />} />
-                <Route path="/email-verified/" element={<EmailVerified />} />
-                <Route path="/forget-password" element={<ForgetPassword />} />
-                <Route path="/reset-password/" element={<ResetPassword />} />
-                <Route path="/privacy-policies" element={<PrivacyPolicy />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-          </Router>
-        </SkeletonTheme>
-      </GoogleOAuthProvider>
-    </div>
+              <ToastContainer />
+              <main className="app-body">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/signin" element={<Signin />} />
+                  <Route path="/profile/:username" element={<Profile />} />
+                  <Route
+                    path="/uploads"
+                    element={<AuthGuard component={<Uploads />} />}
+                  />
+                  <Route
+                    path="/settings"
+                    element={<AuthGuard component={<Settings />} />}
+                  />
+                  <Route
+                    path="/:username/:userId/document/:filename/:fileId/view"
+                    element={<DocumentView />}
+                  />
+                  <Route path="/document-search" element={<DocumentSearch />} />
+                  <Route path="/books" element={<Books />} />
+                  <Route path="/book/view/:bookId" element={<BookView />} />
+                  <Route path="/solve-doubt" element={<ChatBot />} />
+                  <Route path="/tools" element={<Tools />} />
+                  <Route path="/docx-to-pdf" element={<DocxToPdf />} />
+                  <Route path="/pdf-to-docx" element={<PdfToDocx />} />
+                  <Route path="/leaderboard" element={<Leaderboard />} />
+                  <Route path="/email-verified/" element={<EmailVerified />} />
+                  <Route path="/forget-password" element={<ForgetPassword />} />
+                  <Route path="/reset-password/" element={<ResetPassword />} />
+                  <Route path="/privacy-policies" element={<PrivacyPolicy />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+              <Footer />
+            </Router>
+          </SkeletonTheme>
+        </GoogleOAuthProvider>
+      </div>
+    </HelmetProvider>
   );
 };
 

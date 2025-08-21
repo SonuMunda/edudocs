@@ -73,19 +73,19 @@ const DocumentView = () => {
     const newSocket = io(import.meta.env.VITE_SERVER_URL);
     setSocket(newSocket);
 
-    socket.emit("joinDocument", fileId);
-    socket.on("likeUpdate", (data) => {
+    newSocket.emit("joinDocument", fileId);
+    newSocket.on("likeUpdate", (data) => {
       dispatch(updateLikes({ likes: data?.likes }));
     });
-    socket.on("voteUpdate", (data) => {
+    newSocket.on("voteUpdate", (data) => {
       dispatch(updateVotes({ votes: data?.votes }));
     });
 
     return () => {
-      socket.emit("leaveDocument", fileId);
-      socket.disconnect();
+      newSocket.emit("leaveDocument", fileId);
+      newSocket.disconnect();
     };
-  }, [fileId, dispatch, socket]);
+  }, [fileId, dispatch]);
 
   useEffect(() => {
     dispatch(fetchFileDetails(fileId));

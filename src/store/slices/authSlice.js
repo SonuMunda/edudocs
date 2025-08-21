@@ -306,7 +306,7 @@ export const updatePassword = createAsyncThunk(
 
 export const forgetPassword = createAsyncThunk(
   "auth/forgetPassword",
-  async ({ email, toast }, { rejectWithValue }) => {
+  async ({ email }) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/auth/forget-password/${email}`,
@@ -316,73 +316,50 @@ export const forgetPassword = createAsyncThunk(
       );
 
       if (!response.ok) {
-        const errorResponseData = await response.json();
-        toast.error(errorResponseData.message, {
-          position: "top-center",
-        });
-        return rejectWithValue(errorResponseData);
+        const error = await response.json()
+        throw new Error(error)
       }
 
-      const responseData = await response.json();
-      toast.success(responseData.message, {
-        position: "top-center",
-      });
+      const data = await response.json();
 
-      return responseData;
+      return data;
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "An unexpected error occurred";
-      toast.error(errorMessage, {
-        position: "top-center",
-      });
-      return rejectWithValue({ message: errorMessage });
+      throw new Error(error)
+
     }
   }
 );
 
 export const resetPassword = createAsyncThunk(
   "auth/resetPassword",
-  async ({ newPassword, toast, navigate }, { rejectWithValue }) => {
+  async ({ token, newPassword, navigate }) => {
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/auth/reset-password`,
         {
           method: "PATCH",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("resetToken")}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ newPassword }),
+          body: JSON.stringify({ token, newPassword }),
         }
       );
 
       if (!response.ok) {
-        const errorResponseData = await response.json();
-        toast.error(errorResponseData.message, {
-          position: "top-center",
-        });
-        return rejectWithValue(errorResponseData);
+        const error = await response.json();
+        throw Error(error.message);
       }
 
-      const responseData = await response.json();
-      toast.success(responseData.message, {
-        position: "top-center",
-        autoClose: 1500,
-      });
+      const data = await response.json();
 
-      localStorage.removeItem("token");
       setTimeout(() => {
         navigate("/signin");
       }, 3000);
 
-      return responseData;
+      return data;
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "An unexpected error occurred";
-      toast.error(errorMessage, {
-        position: "top-center",
-      });
-      return rejectWithValue({ message: errorMessage });
+      throw Error(error.message);
     }
   }
 );
