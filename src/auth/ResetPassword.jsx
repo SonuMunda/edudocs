@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../store/slices/authSlice";
-import FormResponseMessage from "../components/formResponseMessage";
+import FormResponseMessage from "../components/FormResponseMessage";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);

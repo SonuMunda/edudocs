@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { forgetPassword } from "../store/slices/authSlice";
 import { useState } from "react";
-import FormResponseMessage from "../components/formResponseMessage";
+import FormResponseMessage from "../components/FormResponseMessage";
 
 const ForgetPassword = () => {
   const [apiResponse, setApiResponse] = useState({
