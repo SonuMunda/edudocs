@@ -75,7 +75,7 @@ const Chatbot = () => {
       {/* Header */}
       <div className="bot-header p-2 fixed top-0 w-full flex items-center gap-6 bg-neutral-900 border-b border-neutral-700">
         <div className="relative">
-          <button className="back-btn relative left-2 p-2 rounded hover:ring-1 w-fit" data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" type="button">
+          <button className="back-btn relative left-2 p-2 rounded hover:ring-1 w-fit" title="Back to EduDocs">
             <Link to="/" className="flex items-center gap-2">
               <LuHouse size={24} />
             </Link>
@@ -103,10 +103,10 @@ const Chatbot = () => {
         : (
           <div className="max-w-7xl w-full mx-auto px-4 py-24">
             {conversation.length > 0 && (
-              <div className="space-y-4 max-w-2xl mx-auto">
+              <div className="space-y-4 max-w-2xl mx-auto overflow-x-hidden">
                 {conversation.map((msg, index) => (
-                  <div key={index} className={`query-block ${msg.role == "user" ? "font-bold text-xl" : "border-b py-4 border-neutral-700"} `} ref={messageRef}>
-                    <div className="grid grid-cols-1">
+                  <div key={index} className={`query-block  ${msg.role == "user" ? "font-bold text-wrap" : "border-b py-4 border-neutral-700"} `} ref={messageRef}>
+                    <div className="grid grid-cols-1 gap-2">
                       {msg.role === "assistant" && (
                         <div className="flex gap-2 px-2 py-2 mb-2 border-b-2 border-neutral-500 w-fit">
                           <LuBot className="text-2xl" />
@@ -126,13 +126,14 @@ const Chatbot = () => {
                                 wrapLongLines
                                 wrapLines
                                 PreTag="div"
+                                className="break-word"
                                 {...props}
                               >
                                 {children}
                               </SyntaxHighlighter>
                             ) : (
                               <code
-                                className="bg-neutral-800 px-1 rounded"
+                                className="bg-neutral-800 px-1 rounded break-words"
                                 {...props}
                               >
                                 {children}

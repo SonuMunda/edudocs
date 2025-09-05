@@ -21,6 +21,14 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
+code {
+  white-space : pre-wrap !important;
+}
+
+.query-block pre{
+  margin: 0.5rem 0;
+}
+
 .center {
   display: flex;
   align-items: center;

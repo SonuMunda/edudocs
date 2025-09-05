@@ -98,7 +98,7 @@ const Settings = () => {
     <>
       <ToastContainer />
       <section id="settings" className="w-full center">
-        <div className="container max-w-7xl mx-auto sm:px-4 sm:py-10">
+        <div className="container max-w-7xl mx-auto px-4 py-20">
           <div className="content bg-white max-w-2xl mx-auto p-4 sm:p-10">
             <h3 className="text-3xl font-bold mb-4 border-b-2 pb-4">Settings</h3>
             <h4 className="text-xl font-semibold my-4">Account Settings</h4>

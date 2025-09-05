@@ -37,7 +37,7 @@ const Books = () => {
 
   return (
     <section className="min-h-screen bg-gray-100">
-      <div className="container max-w-7xl mx-auto px-4 py-10 space-y-6">
+      <div className="container max-w-7xl mx-auto px-4 py-24 space-y-6">
         <header className="text-center">
           <h1 className="text-3xl font-bold text-gray-800">
             Digital Book Library

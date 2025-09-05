@@ -80,9 +80,8 @@ const FileUpload = () => {
   return (
     <section className="file-upload center">
       <ToastContainer />
-      <div className="container max-w-7xl mx-auto sm:px-4 sm:py-10">
-        <div className="file-upload-form max-w-3xl mx-auto bg-white p-4 sm:p-10 rounded space-y-10">
-          <h2 className="text-2xl font-semibold text-center text-gray-900">Upload</h2>
+      <div className="container max-w-7xl mx-auto px-4 py-20">
+        <div className="file-upload-form max-w-3xl mx-auto bg-white p-4 sm:p-10 rounded-3xl space-y-10">
           <Formik
             initialValues={{
               file: null,
@@ -110,7 +109,7 @@ const FileUpload = () => {
 
                 <div
                   className={`form-group flex flex-col items-center justify-center gap-4 upload-box border-4 border-blue-200 ${isDragging ? "border-blue-500 bg-blue-200" : "border-dashed"
-                    } rounded p-10 bg-neutral-50 my-2 w-full`}
+                    } rounded-3xl p-10 bg-neutral-50 my-2 w-full`}
                   onDragOver={(e) => {
                     e.preventDefault();
                     setIsDragging(true);

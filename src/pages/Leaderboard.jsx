@@ -31,7 +31,7 @@ const Leaderboard = () => {
           <Loader />
         ) : (
           <section className="leader-board min-h-screen  flex items-center justify-center">
-            <div className="container max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-8">
+            <div className="container max-w-7xl mx-auto px-4 py-24 space-y-8">
               <div className="flex items-center justify-center gap-3">
                 <LuTrophy size={28} className="text-yellow-500" />
                 <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">

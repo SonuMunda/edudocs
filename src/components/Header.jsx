@@ -62,10 +62,10 @@ const Header = () => {
 
   return (
     <header
-      className={`flex justify-between items-center sticky w-full bg-white shadow z-10 transition-all duration-300 ${showNavbar ? "top-0" : "-top-16"
+      className={`flex justify-between items-center fixed w-full bg-white shadow z-10 transition-all duration-300 ${showNavbar ? "top-0" : "-top-16"
         }`}
     >
-      <div className="container max-w-7xl mx-auto flex items-center justify-between py-1 px-4">
+      <div className="container max-w-7xl mx-auto flex items-center justify-between py-2 px-4">
         <div className="center gap-3">
           <div className="flex items-center cursor-pointer md:hidden">
             <LuMenu size={24} onClick={handleToggleNav} />
@@ -82,7 +82,8 @@ const Header = () => {
           </div>
         </div>
 
-        <nav
+       <div className="flex items-center gap-10">
+       <nav
           className={`navbar fixed top-0 left-0 h-dvh w-80 ${isNavOpen ? "-translate-x-0" : "-translate-x-full"
             } overflow-hidden bg-white md:relative md:w-fit md:top-0 md:h-fit z-10 transitions duration-100 ease-in-out transition-transform-full md:translate-x-0`}
         >
@@ -142,7 +143,6 @@ const Header = () => {
               <NavLink
                 to="/solve-doubt"
                 className="nav-link flex items-center p-3 md:p-2 text-gray-800"
-                target="_blank"
               >
                 <span className="block md:hidden">
                   <LuBot size={24} className="me-2" />
@@ -354,6 +354,7 @@ const Header = () => {
             </NavLink>
           </div>
         )}
+       </div>
 
       </div>
       <div

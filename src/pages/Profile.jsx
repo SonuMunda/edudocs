@@ -52,9 +52,9 @@ const Profile = () => {
   };
 
   return (
-    <section className="profile min-h-screen center p-4">
+    <section className="profile min-h-screen center">
       <ToastContainer />
-      <div className="container max-w-7xl mx-auto sm:px-6 sm:py-12">
+      <div className="container max-w-7xl mx-auto px-4 py-20">
 
         {/* Profile Section */}
         <div className="flex flex-col sm:flex-row gap-10 items-center bg-white shadow-md p-6 rounded-2xl">
